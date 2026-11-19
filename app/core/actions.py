@@ -118,7 +118,8 @@ class ActionManager:
         self.actions["win_prev_tab"].setShortcut(QKeySequence("Ctrl+Shift+Tab"))
         self.actions["win_prev_tab"].triggered.connect(self._on_prev_tab)
 
-        self.actions["win_pin_tab"] = QAction("&Pin/Unpin Tab", mw)
+        self.actions["win_pin_tab"] = QAction(WinIcons.get("pin"), "&Pin/Unpin Tab", mw)
+        self.actions["win_pin_tab"].setShortcut(QKeySequence("Ctrl+Shift+P"))
         self.actions["win_pin_tab"].triggered.connect(self._on_pin_tab)
 
         self.actions["win_close_others"] = QAction("Close &Other Tabs", mw)

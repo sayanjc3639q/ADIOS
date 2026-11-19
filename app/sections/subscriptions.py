@@ -238,7 +238,7 @@ class SubscriptionsListView(QWidget):
         item_id = self.model._data[index.row()]["id"]
         window = self.window()
         if hasattr(window, "tab_manager"):
-            window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
+            window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=item_id)
 
 
 CATEGORIES = ["Streaming & Entertainment", "Developer & Tech", "Cloud & Hosting", "Productivity & Office", "AI & Tools", "Health & Fitness", "Other"]

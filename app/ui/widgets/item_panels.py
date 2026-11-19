@@ -382,7 +382,7 @@ class ItemPanelsWidget(QWidget):
         window = self.window()
         if hasattr(window, "tab_manager"):
             from app.core.tab_manager import TabKind
-            window.tab_manager.open_tab(sec_id, TabKind.EDITOR, item_id=other_id)
+            window.tab_manager.open_tab(sec_id, TabKind.VIEW, item_id=other_id)
 
     def _add_reminder(self):
         if not self.item_id:

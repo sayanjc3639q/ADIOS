@@ -107,4 +107,4 @@ class CalendarDockWidget(QWidget):
         if sec_id.lower() in ("schedule", "exams", "clubs", "linkedin", "subscriptions", "money"):
             window = self.window()
             if hasattr(window, "tab_manager"):
-                window.tab_manager.open_tab(sec_id.lower(), TabKind.EDITOR, item_id=item_id)
+                window.tab_manager.open_tab(sec_id.lower(), TabKind.VIEW, item_id=item_id)

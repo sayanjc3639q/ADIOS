@@ -294,7 +294,7 @@ class ClubsListView(QWidget):
         if item_id:
             window = self.window()
             if hasattr(window, "tab_manager"):
-                window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
+                window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=item_id)
 
     def _on_double_click(self, index: QModelIndex):
         self._on_open_selected()
@@ -354,7 +354,7 @@ class ClubsListView(QWidget):
         elif chosen == act_tag or chosen == act_rem:
             window = self.window()
             if hasattr(window, "tab_manager"):
-                window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
+                window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=item_id)
 
 
 class ManageClubsDialog(QDialog):

@@ -283,9 +283,14 @@ class MainWindow(QMainWindow):
             return
 
         menu = QMenu(self)
-        act_close = menu.addAction("Close")
+        act_close = menu.addAction(WinIcons.get("delete"), "Close Tab")
         act_close_others = menu.addAction("Close Other Tabs")
-        act_pin = menu.addAction("Pin / Unpin Tab")
+        
+        # Check current pinned state
+        target_widget = self.tab_widget.widget(tab_idx)
+        target_meta = self.tab_manager.get_tab_meta(target_widget) if target_widget else None
+        is_pinned = target_meta.get("is_pinned", False) if target_meta else False
+        act_pin = menu.addAction(WinIcons.get("pin"), "Unpin Tab" if is_pinned else "Pin Tab")
         act_duplicate = menu.addAction("Duplicate Tab")
 
         chosen = menu.exec(self.tab_widget.mapToGlobal(pos))

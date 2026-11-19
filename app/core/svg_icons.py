@@ -244,6 +244,16 @@ BUILTIN_SVGS: Dict[str, str] = {
     "clock": """<svg viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2">
         <circle cx="12" cy="12" r="10"/>
         <polyline points="12 6 12 12 16 14"/>
+    </svg>""",
+
+    "pin": """<svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="17" x2="12" y2="22"/>
+        <path d="M5 17h14v-2l-2-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v8l-2 2v2z" fill="#3B82F6"/>
+    </svg>""",
+
+    "pin_outline": """<svg viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="17" x2="12" y2="22"/>
+        <path d="M5 17h14v-2l-2-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v8l-2 2v2z"/>
     </svg>"""
 }
 
@@ -292,6 +302,7 @@ CUSTOMIZABLE_ICONS: List[Tuple[str, str, str]] = [
     ("tag", "Tag Icon", "In-App Tools"),
     ("link", "Linked Item Icon", "In-App Tools"),
     ("clock", "Reminder / Clock Icon", "In-App Tools"),
+    ("pin", "Pin Tab Icon", "In-App Tools"),
 ]
 
 

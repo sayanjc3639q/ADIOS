@@ -11,6 +11,7 @@ logger = logging.getLogger("adios.tab_manager")
 class TabKind(str, Enum):
     HOME = "HOME"
     LIST = "LIST"
+    VIEW = "VIEW"
     EDITOR = "EDITOR"
     CREATE = "CREATE"
     SEARCH = "SEARCH"
@@ -118,10 +119,13 @@ class TabManager(QObject):
 
         if kind == TabKind.LIST:
             return section.list_view(parent=self.tab_widget)
-        elif kind == TabKind.EDITOR:
+        elif kind in (TabKind.EDITOR, TabKind.VIEW):
             if item_id is None:
-                raise ValueError("item_id required for EDITOR tab")
-            return section.editor_view(item_id, parent=self.tab_widget)
+                raise ValueError("item_id required for EDITOR or VIEW tab")
+            widget = section.editor_view(item_id, parent=self.tab_widget)
+            if kind == TabKind.VIEW:
+                self._configure_view_mode(widget)
+            return widget
         elif kind == TabKind.CREATE:
             return section.create_view(parent=self.tab_widget)
         
@@ -143,6 +147,11 @@ class TabManager(QObject):
             return sec_name
         elif kind == TabKind.CREATE:
             return f"{sec_name} Create"
+        elif kind == TabKind.VIEW:
+            title_prop = getattr(widget, "item_title", None)
+            if title_prop:
+                return f"{sec_name}: {title_prop}"
+            return f"{sec_name}: #{item_id}"
         elif kind == TabKind.EDITOR:
             # Check if widget has an item_title property or title
             title_prop = getattr(widget, "item_title", None)
@@ -168,12 +177,82 @@ class TabManager(QObject):
         if not meta:
             return
         meta["is_pinned"] = is_pinned
-        # In classic Windows style, pinned can be indicated in tab text or disabled close button
         idx = self.tab_widget.indexOf(widget)
         if idx != -1:
+            from app.core.icons import WinIcons
+            from PySide6.QtWidgets import QTabBar
+            if is_pinned:
+                # Set pin icon on tab
+                self.tab_widget.setTabIcon(idx, WinIcons.get("pin", size=16))
+                # Disable/hide tab close button for pinned tabs
+                tb = self.tab_widget.tabBar()
+                btn = tb.tabButton(idx, QTabBar.ButtonPosition.RightSide)
+                if btn:
+                    btn.setVisible(False)
+            else:
+                # Restore original section icon
+                sec_id = meta.get("section_id", "home")
+                self.tab_widget.setTabIcon(idx, WinIcons.get(sec_id, size=16))
+                tb = self.tab_widget.tabBar()
+                btn = tb.tabButton(idx, QTabBar.ButtonPosition.RightSide)
+                if btn:
+                    btn.setVisible(True)
+
             base_title = meta["title"]
-            prefix = "[P] " if is_pinned else ""
-            self.tab_widget.setTabText(idx, f"{prefix}{base_title}")
+            is_dirty = meta.get("is_dirty", False)
+            title = f"{base_title} *" if is_dirty else base_title
+            self.tab_widget.setTabText(idx, title)
+
+    def _configure_view_mode(self, widget: QWidget) -> None:
+        """Configure form widget into read-only View mode with an 'Edit Item' toggle button."""
+        from PySide6.QtWidgets import (
+            QLineEdit, QTextEdit, QComboBox, QSpinBox, 
+            QDoubleSpinBox, QDateEdit, QCheckBox, QPushButton, QLayout
+        )
+        from app.core.icons import WinIcons
+
+        def apply_state(in_view: bool):
+            for w in widget.findChildren(QWidget):
+                if isinstance(w, (QLineEdit, QTextEdit)):
+                    w.setReadOnly(in_view)
+                elif isinstance(w, (QComboBox, QSpinBox, QDoubleSpinBox, QDateEdit, QCheckBox)):
+                    w.setEnabled(not in_view)
+
+        # Apply read-only mode initially
+        apply_state(True)
+
+        # Locate save and delete buttons
+        btn_save = getattr(widget, "btn_save", None)
+        btn_delete = getattr(widget, "btn_delete", None)
+
+        if btn_save:
+            btn_save.setVisible(False)
+
+        # Create Edit Item button
+        btn_edit = QPushButton("Edit Item")
+        btn_edit.setIcon(WinIcons.get("settings", size=16))
+
+        def on_edit_clicked():
+            apply_state(False)
+            btn_edit.setVisible(False)
+            if btn_save:
+                btn_save.setVisible(True)
+            # Switch tab kind to EDITOR
+            meta = self._tabs_meta.get(widget)
+            if meta:
+                meta["kind"] = TabKind.EDITOR
+
+        btn_edit.clicked.connect(on_edit_clicked)
+
+        # Insert btn_edit into layout containing btn_save
+        if btn_save:
+            parent_w = btn_save.parentWidget()
+            if parent_w:
+                for lay in parent_w.findChildren(QLayout):
+                    idx = lay.indexOf(btn_save)
+                    if idx != -1:
+                        lay.insertWidget(idx, btn_edit)
+                        break
 
     def convert_create_to_editor(self, widget: QWidget, item_id: int, new_title: Optional[str] = None) -> None:
         """Convert a CREATE tab into an EDITOR tab for the newly saved item."""
@@ -202,8 +281,10 @@ class TabManager(QObject):
                     widget.refresh()
 
     def close_editor_for_item(self, section_id: str, item_id: int) -> None:
-        """Close editor tab for a deleted item."""
+        """Close editor or view tab for a deleted item."""
         idx = self.find_open_tab_index(section_id, TabKind.EDITOR, item_id)
+        if idx == -1:
+            idx = self.find_open_tab_index(section_id, TabKind.VIEW, item_id)
         if idx != -1:
             widget = self.tab_widget.widget(idx)
             # Remove dirty flag so it doesn't prompt

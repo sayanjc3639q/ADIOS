@@ -276,7 +276,7 @@ class ExamsListView(QWidget):
         if item_id:
             window = self.window()
             if hasattr(window, "tab_manager"):
-                window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
+                window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=item_id)
 
     def _on_delete_selected(self):
         item_id = self._get_selected_id()
@@ -301,7 +301,7 @@ class ExamsListView(QWidget):
         item_id = self.model._data[index.row()]["id"]
         window = self.window()
         if hasattr(window, "tab_manager"):
-            window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
+            window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=item_id)
 
     def _show_context_menu(self, pos: QPoint):
         idx = self.table.indexAt(pos)
@@ -340,7 +340,7 @@ class ExamsListView(QWidget):
         elif chosen == act_add_tag:
             window = self.window()
             if hasattr(window, "tab_manager"):
-                window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
+                window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=item_id)
         elif chosen == act_add_rem:
             from app.ui.widgets.item_panels import AddReminderDialog
             dlg = AddReminderDialog(item["subject"], parent=self)

@@ -341,7 +341,7 @@ class ScheduleListView(QWidget):
 
         window = self.window()
         if hasattr(window, "tab_manager"):
-            window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=event_id)
+            window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=event_id)
 
     def _on_double_click(self, index: QModelIndex):
         self._on_open_selected()
@@ -402,7 +402,7 @@ class ScheduleListView(QWidget):
             new_id = cur.lastrowid
         window = self.window()
         if hasattr(window, "tab_manager"):
-            window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=new_id)
+            window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=new_id)
 
     def _split_recurring_event(self, event_id: int, split_date: str):
         # Truncate original to day before split_date
@@ -421,7 +421,7 @@ class ScheduleListView(QWidget):
             new_id = cur.lastrowid
         window = self.window()
         if hasattr(window, "tab_manager"):
-            window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=new_id)
+            window.tab_manager.open_tab(self.section.id, TabKind.VIEW, item_id=new_id)
 
     def _show_context_menu(self, pos: QPoint):
         idx = self.table.indexAt(pos)

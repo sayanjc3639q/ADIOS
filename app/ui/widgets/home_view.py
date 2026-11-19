@@ -96,4 +96,4 @@ class HomeView(QWidget):
         if data:
             sec_id, item_id = data
             from app.core.tab_manager import TabKind
-            self.tab_manager.open_tab(sec_id, TabKind.EDITOR, item_id=item_id)
+            self.tab_manager.open_tab(sec_id, TabKind.VIEW, item_id=item_id)
