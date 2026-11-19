@@ -15,12 +15,14 @@ from datetime import datetime, date, timedelta
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
     QTableView, QFormLayout, QLineEdit, QTextEdit, QComboBox, 
-    QDateEdit, QDoubleSpinBox, QSpinBox, QMessageBox, QHeaderView
+    QDateEdit, QDoubleSpinBox, QSpinBox, QMessageBox, QHeaderView,
+    QSplitter, QGroupBox, QCheckBox
 )
 from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QDate, QSize
 from app.core.base_section import BaseSection
 from app.core.tab_manager import TabKind
 from app.core.svg_icons import SvgIconPack, CUSTOMIZABLE_ICONS
+from app.ui.widgets.item_panels import ItemPanelsWidget
 
 
 BILLING_CYCLES = ["Monthly", "Yearly", "Quarterly", "Weekly"]
@@ -239,6 +241,9 @@ class SubscriptionsListView(QWidget):
             window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
 
 
+CATEGORIES = ["Streaming & Entertainment", "Developer & Tech", "Cloud & Hosting", "Productivity & Office", "AI & Tools", "Health & Fitness", "Other"]
+
+
 class SubscriptionsFormView(QWidget):
     def __init__(self, section: SubscriptionsSection, item_id: Optional[int] = None, parent: Optional[QWidget] = None):
         super().__init__(parent)
@@ -247,9 +252,11 @@ class SubscriptionsFormView(QWidget):
         self.item_title = f"Subscription #{item_id}" if item_id else "New Subscription"
         self._loading = False
 
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(8)
+        splitter = QSplitter(Qt.Orientation.Horizontal, self)
+        form_container = QWidget()
+        layout = QVBoxLayout(form_container)
+        layout.setContentsMargins(12, 12, 12, 12)
+        layout.setSpacing(10)
 
         form = QFormLayout()
 
@@ -267,7 +274,22 @@ class SubscriptionsFormView(QWidget):
         form.addRow("Provider / Service:", h_provider)
 
         self.txt_name = QLineEdit()
-        form.addRow("Subscription Name:", self.txt_name)
+        self.txt_name.setPlaceholderText("e.g. Netflix Premium 4K, GitHub Copilot, Spotify Family")
+        form.addRow("Subscription Name*:", self.txt_name)
+
+        # Category and Plan Tier
+        h_cat_tier = QHBoxLayout()
+        self.cmb_category = QComboBox()
+        self.cmb_category.setEditable(True)
+        self.cmb_category.addItems(CATEGORIES)
+        h_cat_tier.addWidget(QLabel("Category:"))
+        h_cat_tier.addWidget(self.cmb_category)
+
+        self.txt_plan_tier = QLineEdit()
+        self.txt_plan_tier.setPlaceholderText("e.g. Pro, Individual, Family, Enterprise")
+        h_cat_tier.addWidget(QLabel("Plan Tier:"))
+        h_cat_tier.addWidget(self.txt_plan_tier)
+        form.addRow("Category & Tier:", h_cat_tier)
 
         h_cost = QHBoxLayout()
         self.spin_cost = QDoubleSpinBox()
@@ -308,13 +330,26 @@ class SubscriptionsFormView(QWidget):
         h_renewal.addStretch()
         form.addRow("Renewal & Usage:", h_renewal)
 
+        # Payment details & URL
+        h_pay_url = QHBoxLayout()
+        self.txt_payment_method = QLineEdit()
+        self.txt_payment_method.setPlaceholderText("e.g. PayPal, Apple Pay, Primary Card (no digits)")
+        h_pay_url.addWidget(QLabel("Payment via:"))
+        h_pay_url.addWidget(self.txt_payment_method)
+
+        self.txt_url = QLineEdit()
+        self.txt_url.setPlaceholderText("https://...")
+        h_pay_url.addWidget(QLabel("Manage URL:"))
+        h_pay_url.addWidget(self.txt_url)
+        form.addRow("Payment & Portal:", h_pay_url)
+
         self.lbl_calc_cpu = QLabel("Calculated Cost-per-use: $0.00")
-        form.addRow("Metrics:", self.lbl_calc_cpu)
+        form.addRow("Value Metric:", self.lbl_calc_cpu)
 
         self.txt_notes = QTextEdit()
-        self.txt_notes.setMaximumHeight(80)
-        self.txt_notes.setPlaceholderText("Cancellation terms, plan tier, shared accounts...")
-        form.addRow("Notes:", self.txt_notes)
+        self.txt_notes.setMinimumHeight(100)
+        self.txt_notes.setPlaceholderText("Cancellation terms, reminder notes, renewal terms, shared accounts...")
+        form.addRow("Terms & Notes:", self.txt_notes)
 
         layout.addLayout(form)
 
@@ -332,14 +367,30 @@ class SubscriptionsFormView(QWidget):
         btn_bar.addStretch()
         layout.addLayout(btn_bar)
 
+        splitter.addWidget(form_container)
+
+        # Reusable side panels: Tags, Links, Reminders
+        self.panels = ItemPanelsWidget("subscriptions", self.item_id, self.section.db, parent=self)
+        splitter.addWidget(self.panels)
+        splitter.setStretchFactor(0, 3)
+        splitter.setStretchFactor(1, 1)
+
+        root = QVBoxLayout(self)
+        root.setContentsMargins(0, 0, 0, 0)
+        root.addWidget(splitter)
+
         self.cmb_provider.currentIndexChanged.connect(self._on_provider_changed)
         self.txt_name.textChanged.connect(self._on_dirty)
+        self.cmb_category.currentTextChanged.connect(self._on_dirty)
+        self.txt_plan_tier.textChanged.connect(self._on_dirty)
         self.spin_cost.valueChanged.connect(self._recalc_and_dirty)
         self.cmb_cycle.currentTextChanged.connect(self._recalc_and_dirty)
         self.cmb_status.currentTextChanged.connect(self._on_dirty)
         self.date_renewal.dateChanged.connect(self._on_dirty)
         self.spin_rating.valueChanged.connect(self._recalc_and_dirty)
         self.spin_uses.valueChanged.connect(self._recalc_and_dirty)
+        self.txt_payment_method.textChanged.connect(self._on_dirty)
+        self.txt_url.textChanged.connect(self._on_dirty)
         self.txt_notes.textChanged.connect(self._on_dirty)
 
         self.btn_save.clicked.connect(self.save_item)
@@ -445,6 +496,20 @@ class SubscriptionsFormView(QWidget):
                     if qd.isValid():
                         self.date_renewal.setDate(qd)
 
+                # Extended fields
+                if "category" in row.keys() and row["category"]:
+                    idx_cat = self.cmb_category.findText(row["category"])
+                    if idx_cat != -1:
+                        self.cmb_category.setCurrentIndex(idx_cat)
+                    else:
+                        self.cmb_category.setEditText(row["category"])
+                if "plan_tier" in row.keys() and row["plan_tier"]:
+                    self.txt_plan_tier.setText(row["plan_tier"])
+                if "payment_method" in row.keys() and row["payment_method"]:
+                    self.txt_payment_method.setText(row["payment_method"])
+                if "manage_url" in row.keys() and row["manage_url"]:
+                    self.txt_url.setText(row["manage_url"])
+
                 self.spin_rating.setValue(int(row["usage_rating"] or 3))
                 self.spin_uses.setValue(int(row["estimated_uses_month"] or 10))
                 self.txt_notes.setPlainText(row["notes"] or "")
@@ -469,15 +534,20 @@ class SubscriptionsFormView(QWidget):
         renewal_date = self.date_renewal.date().toString(Qt.DateFormat.ISODate)
         rating = self.spin_rating.value()
         uses = self.spin_uses.value()
+        category = self.cmb_category.currentText().strip() or "Other"
+        plan_tier = self.txt_plan_tier.text().strip()
+        payment_method = self.txt_payment_method.text().strip()
+        manage_url = self.txt_url.text().strip()
         notes = self.txt_notes.toPlainText()
 
         if self.item_id is None:
             with self.section.db.get_connection():
                 cur = self.section.db.execute(
                     """INSERT INTO subscriptions 
-                       (name, cost, billing_cycle, renewal_date, usage_rating, estimated_uses_month, status, notes)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                    (name, cost, cycle, renewal_date, rating, uses, status, notes)
+                       (name, cost, billing_cycle, renewal_date, usage_rating, estimated_uses_month, 
+                        category, plan_tier, payment_method, manage_url, status, notes)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (name, cost, cycle, renewal_date, rating, uses, category, plan_tier, payment_method, manage_url, status, notes)
                 )
                 self.item_id = cur.lastrowid
                 self.item_title = name
@@ -493,6 +563,9 @@ class SubscriptionsFormView(QWidget):
                 except Exception:
                     pass
 
+            if hasattr(self, "panels"):
+                self.panels.update_item_id(self.item_id)
+
             window = self.window()
             if hasattr(window, "tab_manager"):
                 window.tab_manager.convert_create_to_editor(self, self.item_id, name)
@@ -502,9 +575,10 @@ class SubscriptionsFormView(QWidget):
                 self.section.db.execute(
                     """UPDATE subscriptions 
                        SET name = ?, cost = ?, billing_cycle = ?, renewal_date = ?, 
-                           usage_rating = ?, estimated_uses_month = ?, status = ?, notes = ?
+                           usage_rating = ?, estimated_uses_month = ?, category = ?, 
+                           plan_tier = ?, payment_method = ?, manage_url = ?, status = ?, notes = ?
                        WHERE id = ?""",
-                    (name, cost, cycle, renewal_date, rating, uses, status, notes, self.item_id)
+                    (name, cost, cycle, renewal_date, rating, uses, category, plan_tier, payment_method, manage_url, status, notes, self.item_id)
                 )
                 self.item_title = name
 
@@ -556,11 +630,25 @@ class SubscriptionsSection(BaseSection):
                     renewal_date TEXT,
                     usage_rating INTEGER DEFAULT 3,
                     estimated_uses_month INTEGER DEFAULT 10,
+                    category TEXT DEFAULT 'Other',
+                    plan_tier TEXT,
+                    payment_method TEXT,
+                    manage_url TEXT,
                     status TEXT DEFAULT 'Active',
                     notes TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
+            cur = self.db.execute("PRAGMA table_info(subscriptions)")
+            cols = [c[1] for c in cur.fetchall()]
+            if "category" not in cols:
+                self.db.execute("ALTER TABLE subscriptions ADD COLUMN category TEXT DEFAULT 'Other'")
+            if "plan_tier" not in cols:
+                self.db.execute("ALTER TABLE subscriptions ADD COLUMN plan_tier TEXT")
+            if "payment_method" not in cols:
+                self.db.execute("ALTER TABLE subscriptions ADD COLUMN payment_method TEXT")
+            if "manage_url" not in cols:
+                self.db.execute("ALTER TABLE subscriptions ADD COLUMN manage_url TEXT")
 
     def list_view(self, parent: Optional[QWidget] = None) -> QWidget:
         return SubscriptionsListView(self, parent)

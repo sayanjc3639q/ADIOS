@@ -16,11 +16,12 @@ from datetime import datetime
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
     QTableView, QFormLayout, QLineEdit, QTextEdit, QComboBox, 
-    QDateEdit, QMessageBox, QApplication, QHeaderView
+    QDateEdit, QMessageBox, QApplication, QHeaderView, QSplitter
 )
 from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QDate
 from app.core.base_section import BaseSection
 from app.core.tab_manager import TabKind
+from app.ui.widgets.item_panels import ItemPanelsWidget
 
 
 STATUS_OPTIONS = ["Idea", "Drafting", "Ready", "Scheduled", "Posted"]
@@ -186,15 +187,18 @@ class LinkedInFormView(QWidget):
         self.item_title = f"Post #{item_id}" if item_id else "New Post"
         self._loading = False
 
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(8)
+        splitter = QSplitter(Qt.Orientation.Horizontal, self)
+        form_container = QWidget()
+        layout = QVBoxLayout(form_container)
+        layout.setContentsMargins(12, 12, 12, 12)
+        layout.setSpacing(10)
 
         form = QFormLayout()
         form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.ExpandingFieldsGrow)
 
         self.txt_title = QLineEdit()
-        form.addRow("Title:", self.txt_title)
+        self.txt_title.setPlaceholderText("Catchy hook or topic title...")
+        form.addRow("Title*:", self.txt_title)
 
         # Status & Planned Date row
         h_meta = QHBoxLayout()
@@ -211,28 +215,29 @@ class LinkedInFormView(QWidget):
         form.addRow("Status / Date:", h_meta)
 
         self.txt_tags = QLineEdit()
-        self.txt_tags.setPlaceholderText("comma-separated e.g. python, career, qt")
-        form.addRow("Tags:", self.txt_tags)
+        self.txt_tags.setPlaceholderText("comma-separated e.g. python, career, qt, open-source")
+        form.addRow("Tags / Hashtags:", self.txt_tags)
 
         # Body with Live Character Counter
         self.txt_body = QTextEdit()
         self.txt_body.setAcceptRichText(False)
+        self.txt_body.setPlaceholderText("Write your post hook, story, insight, and call-to-action...")
         self.lbl_char_count = QLabel("Characters: 0 / 3000 (ideal: 1,000 - 1,800)")
         body_box = QVBoxLayout()
         body_box.addWidget(self.txt_body)
         body_box.addWidget(self.lbl_char_count)
-        form.addRow("Body:", body_box)
+        form.addRow("Post Content:", body_box)
 
         self.txt_notes = QTextEdit()
         self.txt_notes.setMaximumHeight(80)
-        self.txt_notes.setPlaceholderText("Internal notes or brainstorming...")
+        self.txt_notes.setPlaceholderText("Brainstorming notes, asset links, carousel ideas...")
         form.addRow("Internal Notes:", self.txt_notes)
 
         layout.addLayout(form)
 
         # Action Buttons
         btn_bar = QHBoxLayout()
-        self.btn_save = QPushButton("Save")
+        self.btn_save = QPushButton("Save Post")
         self.btn_cancel = QPushButton("Cancel")
         self.btn_copy = QPushButton("Copy to Clipboard")
         self.btn_mark_posted = QPushButton("Mark as Posted")
@@ -250,6 +255,18 @@ class LinkedInFormView(QWidget):
         btn_bar.addStretch()
 
         layout.addLayout(btn_bar)
+
+        splitter.addWidget(form_container)
+
+        # Reusable side panels: Tags, Links, Reminders
+        self.panels = ItemPanelsWidget("linkedin", self.item_id, self.section.db, parent=self)
+        splitter.addWidget(self.panels)
+        splitter.setStretchFactor(0, 3)
+        splitter.setStretchFactor(1, 1)
+
+        root = QVBoxLayout(self)
+        root.setContentsMargins(0, 0, 0, 0)
+        root.addWidget(splitter)
 
         # Signal connections
         self.txt_body.textChanged.connect(self._on_body_changed)
@@ -335,6 +352,9 @@ class LinkedInFormView(QWidget):
                 self.item_id = cur.lastrowid
                 self.item_title = title
             
+            if hasattr(self, "panels"):
+                self.panels.update_item_id(self.item_id)
+
             window = self.window()
             if hasattr(window, "tab_manager"):
                 window.tab_manager.convert_create_to_editor(self, self.item_id, title)

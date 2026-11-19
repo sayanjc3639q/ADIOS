@@ -17,11 +17,13 @@ from datetime import datetime, date
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
     QTableView, QFormLayout, QLineEdit, QTextEdit, QComboBox, 
-    QDateEdit, QDoubleSpinBox, QMessageBox, QHeaderView, QTabWidget, QSpinBox
+    QDateEdit, QDoubleSpinBox, QMessageBox, QHeaderView, QTabWidget, QSpinBox,
+    QSplitter, QGroupBox, QCheckBox
 )
 from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QDate
 from app.core.base_section import BaseSection
 from app.core.tab_manager import TabKind
+from app.ui.widgets.item_panels import ItemPanelsWidget
 
 
 TX_TYPES = ["Expense", "Income", "Transfer"]
@@ -197,6 +199,9 @@ class MoneyListView(QWidget):
             window.tab_manager.open_tab(self.section.id, TabKind.EDITOR, item_id=item_id)
 
 
+PAYMENT_METHODS = ["Card / Online", "Cash", "Bank Transfer", "UPI / Digital Wallet", "Cheque / Other"]
+
+
 class MoneyFormView(QWidget):
     def __init__(self, section: MoneySection, item_id: Optional[int] = None, parent: Optional[QWidget] = None):
         super().__init__(parent)
@@ -205,12 +210,15 @@ class MoneyFormView(QWidget):
         self.item_title = f"Transaction #{item_id}" if item_id else "New Transaction"
         self._loading = False
 
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(8)
+        splitter = QSplitter(Qt.Orientation.Horizontal, self)
+        form_container = QWidget()
+        layout = QVBoxLayout(form_container)
+        layout.setContentsMargins(12, 12, 12, 12)
+        layout.setSpacing(10)
 
         form = QFormLayout()
 
+        # Row 1: Type, Amount, Date
         h_top = QHBoxLayout()
         self.cmb_type = QComboBox()
         self.cmb_type.addItems(TX_TYPES)
@@ -231,6 +239,7 @@ class MoneyFormView(QWidget):
         h_top.addStretch()
         form.addRow("Type / Amount / Date:", h_top)
 
+        # Row 2: Account & Category
         h_cat = QHBoxLayout()
         self.cmb_account = QComboBox()
         self._populate_accounts()
@@ -245,17 +254,37 @@ class MoneyFormView(QWidget):
         h_cat.addStretch()
         form.addRow("Account / Category:", h_cat)
 
+        # Row 3: Description
         self.txt_desc = QLineEdit()
         self.txt_desc.setPlaceholderText("e.g. Weekly grocery run, Coffee, Invoice #123")
-        form.addRow("Description:", self.txt_desc)
+        form.addRow("Description*:", self.txt_desc)
 
+        # Row 4: Detailed Breakdown (Payment Method, Payee / Merchant, Status)
+        h_details = QHBoxLayout()
+        self.cmb_payment_method = QComboBox()
+        self.cmb_payment_method.addItems(PAYMENT_METHODS)
+        h_details.addWidget(QLabel("Method:"))
+        h_details.addWidget(self.cmb_payment_method)
+
+        self.txt_payee = QLineEdit()
+        self.txt_payee.setPlaceholderText("e.g. Amazon, Trader Joe's, Employer Corp")
+        h_details.addWidget(QLabel("Payee / Vendor:"))
+        h_details.addWidget(self.txt_payee)
+
+        self.chk_tax_deductible = QCheckBox("Tax Deductible")
+        h_details.addWidget(self.chk_tax_deductible)
+        h_details.addStretch()
+        form.addRow("Payment & Entity:", h_details)
+
+        # Row 5: Notes & Receipt Reference
         self.txt_notes = QTextEdit()
-        self.txt_notes.setMaximumHeight(80)
-        self.txt_notes.setPlaceholderText("Receipt details, tax notes (no card numbers!)...")
-        form.addRow("Notes:", self.txt_notes)
+        self.txt_notes.setMinimumHeight(100)
+        self.txt_notes.setPlaceholderText("Receipt reference, invoice #, breakdown details (no sensitive card numbers!)...")
+        form.addRow("Notes / Memo:", self.txt_notes)
 
         layout.addLayout(form)
 
+        # Action Buttons
         btn_bar = QHBoxLayout()
         self.btn_save = QPushButton("Save Transaction")
         self.btn_cancel = QPushButton("Cancel")
@@ -270,12 +299,27 @@ class MoneyFormView(QWidget):
         btn_bar.addStretch()
         layout.addLayout(btn_bar)
 
+        splitter.addWidget(form_container)
+
+        # Side Panels: Tags, Links, Reminders
+        self.panels = ItemPanelsWidget("money", self.item_id, self.section.db, parent=self)
+        splitter.addWidget(self.panels)
+        splitter.setStretchFactor(0, 3)
+        splitter.setStretchFactor(1, 1)
+
+        root = QVBoxLayout(self)
+        root.setContentsMargins(0, 0, 0, 0)
+        root.addWidget(splitter)
+
         self.cmb_type.currentTextChanged.connect(self._on_dirty)
         self.spin_amount.valueChanged.connect(self._on_dirty)
         self.date_tx.dateChanged.connect(self._on_dirty)
         self.cmb_account.currentTextChanged.connect(self._on_dirty)
         self.cmb_category.currentTextChanged.connect(self._on_dirty)
         self.txt_desc.textChanged.connect(self._on_dirty)
+        self.cmb_payment_method.currentTextChanged.connect(self._on_dirty)
+        self.txt_payee.textChanged.connect(self._on_dirty)
+        self.chk_tax_deductible.stateChanged.connect(self._on_dirty)
         self.txt_notes.textChanged.connect(self._on_dirty)
 
         self.btn_save.clicked.connect(self.save_item)
@@ -331,6 +375,17 @@ class MoneyFormView(QWidget):
                     self.cmb_category.setEditText(cat)
 
                 self.txt_desc.setText(row["description"] or "")
+                
+                # Extended details
+                if "payment_method" in row.keys() and row["payment_method"]:
+                    idx_pm = self.cmb_payment_method.findText(row["payment_method"])
+                    if idx_pm != -1:
+                        self.cmb_payment_method.setCurrentIndex(idx_pm)
+                if "payee" in row.keys() and row["payee"]:
+                    self.txt_payee.setText(row["payee"])
+                if "is_tax_deductible" in row.keys():
+                    self.chk_tax_deductible.setChecked(bool(row["is_tax_deductible"]))
+
                 self.txt_notes.setPlainText(row["notes"] or "")
                 self.item_title = f"{row['tx_type']}: ${row['amount']:.2f} ({row['description'] or ''})"
 
@@ -351,6 +406,9 @@ class MoneyFormView(QWidget):
         account_id = self.cmb_account.currentData() or 1
         category = self.cmb_category.currentText().strip() or "Other"
         description = self.txt_desc.text().strip() or f"{tx_type} transaction"
+        payment_method = self.cmb_payment_method.currentText()
+        payee = self.txt_payee.text().strip()
+        is_tax_deductible = 1 if self.chk_tax_deductible.isChecked() else 0
         notes = self.txt_notes.toPlainText()
 
         # Sanity check: Ensure no card numbers stored
@@ -363,12 +421,15 @@ class MoneyFormView(QWidget):
             with self.section.db.get_connection():
                 cur = self.section.db.execute(
                     """INSERT INTO money_transactions 
-                       (account_id, tx_date, tx_type, category, amount, description, notes)
-                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                    (account_id, tx_date, tx_type, category, amount, description, notes)
+                       (account_id, tx_date, tx_type, category, amount, description, payment_method, payee, is_tax_deductible, notes)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (account_id, tx_date, tx_type, category, amount, description, payment_method, payee, is_tax_deductible, notes)
                 )
                 self.item_id = cur.lastrowid
                 self.item_title = f"{tx_type}: ${amount:.2f} ({description})"
+
+            if hasattr(self, "panels"):
+                self.panels.update_item_id(self.item_id)
 
             window = self.window()
             if hasattr(window, "tab_manager"):
@@ -378,9 +439,10 @@ class MoneyFormView(QWidget):
             with self.section.db.get_connection():
                 self.section.db.execute(
                     """UPDATE money_transactions 
-                       SET account_id = ?, tx_date = ?, tx_type = ?, category = ?, amount = ?, description = ?, notes = ?
+                       SET account_id = ?, tx_date = ?, tx_type = ?, category = ?, amount = ?, description = ?, 
+                           payment_method = ?, payee = ?, is_tax_deductible = ?, notes = ?
                        WHERE id = ?""",
-                    (account_id, tx_date, tx_type, category, amount, description, notes, self.item_id)
+                    (account_id, tx_date, tx_type, category, amount, description, payment_method, payee, is_tax_deductible, notes, self.item_id)
                 )
                 self.item_title = f"{tx_type}: ${amount:.2f} ({description})"
 
@@ -447,11 +509,23 @@ class MoneySection(BaseSection):
                     category TEXT NOT NULL,
                     amount REAL NOT NULL,
                     description TEXT,
+                    payment_method TEXT DEFAULT 'Card / Online',
+                    payee TEXT,
+                    is_tax_deductible INTEGER DEFAULT 0,
                     notes TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY(account_id) REFERENCES money_accounts(id)
                 );
             """)
+            # Migration check for new columns if table already existed
+            cur = self.db.execute("PRAGMA table_info(money_transactions)")
+            cols = [c[1] for c in cur.fetchall()]
+            if "payment_method" not in cols:
+                self.db.execute("ALTER TABLE money_transactions ADD COLUMN payment_method TEXT DEFAULT 'Card / Online'")
+            if "payee" not in cols:
+                self.db.execute("ALTER TABLE money_transactions ADD COLUMN payee TEXT")
+            if "is_tax_deductible" not in cols:
+                self.db.execute("ALTER TABLE money_transactions ADD COLUMN is_tax_deductible INTEGER DEFAULT 0")
             # Ensure at least one default account exists
             cur = self.db.execute("SELECT COUNT(*) FROM money_accounts")
             if cur.fetchone()[0] == 0:
