@@ -43,8 +43,10 @@ BUILTIN_SVGS: Dict[str, str] = {
     </svg>""",
 
     "money": """<svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="1" x2="12" y2="23"/>
-        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        <line x1="6" y1="3" x2="18" y2="3"/>
+        <line x1="6" y1="8" x2="18" y2="8"/>
+        <path d="M6 13l6.5 8"/>
+        <path d="M6 3h3a4.5 4.5 0 0 1 4.5 4.5c0 2.485-2.015 4.5-4.5 4.5H6"/>
     </svg>""",
 
     "subscriptions": """<svg viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

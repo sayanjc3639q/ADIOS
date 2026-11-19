@@ -247,7 +247,7 @@ class PrintReportDialog(QDialog):
                     "title": r["description"] or "Transaction",
                     "category": r["category"] or "General",
                     "value_raw": amt if is_inc else -amt,
-                    "value_display": f"{sign}${amt:.2f}",
+                    "value_display": f"{sign}₹{amt:.2f}",
                     "is_income": is_inc
                 })
 
@@ -398,8 +398,8 @@ class PrintReportDialog(QDialog):
             total_expense = sum(-it["value_raw"] for it in selected if not it.get("is_income"))
             net = total_income - total_expense
             self.lbl_summary.setText(
-                f"Selected Entries: {count} | Total Income: +${total_income:.2f} | "
-                f"Total Expenses: -${total_expense:.2f} | NET CASH FLOW: ${net:+.2f}"
+                f"Selected Entries: {count} | Total Income: +₹{total_income:.2f} | "
+                f"Total Expenses: -₹{total_expense:.2f} | NET CASH FLOW: ₹{net:+.2f}"
             )
         elif sec_id == "subscriptions":
             total_monthly = sum(it.get("monthly_cost", 0.0) for it in selected)

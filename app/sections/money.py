@@ -64,7 +64,7 @@ class MoneyTableModel(QAbstractTableModel):
             amt = float(item.get("amount") or 0.0)
             tt = item.get("tx_type")
             prefix = "+" if tt == "Income" else ("-" if tt == "Expense" else "")
-            return f"{prefix}${amt:.2f}"
+            return f"{prefix}₹{amt:.2f}"
         elif col == 6:
             return item.get("description") or ""
         return None
@@ -119,7 +119,7 @@ class MoneyListView(QWidget):
         top_bar.addWidget(self.cmb_type)
 
         top_bar.addStretch()
-        self.lbl_summary = QLabel("Income: $0.00 | Expense: $0.00 | Net: $0.00")
+        self.lbl_summary = QLabel("Income: ₹0.00 | Expense: ₹0.00 | Net: ₹0.00")
         top_bar.addWidget(self.lbl_summary)
 
         layout.addLayout(top_bar)
@@ -183,7 +183,7 @@ class MoneyListView(QWidget):
         self.model = MoneyTableModel(filtered)
         self.table.setModel(self.model)
         net = tot_inc - tot_exp
-        self.lbl_summary.setText(f"{len(filtered)} txs | In: +${tot_inc:.2f} | Out: -${tot_exp:.2f} | Net: ${net:.2f}")
+        self.lbl_summary.setText(f"{len(filtered)} txs | In: +₹{tot_inc:.2f} | Out: -₹{tot_exp:.2f} | Net: ₹{net:.2f}")
 
     def _on_new(self):
         window = self.window()
@@ -226,7 +226,7 @@ class MoneyFormView(QWidget):
 
         self.spin_amount = QDoubleSpinBox()
         self.spin_amount.setRange(0.01, 9999999.0)
-        self.spin_amount.setPrefix("$")
+        self.spin_amount.setPrefix("₹")
         self.spin_amount.setValue(10.00)
         h_top.addWidget(QLabel("Amount:"))
         h_top.addWidget(self.spin_amount)
@@ -387,7 +387,7 @@ class MoneyFormView(QWidget):
                     self.chk_tax_deductible.setChecked(bool(row["is_tax_deductible"]))
 
                 self.txt_notes.setPlainText(row["notes"] or "")
-                self.item_title = f"{row['tx_type']}: ${row['amount']:.2f} ({row['description'] or ''})"
+                self.item_title = f"{row['tx_type']}: ₹{row['amount']:.2f} ({row['description'] or ''})"
 
                 window = self.window()
                 if hasattr(window, "tab_manager"):
@@ -426,7 +426,7 @@ class MoneyFormView(QWidget):
                     (account_id, tx_date, tx_type, category, amount, description, payment_method, payee, is_tax_deductible, notes)
                 )
                 self.item_id = cur.lastrowid
-                self.item_title = f"{tx_type}: ${amount:.2f} ({description})"
+                self.item_title = f"{tx_type}: ₹{amount:.2f} ({description})"
 
             if hasattr(self, "panels"):
                 self.panels.update_item_id(self.item_id)
@@ -444,7 +444,7 @@ class MoneyFormView(QWidget):
                        WHERE id = ?""",
                     (account_id, tx_date, tx_type, category, amount, description, payment_method, payee, is_tax_deductible, notes, self.item_id)
                 )
-                self.item_title = f"{tx_type}: ${amount:.2f} ({description})"
+                self.item_title = f"{tx_type}: ₹{amount:.2f} ({description})"
 
             window = self.window()
             if hasattr(window, "tab_manager"):
@@ -558,7 +558,7 @@ class MoneySection(BaseSection):
             )[0]
             
             lbl_month = QLabel(f"<b>Month ({month_prefix}):</b>")
-            lbl_stats = QLabel(f"Income: +${row_inc:.2f}\nExpense: -${row_exp:.2f}\nNet: ${(row_inc - row_exp):.2f}")
+            lbl_stats = QLabel(f"Income: +₹{row_inc:.2f}\nExpense: -₹{row_exp:.2f}\nNet: ₹{(row_inc - row_exp):.2f}")
             l.addWidget(lbl_month)
             l.addWidget(lbl_stats)
 
@@ -581,7 +581,7 @@ class MoneySection(BaseSection):
         """, (f"%{query}%", f"%{query}%", f"%{query}%"))
         return [{
             "id": r["id"],
-            "title": f"Money: {r['tx_type']} ${r['amount']:.2f} - {r['description']}",
+            "title": f"Money: {r['tx_type']} ₹{r['amount']:.2f} - {r['description']}",
             "snippet": f"Category: {r['category']} | Date: {r['tx_date']} | {(r['notes'] or '')[:80]}",
             "section_id": self.id
         } for r in rows]
