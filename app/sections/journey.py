@@ -47,6 +47,19 @@ class JourneyTableModel(QAbstractTableModel):
         col = index.column()
 
         if role == Qt.ItemDataRole.DecorationRole and col == 2:
+            icon_key = item.get("icon_key")
+            if icon_key:
+                return SvgIconPack.get(icon_key, size=18)
+            # Match by type keywords
+            mtype = (item.get("milestone_type") or "").lower()
+            if "award" in mtype or "honor" in mtype:
+                return SvgIconPack.get("journey_award", size=18)
+            elif "promot" in mtype:
+                return SvgIconPack.get("journey_promotion", size=18)
+            elif "launch" in mtype or "release" in mtype:
+                return SvgIconPack.get("journey_launch", size=18)
+            elif "cert" in mtype:
+                return SvgIconPack.get("journey_cert", size=18)
             return SvgIconPack.get("journey", size=18)
 
         if role != Qt.ItemDataRole.DisplayRole:
@@ -185,6 +198,17 @@ class JourneyFormView(QWidget):
 
         form = QFormLayout()
 
+        # Icon preset dropdown
+        h_icon = QHBoxLayout()
+        self.cmb_icon = QComboBox()
+        self._populate_journey_icons()
+        h_icon.addWidget(self.cmb_icon)
+        self.lbl_icon_preview = QLabel()
+        self.lbl_icon_preview.setFixedSize(22, 22)
+        h_icon.addWidget(self.lbl_icon_preview)
+        h_icon.addStretch()
+        form.addRow("Milestone Vector Icon:", h_icon)
+
         self.txt_title = QLineEdit()
         self.txt_title.setPlaceholderText("e.g. Mastered PySide6 Architecture, Deployed First Production Service")
         form.addRow("Milestone Title*:", self.txt_title)
@@ -247,7 +271,8 @@ class JourneyFormView(QWidget):
         root.setContentsMargins(0, 0, 0, 0)
         root.addWidget(splitter)
 
-        self.txt_title.textChanged.connect(self._on_dirty)
+        self.cmb_icon.currentIndexChanged.connect(self._on_icon_changed)
+        self.txt_title.textChanged.connect(self._on_title_changed)
         self.cmb_type.currentTextChanged.connect(self._on_dirty)
         self.spin_impact.valueChanged.connect(self._on_dirty)
         self.txt_learnings.textChanged.connect(self._on_dirty)
@@ -259,6 +284,46 @@ class JourneyFormView(QWidget):
 
         if self.item_id:
             self._load_item()
+
+    def _populate_journey_icons(self):
+        import json
+        self.cmb_icon.clear()
+        self.cmb_icon.addItem(SvgIconPack.get("journey", size=20), "Default Journey Icon", "journey")
+
+        from app.core.svg_icons import CUSTOMIZABLE_ICONS
+        for key, label, cat in CUSTOMIZABLE_ICONS:
+            if cat == "Journey Milestones":
+                self.cmb_icon.addItem(SvgIconPack.get(key, size=20), label, key)
+
+        # Load user-added journey icons from settings
+        try:
+            raw = self.section.db.get_setting("custom_icon_entries", "[]")
+            entries = json.loads(raw)
+            for e in entries:
+                if e.get("category") == "Journey Milestones":
+                    k = e["key"]
+                    l = e["label"]
+                    self.cmb_icon.addItem(SvgIconPack.get(k, size=20), l, k)
+        except Exception:
+            pass
+
+    def _on_icon_changed(self):
+        key = self.cmb_icon.currentData() or "journey"
+        pix = SvgIconPack.get(key, size=22).pixmap(22, 22)
+        self.lbl_icon_preview.setPixmap(pix)
+        self._on_dirty()
+
+    def _on_title_changed(self):
+        current_key = self.cmb_icon.currentData()
+        title_lower = self.txt_title.text().strip().lower()
+        if current_key == "journey":
+            for i in range(self.cmb_icon.count()):
+                k = self.cmb_icon.itemData(i) or ""
+                kw = k.replace("journey_", "").lower()
+                if kw and kw in title_lower:
+                    self.cmb_icon.setCurrentIndex(i)
+                    break
+        self._on_dirty()
 
     def _on_dirty(self):
         if self._loading:
@@ -284,6 +349,14 @@ class JourneyFormView(QWidget):
                 if idx_t != -1:
                     self.cmb_type.setCurrentIndex(idx_t)
 
+                # Set icon if saved
+                icon_k = row["icon_key"] if "icon_key" in row.keys() else "journey"
+                if icon_k:
+                    idx_ic = self.cmb_icon.findData(icon_k)
+                    if idx_ic != -1:
+                        self.cmb_icon.setCurrentIndex(idx_ic)
+                self._on_icon_changed()
+
                 self.spin_impact.setValue(int(row["impact_rating"] or 5))
                 self.txt_learnings.setText(row["learnings"] or "")
                 self.txt_reflection.setPlainText(row["reflection"] or "")
@@ -304,6 +377,7 @@ class JourneyFormView(QWidget):
         entry_date = self.date_entry.date().toString(Qt.DateFormat.ISODate)
         m_type = self.cmb_type.currentText()
         impact = self.spin_impact.value()
+        icon_key = self.cmb_icon.currentData() or "journey"
         learnings = self.txt_learnings.text().strip()
         reflection = self.txt_reflection.toPlainText()
 
@@ -311,9 +385,9 @@ class JourneyFormView(QWidget):
             with self.section.db.get_connection():
                 cur = self.section.db.execute(
                     """INSERT INTO journey_entries 
-                       (title, entry_date, milestone_type, impact_rating, learnings, reflection)
-                       VALUES (?, ?, ?, ?, ?, ?)""",
-                    (title, entry_date, m_type, impact, learnings, reflection)
+                       (title, entry_date, milestone_type, impact_rating, icon_key, learnings, reflection)
+                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    (title, entry_date, m_type, impact, icon_key, learnings, reflection)
                 )
                 self.item_id = cur.lastrowid
                 self.item_title = title
@@ -328,9 +402,9 @@ class JourneyFormView(QWidget):
                 self.section.db.execute(
                     """UPDATE journey_entries 
                        SET title = ?, entry_date = ?, milestone_type = ?, impact_rating = ?,
-                           learnings = ?, reflection = ?, updated_at = CURRENT_TIMESTAMP
+                           icon_key = ?, learnings = ?, reflection = ?, updated_at = CURRENT_TIMESTAMP
                        WHERE id = ?""",
-                    (title, entry_date, m_type, impact, learnings, reflection, self.item_id)
+                    (title, entry_date, m_type, impact, icon_key, learnings, reflection, self.item_id)
                 )
                 self.item_title = title
 
@@ -379,12 +453,17 @@ class JourneySection(BaseSection):
                     entry_date TEXT,
                     milestone_type TEXT DEFAULT 'Major Achievement',
                     impact_rating INTEGER DEFAULT 5,
+                    icon_key TEXT DEFAULT 'journey',
                     learnings TEXT,
                     reflection TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
+            cur = self.db.execute("PRAGMA table_info(journey_entries)")
+            cols = [c[1] for c in cur.fetchall()]
+            if "icon_key" not in cols:
+                self.db.execute("ALTER TABLE journey_entries ADD COLUMN icon_key TEXT DEFAULT 'journey'")
 
     def list_view(self, parent: Optional[QWidget] = None) -> QWidget:
         return JourneyListView(self, parent)

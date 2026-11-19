@@ -254,6 +254,85 @@ BUILTIN_SVGS: Dict[str, str] = {
     "pin_outline": """<svg viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="12" y1="17" x2="12" y2="22"/>
         <path d="M5 17h14v-2l-2-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v8l-2 2v2z"/>
+    </svg>""",
+
+    # SKILL PRESETS
+    "skill_python": """<svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2c-3.5 0-5 1.5-5 3.5V8h5v1H5.5C3.5 9 2 10.5 2 14s1.5 5 3.5 5H7v-2.5c0-1.5 1-2.5 2.5-2.5h5c1.5 0 2.5-1 2.5-2.5V8c0-3.5-2.5-6-5-6z" fill="#3776AB"/>
+        <circle cx="9" cy="5" r="1" fill="#FFFFFF"/>
+        <path d="M12 22c3.5 0 5-1.5 5-3.5V16h-5v-1h6.5c2 0 3.5-1.5 3.5-5s-1.5-5-3.5-5H17v2.5c0 1.5-1 2.5-2.5 2.5h-5c-1.5 0-2.5 1-2.5 2.5V16c0 3.5 2.5 6 5 6z" fill="#FFD43B"/>
+        <circle cx="15" cy="19" r="1" fill="#FFFFFF"/>
+    </svg>""",
+
+    "skill_javascript": """<svg viewBox="0 0 24 24" fill="none">
+        <rect width="24" height="24" rx="3" fill="#F7DF1E"/>
+        <path d="M7 13v5c0 1.5 1 2.5 2.5 2.5 1.5 0 2-.8 2-1.5" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
+        <path d="M14 17.5c.5.8 1.2 1.5 2.3 1.5 1.2 0 2-.6 2-1.4 0-1-.8-1.4-2.2-2-1.8-.7-3-1.4-3-3.3 0-1.8 1.4-3.3 3.4-3.3 1.5 0 2.6.6 3.3 1.8" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
+    </svg>""",
+
+    "skill_typescript": """<svg viewBox="0 0 24 24" fill="none">
+        <rect width="24" height="24" rx="3" fill="#3178C6"/>
+        <path d="M4 10h8m-4 0v9" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+        <path d="M13 16.5c.5.6 1.1 1.2 2 1.2 1 0 1.6-.5 1.6-1.1 0-.8-.7-1.1-1.8-1.5-1.5-.6-2.5-1.1-2.5-2.5 0-1.4 1.1-2.4 2.7-2.4 1.2 0 2.1.5 2.6 1.4" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>""",
+
+    "skill_react": """<svg viewBox="0 0 24 24" fill="none" stroke="#61DAFB" stroke-width="1.8">
+        <ellipse cx="12" cy="12" rx="4" ry="10" transform="rotate(30 12 12)"/>
+        <ellipse cx="12" cy="12" rx="4" ry="10" transform="rotate(90 12 12)"/>
+        <ellipse cx="12" cy="12" rx="4" ry="10" transform="rotate(150 12 12)"/>
+        <circle cx="12" cy="12" r="2" fill="#61DAFB"/>
+    </svg>""",
+
+    "skill_database": """<svg viewBox="0 0 24 24" fill="none" stroke="#336791" stroke-width="2">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+    </svg>""",
+
+    "skill_docker": """<svg viewBox="0 0 24 24" fill="none">
+        <path d="M2 13c1 0 2.5 1 4 1 2.5 0 3.5-2 6-2 3 0 4 2 6 2 2 0 3-1 4-1" stroke="#2496ED" stroke-width="2"/>
+        <rect x="5" y="9" width="3" height="3" fill="#2496ED"/>
+        <rect x="9" y="9" width="3" height="3" fill="#2496ED"/>
+        <rect x="13" y="9" width="3" height="3" fill="#2496ED"/>
+        <rect x="9" y="5" width="3" height="3" fill="#2496ED"/>
+    </svg>""",
+
+    "skill_cloud": """<svg viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+    </svg>""",
+
+    "skill_git": """<svg viewBox="0 0 24 24" fill="none" stroke="#F05032" stroke-width="2">
+        <circle cx="18" cy="6" r="3"/>
+        <circle cx="6" cy="12" r="3"/>
+        <circle cx="18" cy="18" r="3"/>
+        <path d="M9 12h3a3 3 0 0 0 3-3V6m0 12v-3a3 3 0 0 0-3-3"/>
+    </svg>""",
+
+    # JOURNEY / MILESTONE PRESETS
+    "journey_award": """<svg viewBox="0 0 24 24" fill="none" stroke="#EAB308" stroke-width="2">
+        <circle cx="12" cy="8" r="6"/>
+        <path d="M15.48 13.92L18 22l-6-3-6 3 2.52-8.08"/>
+    </svg>""",
+
+    "journey_promotion": """<svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2">
+        <polyline points="18 15 12 9 6 15"/>
+        <polyline points="18 9 12 3 6 9"/>
+        <line x1="12" y1="12" x2="12" y2="21"/>
+    </svg>""",
+
+    "journey_launch": """<svg viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2">
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+        <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+    </svg>""",
+
+    "journey_cert": """<svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2">
+        <rect x="3" y="4" width="18" height="13" rx="2"/>
+        <circle cx="12" cy="11" r="3"/>
+        <path d="M10 17l-1 5 3-2 3 2-1-5"/>
+    </svg>""",
+
+    "journey_milestone": """<svg viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
     </svg>"""
 }
 
@@ -303,6 +382,23 @@ CUSTOMIZABLE_ICONS: List[Tuple[str, str, str]] = [
     ("link", "Linked Item Icon", "In-App Tools"),
     ("clock", "Reminder / Clock Icon", "In-App Tools"),
     ("pin", "Pin Tab Icon", "In-App Tools"),
+
+    # Skill Presets
+    ("skill_python", "Python", "Skill Icons"),
+    ("skill_javascript", "JavaScript", "Skill Icons"),
+    ("skill_typescript", "TypeScript", "Skill Icons"),
+    ("skill_react", "React / Frontend", "Skill Icons"),
+    ("skill_database", "Database / SQL", "Skill Icons"),
+    ("skill_docker", "Docker / DevOps", "Skill Icons"),
+    ("skill_cloud", "Cloud Infrastructure", "Skill Icons"),
+    ("skill_git", "Git / Version Control", "Skill Icons"),
+
+    # Journey Presets
+    ("journey_award", "Award / Honor", "Journey Milestones"),
+    ("journey_promotion", "Promotion / Advancement", "Journey Milestones"),
+    ("journey_launch", "Product Launch / Release", "Journey Milestones"),
+    ("journey_cert", "Certification Completed", "Journey Milestones"),
+    ("journey_milestone", "Core Technical Milestone", "Journey Milestones"),
 ]
 
 

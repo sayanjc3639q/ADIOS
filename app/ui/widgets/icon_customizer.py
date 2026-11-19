@@ -51,6 +51,12 @@ class AddNewIconEntryDialog(QDialog):
         elif category == "Clubs & Societies":
             default_prefix = "club_"
             self.txt_key.setPlaceholderText("e.g. photography, astronomy, chess")
+        elif category == "Skill Icons":
+            default_prefix = "skill_"
+            self.txt_key.setPlaceholderText("e.g. go, rust, vue, cplusplus")
+        elif category == "Journey Milestones":
+            default_prefix = "journey_"
+            self.txt_key.setPlaceholderText("e.g. speaking, hackathon, published")
         else:
             self.txt_key.setPlaceholderText("e.g. custom_section_key")
 
@@ -111,6 +117,10 @@ class AddNewIconEntryDialog(QDialog):
             key = f"provider_{raw_key}"
         elif self.category == "Clubs & Societies" and not raw_key.startswith("club_"):
             key = f"club_{raw_key}"
+        elif self.category == "Skill Icons" and not raw_key.startswith("skill_"):
+            key = f"skill_{raw_key}"
+        elif self.category == "Journey Milestones" and not raw_key.startswith("journey_"):
+            key = f"journey_{raw_key}"
         else:
             key = raw_key
 
@@ -152,7 +162,14 @@ class IconCustomizerWidget(QWidget):
         layout.addWidget(self.tabs, stretch=1)
 
         # Create Category Pages
-        self.categories = ["Sections", "Subscription Providers", "Clubs & Societies", "In-App Tools"]
+        self.categories = [
+            "Sections", 
+            "Subscription Providers", 
+            "Clubs & Societies", 
+            "Skill Icons", 
+            "Journey Milestones", 
+            "In-App Tools"
+        ]
         self.tables: dict[str, QTableWidget] = {}
 
         for cat in self.categories:

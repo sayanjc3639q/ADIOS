@@ -47,6 +47,14 @@ class SkillsTableModel(QAbstractTableModel):
         col = index.column()
 
         if role == Qt.ItemDataRole.DecorationRole and col == 1:
+            icon_key = item.get("icon_key")
+            if icon_key:
+                return SvgIconPack.get(icon_key, size=18)
+            # Match by name keywords
+            name_low = (item.get("name") or "").lower()
+            for k in ["python", "javascript", "typescript", "react", "database", "docker", "cloud", "git"]:
+                if k in name_low:
+                    return SvgIconPack.get(f"skill_{k}", size=18)
             return SvgIconPack.get("skills", size=18)
 
         if role != Qt.ItemDataRole.DisplayRole:
@@ -185,6 +193,17 @@ class SkillsFormView(QWidget):
 
         form = QFormLayout()
 
+        # Icon preset dropdown
+        h_icon = QHBoxLayout()
+        self.cmb_icon = QComboBox()
+        self._populate_skill_icons()
+        h_icon.addWidget(self.cmb_icon)
+        self.lbl_icon_preview = QLabel()
+        self.lbl_icon_preview.setFixedSize(22, 22)
+        h_icon.addWidget(self.lbl_icon_preview)
+        h_icon.addStretch()
+        form.addRow("Skill Vector Icon:", h_icon)
+
         self.txt_name = QLineEdit()
         self.txt_name.setPlaceholderText("e.g. Python, Rust, Qt/PySide6, Docker, PostgreSQL")
         form.addRow("Skill Name*:", self.txt_name)
@@ -257,7 +276,8 @@ class SkillsFormView(QWidget):
         root.setContentsMargins(0, 0, 0, 0)
         root.addWidget(splitter)
 
-        self.txt_name.textChanged.connect(self._on_dirty)
+        self.cmb_icon.currentIndexChanged.connect(self._on_icon_changed)
+        self.txt_name.textChanged.connect(self._on_name_changed)
         self.cmb_category.currentTextChanged.connect(self._on_dirty)
         self.cmb_current_level.currentTextChanged.connect(self._on_dirty)
         self.cmb_target_level.currentTextChanged.connect(self._on_dirty)
@@ -271,6 +291,47 @@ class SkillsFormView(QWidget):
 
         if self.item_id:
             self._load_item()
+
+    def _populate_skill_icons(self):
+        import json
+        self.cmb_icon.clear()
+        self.cmb_icon.addItem(SvgIconPack.get("skills", size=20), "Default Skill Icon", "skills")
+
+        from app.core.svg_icons import CUSTOMIZABLE_ICONS
+        for key, label, cat in CUSTOMIZABLE_ICONS:
+            if cat == "Skill Icons":
+                self.cmb_icon.addItem(SvgIconPack.get(key, size=20), label, key)
+
+        # Also load user-added skill icons from settings
+        try:
+            raw = self.section.db.get_setting("custom_icon_entries", "[]")
+            entries = json.loads(raw)
+            for e in entries:
+                if e.get("category") == "Skill Icons":
+                    k = e["key"]
+                    l = e["label"]
+                    self.cmb_icon.addItem(SvgIconPack.get(k, size=20), l, k)
+        except Exception:
+            pass
+
+    def _on_icon_changed(self):
+        key = self.cmb_icon.currentData() or "skills"
+        pix = SvgIconPack.get(key, size=22).pixmap(22, 22)
+        self.lbl_icon_preview.setPixmap(pix)
+        self._on_dirty()
+
+    def _on_name_changed(self):
+        # Auto-suggest icon based on typed skill name if icon is currently default
+        current_key = self.cmb_icon.currentData()
+        name_lower = self.txt_name.text().strip().lower()
+        if current_key == "skills":
+            for i in range(self.cmb_icon.count()):
+                k = self.cmb_icon.itemData(i) or ""
+                kw = k.replace("skill_", "").lower()
+                if kw and kw in name_lower:
+                    self.cmb_icon.setCurrentIndex(i)
+                    break
+        self._on_dirty()
 
     def _on_progress_changed(self, val: int):
         self.progress_bar.setValue(val)
@@ -305,6 +366,14 @@ class SkillsFormView(QWidget):
                 self.spin_progress.setValue(prog)
                 self.progress_bar.setValue(prog)
 
+                # Set icon if saved
+                icon_k = row["icon_key"] if "icon_key" in row.keys() else "skills"
+                if icon_k:
+                    idx_ic = self.cmb_icon.findData(icon_k)
+                    if idx_ic != -1:
+                        self.cmb_icon.setCurrentIndex(idx_ic)
+                self._on_icon_changed()
+
                 self.txt_proof.setText(row["proof_links"] or "")
                 self.txt_notes.setPlainText(row["notes"] or "")
                 self.item_title = row["name"] or f"Skill #{self.item_id}"
@@ -325,6 +394,7 @@ class SkillsFormView(QWidget):
         current_level = self.cmb_current_level.currentText()
         target_level = self.cmb_target_level.currentText()
         progress = self.spin_progress.value()
+        icon_key = self.cmb_icon.currentData() or "skills"
         proof = self.txt_proof.text().strip()
         notes = self.txt_notes.toPlainText()
 
@@ -332,9 +402,9 @@ class SkillsFormView(QWidget):
             with self.section.db.get_connection():
                 cur = self.section.db.execute(
                     """INSERT INTO skills 
-                       (name, category, proficiency_level, progress_percent, target_level, proof_links, notes)
-                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                    (name, category, current_level, progress, target_level, proof, notes)
+                       (name, category, proficiency_level, progress_percent, target_level, icon_key, proof_links, notes)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (name, category, current_level, progress, target_level, icon_key, proof, notes)
                 )
                 self.item_id = cur.lastrowid
                 self.item_title = name
@@ -349,9 +419,9 @@ class SkillsFormView(QWidget):
                 self.section.db.execute(
                     """UPDATE skills 
                        SET name = ?, category = ?, proficiency_level = ?, progress_percent = ?,
-                           target_level = ?, proof_links = ?, notes = ?, updated_at = CURRENT_TIMESTAMP
+                           target_level = ?, icon_key = ?, proof_links = ?, notes = ?, updated_at = CURRENT_TIMESTAMP
                        WHERE id = ?""",
-                    (name, category, current_level, progress, target_level, proof, notes, self.item_id)
+                    (name, category, current_level, progress, target_level, icon_key, proof, notes, self.item_id)
                 )
                 self.item_title = name
 
@@ -401,12 +471,17 @@ class SkillsSection(BaseSection):
                     proficiency_level TEXT DEFAULT 'Intermediate',
                     progress_percent INTEGER DEFAULT 50,
                     target_level TEXT DEFAULT 'Advanced',
+                    icon_key TEXT DEFAULT 'skills',
                     proof_links TEXT,
                     notes TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
+            cur = self.db.execute("PRAGMA table_info(skills)")
+            cols = [c[1] for c in cur.fetchall()]
+            if "icon_key" not in cols:
+                self.db.execute("ALTER TABLE skills ADD COLUMN icon_key TEXT DEFAULT 'skills'")
 
     def list_view(self, parent: Optional[QWidget] = None) -> QWidget:
         return SkillsListView(self, parent)
