@@ -535,7 +535,19 @@ class ExamsFormView(QWidget):
                 if t_str:
                     self.time_exam.setTime(QTime.fromString(t_str, "HH:mm"))
 
-                self.spin_duration.setValue(int(row["duration"] or 180))
+                raw_dur = row["duration"]
+                dur_val = 180
+                if raw_dur is not None:
+                    try:
+                        dur_val = int(raw_dur)
+                    except (ValueError, TypeError):
+                        # Handle text like "3 hours" or "180 mins"
+                        import re
+                        m = re.search(r'\d+', str(raw_dur))
+                        dur_val = int(m.group()) if m else 180
+                        if "hour" in str(raw_dur).lower():
+                            dur_val *= 60
+                self.spin_duration.setValue(dur_val)
                 self.txt_venue.setText(row["venue"] or "")
 
                 if row["marks_obtained"] is not None:

@@ -871,12 +871,35 @@ class ClubsSection(BaseSection):
         }]
 
     def search(self, query: str) -> List[Dict[str, Any]]:
-        rows = self.db.fetchall("""
+        results = []
+        # Search clubs
+        club_rows = self.db.fetchall("""
+            SELECT id, name, my_role, description FROM clubs 
+            WHERE name LIKE ? OR my_role LIKE ? OR description LIKE ?
+        """, (f"%{query}%", f"%{query}%", f"%{query}%"))
+        for c in club_rows:
+            results.append({
+                "id": c["id"],
+                "title": f"Club: {c['name']} ({c['my_role'] or 'Member'})",
+                "snippet": (c["description"] or "")[:100],
+                "section_id": self.id
+            })
+
+        # Search club tasks
+        task_rows = self.db.fetchall("""
             SELECT t.id, t.task, t.deadline, t.notes, c.name as club_name 
             FROM club_tasks t
             LEFT JOIN clubs c ON t.club_id = c.id
             WHERE t.task LIKE ? OR t.notes LIKE ? OR c.name LIKE ?
         """, (f"%{query}%", f"%{query}%", f"%{query}%"))
+        for t in task_rows:
+            results.append({
+                "id": t["id"],
+                "title": f"Club Task: [{t['club_name'] or 'General'}] {t['task']}",
+                "snippet": f"Due: {t['deadline'] or 'No date'} - {t['notes'] or ''}"[:100],
+                "section_id": self.id
+            })
+        return results
         return [{
             "id": r["id"],
             "title": f"[{r['club_name']}] {r['task']}",
