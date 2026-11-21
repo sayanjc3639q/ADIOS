@@ -32,6 +32,9 @@ venv/
 env/
 ENV/
 
+# Admin Server (private / local only)
+admin/
+
 # PyInstaller
 *.spec
 
