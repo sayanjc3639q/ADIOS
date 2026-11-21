@@ -32,14 +32,21 @@ venv/
 env/
 ENV/
 
-# Database files & local test outputs
+# PyInstaller
+*.spec
+
+# Database files, backups & local runtime logs
 *.db
 *.db-journal
 *.bak
+backups/
 adios.log
+
+# Generated test & export artifacts
 test_*.pdf
 test_*.png
 preview_page.png
+*.pdf
 
 # Pytest / IDE
 .pytest_cache/
