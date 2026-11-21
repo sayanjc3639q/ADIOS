@@ -17,6 +17,7 @@ class TabKind(str, Enum):
     SEARCH = "SEARCH"
     SETTINGS = "SETTINGS"
     TOOLS = "TOOLS"
+    RELEASE_NOTES = "RELEASE_NOTES"
 
 class TabManager(QObject):
     """
@@ -112,6 +113,10 @@ class TabManager(QObject):
             from app.ui.widgets.settings_view import SettingsView
             return SettingsView(self.registry.db, self)
 
+        if kind == TabKind.RELEASE_NOTES:
+            from app.ui.widgets.release_notes_view import ReleaseNotesView
+            return ReleaseNotesView(self.tab_widget)
+
         section = self.registry.get(section_id)
         if not section:
             from PySide6.QtWidgets import QLabel
@@ -139,6 +144,8 @@ class TabManager(QObject):
             return "Search Results"
         if kind == TabKind.SETTINGS:
             return "Settings"
+        if kind == TabKind.RELEASE_NOTES:
+            return "Release Notes"
 
         section = self.registry.get(section_id)
         sec_name = section.name if section else section_id

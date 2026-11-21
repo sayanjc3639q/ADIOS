@@ -144,11 +144,17 @@ class ActionManager:
         self.actions["help_guide"] = QAction(WinIcons.get("info"), "&User Guide", mw)
         self.actions["help_guide"].triggered.connect(lambda: QMessageBox.information(mw, "User Guide", "ADIOS: Personal Desktop Management System.\n\nUse the Left Toolbar or GO menu to switch sections."))
 
+        self.actions["help_release_notes"] = QAction(WinIcons.get("study"), "&Release Notes", mw)
+        self.actions["help_release_notes"].triggered.connect(lambda: mw.tab_manager.open_tab("system", TabKind.RELEASE_NOTES))
+
+        self.actions["help_check_updates"] = QAction(WinIcons.get("refresh"), "&Check for Updates...", mw)
+        self.actions["help_check_updates"].triggered.connect(mw.manual_check_updates)
+
         self.actions["help_logs"] = QAction(WinIcons.get("folder"), "View &Log File", mw)
         self.actions["help_logs"].triggered.connect(self._show_logs)
 
         self.actions["help_about"] = QAction(WinIcons.get("shield"), "&About ADIOS", mw)
-        self.actions["help_about"].triggered.connect(lambda: QMessageBox.about(mw, "About ADIOS", "ADIOS v1.0\nPersonal Desktop Management Application\nQt Classic Native Interface."))
+        self.actions["help_about"].triggered.connect(self._show_about)
 
     def build_menus(self, menu_bar: QMenuBar) -> None:
         mw = self.mw
@@ -258,6 +264,8 @@ class ActionManager:
         menu_help = menu_bar.addMenu("&Help")
         menu_help.addAction(self.actions["help_shortcuts"])
         menu_help.addAction(self.actions["help_guide"])
+        menu_help.addAction(self.actions["help_release_notes"])
+        menu_help.addAction(self.actions["help_check_updates"])
         menu_help.addAction(self.actions["help_logs"])
         menu_help.addSeparator()
         menu_help.addAction(self.actions["help_about"])
@@ -292,6 +300,27 @@ class ActionManager:
         profile_menu.addAction("Exit").triggered.connect(mw.close)
         self.btn_profile.setMenu(profile_menu)
 
+        # UPDATE BUTTON IN TOP RIGHT CORNER (Only visible when update available)
+        self.btn_update = QPushButton("⚡ Install Update", self.right_corner_widget)
+        self.btn_update.setStyleSheet("""
+            QPushButton {
+                background-color: #16a34a;
+                color: #ffffff;
+                font-weight: 700;
+                font-size: 11.5px;
+                padding: 2px 8px;
+                border-radius: 4px;
+                border: 1px solid #15803d;
+            }
+            QPushButton:hover {
+                background-color: #15803d;
+            }
+        """)
+        self.btn_update.setFixedHeight(24)
+        self.btn_update.setVisible(False)
+        self.btn_update.clicked.connect(mw.open_update_dialog)
+
+        corner_layout.addWidget(self.btn_update)
         corner_layout.addWidget(self.corner_search)
         corner_layout.addWidget(self.btn_settings)
         corner_layout.addWidget(self.btn_profile)
@@ -475,6 +504,18 @@ class ActionManager:
     def _on_compact_db(self) -> None:
         self.mw.db.compact()
         QMessageBox.information(self.mw, "Database Compact", "Database check and compact completed successfully.")
+
+    def _show_about(self) -> None:
+        from app.version import APP_VERSION
+        QMessageBox.about(
+            self.mw,
+            "About ADIOS",
+            f"<b>ADIOS — Personal Desktop Management</b><br>"
+            f"Version: <b>v{APP_VERSION}</b><br><br>"
+            f"Clean, lightweight desktop manager for Windows.<br>"
+            f"Built with Python & PySide6 (Qt) • 100% Offline-First.<br><br>"
+            f"GitHub: <a href='https://github.com/sayanjc3639q/ADIOS'>sayanjc3639q/ADIOS</a>"
+        )
 
     def _open_data_folder(self) -> None:
         import os, subprocess

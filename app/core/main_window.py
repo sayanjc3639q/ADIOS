@@ -85,6 +85,10 @@ class MainWindow(QMainWindow):
         self.reminders = ReminderSystem(self)
         self.reminders.start()
 
+        # Update info storage
+        self.latest_update_info: Optional[Dict[str, str]] = None
+        self._start_update_check()
+
         # 9. Restore Tabs or open Home
         self.restore_startup_state()
 
@@ -318,6 +322,10 @@ class MainWindow(QMainWindow):
         self.update_status_bar()
 
     def restore_startup_state(self) -> None:
+        from app.version import APP_VERSION
+        last_seen_ver = self.db.get_setting("last_seen_version", "")
+        is_first_run_of_version = (last_seen_ver != APP_VERSION)
+
         behavior = self.db.get_setting("startup_behavior", "Restore Open Tabs")
         if behavior == "Restore Open Tabs":
             saved_tabs_json = self.db.get_setting("open_tabs_state", "[]")
@@ -332,6 +340,11 @@ class MainWindow(QMainWindow):
                             pass
             except Exception:
                 pass
+
+        # If freshly updated or installed, open the Release Notes tab automatically
+        if is_first_run_of_version:
+            self.tab_manager.open_tab("system", TabKind.RELEASE_NOTES)
+            self.db.set_setting("last_seen_version", APP_VERSION)
 
         if self.tab_widget.count() == 0:
             self.tab_manager.open_tab("system", TabKind.HOME)
@@ -384,3 +397,68 @@ class MainWindow(QMainWindow):
 
         self.db.close()
         event.accept()
+
+    def _start_update_check(self) -> None:
+        """Starts background GitHub release check without stalling startup."""
+        from app.core.updater import CheckUpdateThread
+        self.update_thread = CheckUpdateThread(self)
+        self.update_thread.update_available.connect(self._on_update_available)
+        self.update_thread.start()
+
+    def _on_update_available(self, version: str, download_url: str, release_notes: str) -> None:
+        self.latest_update_info = {
+            "version": version,
+            "download_url": download_url,
+            "release_notes": release_notes
+        }
+        # Reveal prominent Install Update button in top-right corner of menubar
+        if hasattr(self, "action_manager") and hasattr(self.action_manager, "btn_update"):
+            self.action_manager.btn_update.setText(f"⚡ Update v{version}")
+            self.action_manager.btn_update.setVisible(True)
+
+    def manual_check_updates(self) -> None:
+        """Called by Help -> Check for Updates."""
+        from app.version import APP_VERSION
+        from app.core.updater import CheckUpdateThread
+
+        self.status_tab_info.setText("Checking GitHub for updates...")
+        thread = CheckUpdateThread(self)
+
+        def on_avail(version, url, notes):
+            self._on_update_available(version, url, notes)
+            self.open_update_dialog()
+
+        def on_none():
+            QMessageBox.information(
+                self,
+                "Check for Updates",
+                f"You are running the latest version of ADIOS (v{APP_VERSION})."
+            )
+
+        def on_fail(err):
+            QMessageBox.warning(
+                self,
+                "Check for Updates",
+                f"Could not reach update server. You may be offline or rate-limited.\n\nError: {err}"
+            )
+
+        thread.update_available.connect(on_avail)
+        thread.no_update.connect(on_none)
+        thread.check_failed.connect(on_fail)
+        thread.start()
+        self._manual_thread = thread
+
+    def open_update_dialog(self) -> None:
+        """Opens dialog to download update and restart."""
+        if not self.latest_update_info:
+            self.manual_check_updates()
+            return
+
+        from app.core.updater import UpdateDialog
+        dlg = UpdateDialog(
+            version=self.latest_update_info["version"],
+            download_url=self.latest_update_info["download_url"],
+            release_notes=self.latest_update_info["release_notes"],
+            parent=self
+        )
+        dlg.exec()
