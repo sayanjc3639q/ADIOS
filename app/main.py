@@ -52,8 +52,16 @@ def main() -> None:
     font.setFamily("Segoe UI")
     app.setFont(font)
 
+    # Set window icon
+    from PySide6.QtGui import QIcon
+    icon_path = Path("resources/icons/app_logo.png")
+    if icon_path.exists():
+        app.setWindowIcon(QIcon(str(icon_path)))
+
     # Initialize main window
     window = MainWindow()
+    if icon_path.exists():
+        window.setWindowIcon(QIcon(str(icon_path)))
     
     # Apply user-saved theme (Light or Dark)
     from app.core.theme_manager import ThemeManager

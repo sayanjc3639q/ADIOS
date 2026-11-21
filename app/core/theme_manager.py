@@ -114,20 +114,39 @@ QStatusBar {
     border-top: 1px solid #3e4451;
 }
 QMenuBar {
-    background-color: #21252b;
-    color: #e6ebf5;
+    background-color: #1e1e1e;
+    color: #cccccc;
+    border-bottom: 1px solid #2d2d2d;
+    padding: 2px 4px;
+}
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 QMenuBar::item:selected {
-    background-color: #3e4451;
+    background-color: #323233;
+    color: #ffffff;
 }
 QMenu {
-    background-color: #21252b;
-    color: #e6ebf5;
-    border: 1px solid #3e4451;
+    background-color: #252526;
+    color: #cccccc;
+    border: 1px solid #454545;
+    padding: 4px;
+    border-radius: 4px;
+}
+QMenu::item {
+    padding: 4px 20px 4px 10px;
+    border-radius: 3px;
 }
 QMenu::item:selected {
-    background-color: #2563eb;
+    background-color: #094771;
     color: #ffffff;
+}
+QMenu::separator {
+    height: 1px;
+    background-color: #3c3c3c;
+    margin: 4px 0px;
 }
 """
 
@@ -150,6 +169,42 @@ class ThemeManager:
             app.setPalette(palette)
             app.setStyleSheet(DARK_STYLESHEET)
         else:
-            # Revert to standard Fusion Light palette and empty custom stylesheet
+            # Revert to standard Fusion Light palette with modern dark unified top bar
             app.setPalette(app.style().standardPalette())
-            app.setStyleSheet("")
+            app.setStyleSheet("""
+                QMenuBar {
+                    background-color: #24292e;
+                    color: #d1d5db;
+                    border-bottom: 1px solid #1b1f23;
+                    padding: 2px 4px;
+                }
+                QMenuBar::item {
+                    background: transparent;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                }
+                QMenuBar::item:selected {
+                    background-color: #3f4448;
+                    color: #ffffff;
+                }
+                QMenu {
+                    background-color: #24292e;
+                    color: #d1d5db;
+                    border: 1px solid #374151;
+                    padding: 4px;
+                    border-radius: 4px;
+                }
+                QMenu::item {
+                    padding: 4px 20px 4px 10px;
+                    border-radius: 3px;
+                }
+                QMenu::item:selected {
+                    background-color: #0366d6;
+                    color: #ffffff;
+                }
+                QMenu::separator {
+                    height: 1px;
+                    background-color: #374151;
+                    margin: 4px 0px;
+                }
+            """)

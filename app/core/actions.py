@@ -159,6 +159,15 @@ class ActionManager:
     def build_menus(self, menu_bar: QMenuBar) -> None:
         mw = self.mw
 
+        # Add Modern Custom App Logo as first clickable item on MenuBar (Matching 2nd image)
+        import os
+        from PySide6.QtGui import QIcon, QPixmap
+        logo_path = "resources/icons/app_logo.png"
+        if os.path.exists(logo_path):
+            act_app_brand = menu_bar.addAction(QIcon(logo_path), "")
+            act_app_brand.setToolTip("ADIOS - Click to go Home")
+            act_app_brand.triggered.connect(lambda: mw.tab_manager.open_tab("system", TabKind.HOME))
+
         # FILE
         menu_file = menu_bar.addMenu("&File")
         menu_file.addAction(self.actions["file_new"])
@@ -276,21 +285,77 @@ class ActionManager:
         corner_layout.setContentsMargins(0, 1, 6, 1)
         corner_layout.setSpacing(6)
 
+        # Center/Context Title (Matching Modern Top Bar in 2nd image)
+        self.lbl_title_context = QLabel("ADIOS — Personal Desktop Manager", self.right_corner_widget)
+        self.lbl_title_context.setStyleSheet("""
+            QLabel {
+                color: #94a3b8;
+                font-size: 12px;
+                font-weight: 500;
+                padding-right: 18px;
+            }
+        """)
+
+        # Search icon button
+        self.btn_search_icon = QPushButton(self.right_corner_widget)
+        self.btn_search_icon.setIcon(WinIcons.get("search"))
+        self.btn_search_icon.setToolTip("Quick Search (Ctrl+F)")
+        self.btn_search_icon.setFixedSize(26, 24)
+        self.btn_search_icon.setStyleSheet("""
+            QPushButton {
+                background: transparent;
+                border: none;
+                border-radius: 4px;
+                padding: 2px;
+            }
+            QPushButton:hover {
+                background: rgba(255, 255, 255, 0.08);
+            }
+        """)
+        self.btn_search_icon.clicked.connect(self._toggle_corner_search)
+
         self.corner_search = QLineEdit(self.right_corner_widget)
         self.corner_search.setPlaceholderText("Search...")
-        self.corner_search.setFixedWidth(140)
-        self.corner_search.setFixedHeight(24)
+        self.corner_search.setFixedWidth(130)
+        self.corner_search.setFixedHeight(22)
+        self.corner_search.setVisible(False)
         self.corner_search.returnPressed.connect(self._on_corner_search)
 
-        self.btn_settings = QPushButton(" Settings", self.right_corner_widget)
+        self.btn_settings = QPushButton(self.right_corner_widget)
         self.btn_settings.setIcon(WinIcons.get("settings"))
-        self.btn_settings.setFixedHeight(24)
+        self.btn_settings.setToolTip("Settings")
+        self.btn_settings.setFixedSize(26, 24)
+        self.btn_settings.setStyleSheet("""
+            QPushButton {
+                background: transparent;
+                border: none;
+                border-radius: 4px;
+                padding: 2px;
+            }
+            QPushButton:hover {
+                background: rgba(255, 255, 255, 0.08);
+            }
+        """)
         self.btn_settings.clicked.connect(lambda: mw.tab_manager.open_tab("system", TabKind.SETTINGS))
 
-        self.btn_profile = QPushButton(" Offline (Sign In) [v]", self.right_corner_widget)
+        self.btn_profile = QPushButton(" Offline", self.right_corner_widget)
         self.btn_profile.setIcon(WinIcons.get("user"))
         self.btn_profile.setToolTip("Offline Mode - Click to Sign In & Sync")
-        self.btn_profile.setFixedHeight(24)
+        self.btn_profile.setFixedHeight(22)
+        self.btn_profile.setStyleSheet("""
+            QPushButton {
+                background: transparent;
+                color: #cbd5e1;
+                font-size: 11.5px;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                border-radius: 4px;
+                padding: 2px 8px;
+            }
+            QPushButton:hover {
+                background: rgba(255, 255, 255, 0.08);
+                color: #ffffff;
+            }
+        """)
         profile_menu = QMenu(self.btn_profile)
         profile_menu.addAction("Sign In to Sync...").triggered.connect(lambda: QMessageBox.information(mw, "Account Sync", "Cloud sync sign-in. Currently operating in Offline mode."))
         profile_menu.addAction("Profile Details...").triggered.connect(lambda: QMessageBox.information(mw, "Profile", "Local Offline User Profile."))
@@ -301,13 +366,13 @@ class ActionManager:
         self.btn_profile.setMenu(profile_menu)
 
         # UPDATE BUTTON IN TOP RIGHT CORNER (Only visible when update available)
-        self.btn_update = QPushButton("⚡ Install Update", self.right_corner_widget)
+        self.btn_update = QPushButton("⚡ Update", self.right_corner_widget)
         self.btn_update.setStyleSheet("""
             QPushButton {
                 background-color: #16a34a;
                 color: #ffffff;
                 font-weight: 700;
-                font-size: 11.5px;
+                font-size: 11px;
                 padding: 2px 8px;
                 border-radius: 4px;
                 border: 1px solid #15803d;
@@ -316,11 +381,13 @@ class ActionManager:
                 background-color: #15803d;
             }
         """)
-        self.btn_update.setFixedHeight(24)
+        self.btn_update.setFixedHeight(22)
         self.btn_update.setVisible(False)
         self.btn_update.clicked.connect(mw.open_update_dialog)
 
+        corner_layout.addWidget(self.lbl_title_context)
         corner_layout.addWidget(self.btn_update)
+        corner_layout.addWidget(self.btn_search_icon)
         corner_layout.addWidget(self.corner_search)
         corner_layout.addWidget(self.btn_settings)
         corner_layout.addWidget(self.btn_profile)
@@ -453,6 +520,12 @@ class ActionManager:
         query = self.corner_search.text().strip()
         if query:
             self.mw.tab_manager.open_tab("system", TabKind.SEARCH, query=query)
+
+    def _toggle_corner_search(self) -> None:
+        vis = not self.corner_search.isVisible()
+        self.corner_search.setVisible(vis)
+        if vis:
+            self.corner_search.setFocus()
 
     def _on_edit_find(self) -> None:
         self.corner_search.setFocus()
