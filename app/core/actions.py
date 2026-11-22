@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, Any, List
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import (
-    QMainWindow, QMenuBar, QMenu, QToolBar, QStatusBar, QLineEdit, QPushButton, QWidget, QHBoxLayout, QMessageBox, QFileDialog
+    QMainWindow, QMenuBar, QMenu, QToolBar, QStatusBar, QLineEdit, QPushButton, QWidget, QHBoxLayout, QMessageBox, QFileDialog, QLabel
 )
 from app.core.tab_manager import TabKind
 from app.core.icons import WinIcons
