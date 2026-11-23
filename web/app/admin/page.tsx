@@ -153,7 +153,7 @@ export default function AdminPage() {
               lineHeight: 1.4
             }}>
               <div style={{ fontWeight: 600, marginBottom: '2px' }}>
-                {isLocked ? '🔒 Access Temporarily Locked' : 'Authentication Notice'}
+                {isLocked ? 'Access Temporarily Locked' : 'Authentication Notice'}
               </div>
               {errorMsg}
             </div>

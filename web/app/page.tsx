@@ -3,6 +3,24 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  IndianRupee,
+  CheckSquare,
+  Calendar,
+  CreditCard,
+  Users,
+  Timer,
+  ClipboardList,
+  Sparkles,
+  GitCommit,
+  Share2,
+  User,
+  Key,
+  Eye,
+  EyeOff,
+  Copy,
+  Check
+} from 'lucide-react';
 
 export default function HomePage() {
   // Authentication Modal / State for Purchasing
@@ -261,9 +279,12 @@ export default function HomePage() {
                 }}
                 title="View Profile & Product Keys"
               >
-                <span>👤</span>
+                <User size={13} strokeWidth={2} />
                 <span>{user.name}</span>
-                <span style={{ fontSize: '10px', opacity: 0.8 }}>[Keys]</span>
+                <span style={{ fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '2px', opacity: 0.9 }}>
+                  <Key size={11} strokeWidth={2} />
+                  <span>Keys</span>
+                </span>
               </button>
             ) : (
               <button
@@ -355,10 +376,15 @@ export default function HomePage() {
                     color: 'var(--accent)',
                     cursor: 'pointer',
                     fontSize: '12px',
-                    padding: 0
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
                   }}
                 >
-                  👤 {user.name} (View Keys)
+                  <User size={13} strokeWidth={2} />
+                  <span>{user.name}</span>
+                  <span style={{ color: 'var(--text-muted)' }}>(View Keys)</span>
                 </button>
               ) : (
                 <button
@@ -640,80 +666,80 @@ export default function HomePage() {
             }}
           >
             {/* Money */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-money)', fontWeight: 700, fontSize: '16px' }}>₹</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <IndianRupee size={17} strokeWidth={2} color="var(--mod-money)" />
               <div>
                 <b>Money</b>: transactions, accounts and categories in ₹, with a monthly cash flow summary.
               </div>
             </div>
 
             {/* Exams */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-exams)', fontWeight: 700, fontSize: '15px' }}>☑</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <CheckSquare size={17} strokeWidth={1.75} color="var(--mod-exams)" />
               <div>
                 <b>Exams</b>: upcoming exams and dates.
               </div>
             </div>
 
             {/* Schedule */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-schedule)', fontWeight: 700, fontSize: '15px' }}>📅</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Calendar size={17} strokeWidth={1.75} color="var(--mod-schedule)" />
               <div>
                 <b>Schedule</b>: events for today and the week.
               </div>
             </div>
 
             {/* Subscriptions */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-subscriptions)', fontWeight: 700, fontSize: '15px' }}>💳</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <CreditCard size={17} strokeWidth={1.75} color="var(--mod-subscriptions)" />
               <div>
                 <b>Subscriptions</b>: tracks renewals and warns about the next 14 days.
               </div>
             </div>
 
             {/* Clubs & Societies */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-clubs)', fontWeight: 700, fontSize: '15px' }}>👥</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Users size={17} strokeWidth={1.75} color="var(--mod-clubs)" />
               <div>
                 <b>Clubs &amp; societies</b>: tasks and due dates per club.
               </div>
             </div>
 
             {/* Study Tracker */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-study)', fontWeight: 700, fontSize: '15px' }}>⏱</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Timer size={17} strokeWidth={1.75} color="var(--mod-study)" />
               <div>
                 <b>Study tracker</b>: study sessions with a Pomodoro timer.
               </div>
             </div>
 
             {/* Project Wishlist */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-wishlist)', fontWeight: 700, fontSize: '15px' }}>📋</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <ClipboardList size={17} strokeWidth={1.75} color="var(--mod-wishlist)" />
               <div>
                 <b>Project wishlist</b>: projects I want to build.
               </div>
             </div>
 
             {/* Skills Inventory */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-skills)', fontWeight: 700, fontSize: '15px' }}>★</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Sparkles size={17} strokeWidth={1.75} color="var(--mod-skills)" />
               <div>
                 <b>Skills inventory</b>: skills I have and want to learn.
               </div>
             </div>
 
             {/* Development Journey */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-journey)', fontWeight: 700, fontSize: '15px' }}>◎</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <GitCommit size={17} strokeWidth={1.75} color="var(--mod-journey)" />
               <div>
                 <b>Development journey</b>: a running log of progress.
               </div>
             </div>
 
             {/* LinkedIn Queue */}
-            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ color: 'var(--mod-linkedin)', fontWeight: 700, fontSize: '15px' }}>in</span>
+            <div style={{ borderBottom: '1px dotted var(--border)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Share2 size={17} strokeWidth={1.75} color="var(--mod-linkedin)" />
               <div>
                 <b>LinkedIn queue</b>: drafts and scheduled posts.
               </div>
@@ -1374,8 +1400,9 @@ export default function HomePage() {
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--ok)' }}>
-                            ● {pk.plan}
+                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--ok)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--ok)' }}></span>
+                            <span>{pk.plan}</span>
                           </span>
                           <span className="font-mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                             {pk.issuedAt}
@@ -1406,19 +1433,21 @@ export default function HomePage() {
                             type="button"
                             onClick={() => toggleRevealKey(pk.key)}
                             className="btn btn-secondary"
-                            style={{ height: '32px', padding: '0 10px', fontSize: '12px' }}
+                            style={{ height: '32px', padding: '0 8px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                             title={isRevealed ? 'Hide product key' : 'Reveal full product key'}
                           >
-                            {isRevealed ? 'Hide' : 'Reveal'}
+                            {isRevealed ? <EyeOff size={13} strokeWidth={2} /> : <Eye size={13} strokeWidth={2} />}
+                            <span>{isRevealed ? 'Hide' : 'Reveal'}</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => handleCopyKey(pk.key)}
                             className="btn btn-primary"
-                            style={{ height: '32px', padding: '0 10px', fontSize: '12px' }}
+                            style={{ height: '32px', padding: '0 8px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                             title="Copy product key to clipboard"
                           >
-                            {isCopied ? 'Copied!' : 'Copy'}
+                            {isCopied ? <Check size={13} strokeWidth={2} /> : <Copy size={13} strokeWidth={2} />}
+                            <span>{isCopied ? 'Copied' : 'Copy'}</span>
                           </button>
                         </div>
                         <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>

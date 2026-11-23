@@ -110,7 +110,7 @@ export default function CommunityPage() {
               <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.5, marginBottom: '12px' }}>{d.message}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', color: 'var(--text-muted)' }}>
                 <span>Posted by <b>{d.author}</b></span>
-                <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>👍 {d.likes} reactions</span>
+                <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>{d.likes} reactions</span>
               </div>
             </div>
           ))}
