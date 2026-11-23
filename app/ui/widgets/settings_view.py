@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 )
 from app.ui.widgets.icon_customizer import IconCustomizerWidget
 from app.core.icons import WinIcons
+from app.core.theme_manager import THEME_NAMES, ThemeManager
 
 
 class GeneralSettingsWidget(QWidget):
@@ -30,7 +31,7 @@ class GeneralSettingsWidget(QWidget):
         f_theme = QFormLayout(grp_theme)
 
         self.combo_theme = QComboBox()
-        self.combo_theme.addItems(["Light Mode", "Dark Mode"])
+        self.combo_theme.addItems(THEME_NAMES)
         self.combo_theme.currentTextChanged.connect(self._on_theme_changed)
         f_theme.addRow("Theme:", self.combo_theme)
         layout.addWidget(grp_theme)
@@ -99,7 +100,6 @@ class GeneralSettingsWidget(QWidget):
         self.load_settings()
 
     def _on_theme_changed(self, theme_text: str):
-        from app.core.theme_manager import ThemeManager
         ThemeManager.apply_theme(theme_text)
 
     def load_settings(self):
@@ -148,7 +148,6 @@ class GeneralSettingsWidget(QWidget):
     def save_settings(self):
         theme_val = self.combo_theme.currentText()
         self.db.set_setting("theme_mode", theme_val)
-        from app.core.theme_manager import ThemeManager
         ThemeManager.apply_theme(theme_val)
 
         self.db.set_setting("currency_mode", self.combo_currency.currentText())
