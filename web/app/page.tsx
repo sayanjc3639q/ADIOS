@@ -5,11 +5,15 @@ import Link from 'next/link';
 
 export default function HomePage() {
   // Authentication Modal / State for Purchasing
-  const [user, setUser] = useState<{ name: string; email: string; phone: string } | null>(null);
+  const [user, setUser] = useState<{ id?: number; name: string; email: string; phone: string } | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [authName, setAuthName] = useState('');
   const [authEmail, setAuthEmail] = useState('');
   const [authPhone, setAuthPhone] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
 
   // Payment Checkout Modal
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -24,12 +28,38 @@ export default function HomePage() {
   // Open FAQs state
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  const handleAuthSubmit = (e: React.FormEvent) => {
+  const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!authName || !authEmail) return;
-    setUser({ name: authName, email: authEmail, phone: authPhone });
-    setShowAuthModal(false);
-    setShowCheckoutModal(true);
+    setAuthError('');
+    if (!authEmail) return;
+
+    setAuthLoading(true);
+    try {
+      const res = await fetch('/api/user/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: authMode,
+          name: authName,
+          email: authEmail,
+          phone: authPhone,
+          password: authPassword
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setUser(data.user);
+        setShowAuthModal(false);
+        setAuthPassword('');
+      } else {
+        setAuthError(data.message || 'Authentication failed. Please verify credentials.');
+      }
+    } catch (err: any) {
+      setAuthError('Network error connecting to auth service.');
+    } finally {
+      setAuthLoading(false);
+    }
   };
 
   const handleStartPurchase = () => {
@@ -333,26 +363,86 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* 1. SIGN IN MODAL */}
+      {/* 1. SECURE SIGN IN / SIGN UP MODAL */}
       {showAuthModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-          <div className="card" style={{ maxWidth: '420px', width: '100%' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '6px' }}>Customer Sign In</h3>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '18px' }}>
-              We only save your Name, Email, and Phone for customer support and key delivery.
-            </p>
-            <form onSubmit={handleAuthSubmit}>
-              <div style={{ marginBottom: '12px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Your Full Name*</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Sayan Maity"
-                  value={authName}
-                  onChange={e => setAuthName(e.target.value)}
-                  required
-                  style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 'var(--radius)', outline: 'none' }}
-                />
+          <div className="card" style={{ maxWidth: '440px', width: '100%', padding: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div>
+                <h3 style={{ fontSize: '18px', fontWeight: 700 }}>
+                  {authMode === 'signin' ? 'Sign In to ADIOS' : 'Create ADIOS Account'}
+                </h3>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  {authMode === 'signin' ? 'Access your cloud sync and license keys' : 'Quick register to purchase your Lifetime Key'}
+                </p>
               </div>
+              <button 
+                onClick={() => { setShowAuthModal(false); setAuthError(''); }} 
+                style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: 'var(--text-muted)' }}
+              >✕</button>
+            </div>
+
+            {/* Mode Toggle Buttons */}
+            <div style={{ display: 'flex', background: '#f1f5f9', padding: '3px', borderRadius: '8px', marginBottom: '18px' }}>
+              <button
+                type="button"
+                onClick={() => { setAuthMode('signin'); setAuthError(''); }}
+                style={{
+                  flex: 1,
+                  padding: '7px 0',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  background: authMode === 'signin' ? '#ffffff' : 'transparent',
+                  color: authMode === 'signin' ? 'var(--primary)' : 'var(--text-secondary)',
+                  boxShadow: authMode === 'signin' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                }}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAuthMode('signup'); setAuthError(''); }}
+                style={{
+                  flex: 1,
+                  padding: '7px 0',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  background: authMode === 'signup' ? '#ffffff' : 'transparent',
+                  color: authMode === 'signup' ? 'var(--primary)' : 'var(--text-secondary)',
+                  boxShadow: authMode === 'signup' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                }}
+              >
+                Create Account
+              </button>
+            </div>
+
+            {authError && (
+              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '9px 12px', borderRadius: '6px', fontSize: '13px', marginBottom: '16px' }}>
+                {authError}
+              </div>
+            )}
+
+            <form onSubmit={handleAuthSubmit}>
+              {authMode === 'signup' && (
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Your Full Name*</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Rahul Sharma"
+                    value={authName}
+                    onChange={e => setAuthName(e.target.value)}
+                    required
+                    style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 'var(--radius)', outline: 'none' }}
+                  />
+                </div>
+              )}
+
               <div style={{ marginBottom: '12px' }}>
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Email Address*</label>
                 <input
@@ -364,21 +454,47 @@ export default function HomePage() {
                   style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 'var(--radius)', outline: 'none' }}
                 />
               </div>
+
+              {authMode === 'signup' && (
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Contact Number (for delivery & SMS update)</label>
+                  <input
+                    type="tel"
+                    placeholder="+91 9876543210"
+                    value={authPhone}
+                    onChange={e => setAuthPhone(e.target.value)}
+                    style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 'var(--radius)', outline: 'none' }}
+                  />
+                </div>
+              )}
+
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Contact Number (for updates & support)</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>
+                  Password* {authMode === 'signup' && <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>(min 6 chars)</span>}
+                </label>
                 <input
-                  type="tel"
-                  placeholder="+91 9876543210"
-                  value={authPhone}
-                  onChange={e => setAuthPhone(e.target.value)}
+                  type="password"
+                  placeholder="••••••••••••"
+                  value={authPassword}
+                  onChange={e => setAuthPassword(e.target.value)}
+                  required
                   style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 'var(--radius)', outline: 'none' }}
                 />
               </div>
+
               <div style={{ display: 'flex', gap: '8px' }}>
-                <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>Continue to Payment</button>
-                <button type="button" onClick={() => setShowAuthModal(false)} className="btn btn-secondary">Cancel</button>
+                <button type="submit" disabled={authLoading} className="btn btn-primary" style={{ flex: 1, padding: '10px' }}>
+                  {authLoading ? 'Verifying...' : authMode === 'signin' ? 'Sign In' : 'Create & Continue'}
+                </button>
+                <button type="button" onClick={() => { setShowAuthModal(false); setAuthError(''); }} className="btn btn-secondary">
+                  Cancel
+                </button>
               </div>
             </form>
+
+            <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)' }}>
+              🔒 Protected by 256-bit encryption. We never share your personal details.
+            </div>
           </div>
         </div>
       )}
