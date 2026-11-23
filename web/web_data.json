@@ -15,9 +15,30 @@
       "phone": "+91 9811122233",
       "role": "user",
       "createdAt": "2026-11-21"
+    },
+    {
+      "id": 3,
+      "name": "SAYAN MAITY",
+      "email": "me@sayanmaity.com",
+      "phone": "03224452169",
+      "password": "123456",
+      "role": "user",
+      "createdAt": "2026-11-23"
     }
   ],
   "orders": [
+    {
+      "id": "ORD-1087",
+      "userName": "SAYAN MAITY",
+      "userEmail": "me@sayanmaity.com",
+      "userPhone": "03224452169",
+      "amount": 999,
+      "utrNumber": "123456789123",
+      "plan": "Pro Lifetime Key",
+      "status": "Approved & Key Issued",
+      "createdAt": "11/23/2026, 10:04:28 PM",
+      "issuedKey": "ADIOS-PRO-X0DL-A32T"
+    },
     {
       "id": "ORD-9021",
       "userName": "Rahul Sharma",
@@ -49,5 +70,9 @@
       "likes": 9,
       "createdAt": "2026-11-22 11:00"
     }
-  ]
+  ],
+  "adminLockout": {
+    "failedAttempts": 0,
+    "lockedUntil": null
+  }
 }

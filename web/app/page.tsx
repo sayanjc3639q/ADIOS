@@ -22,6 +22,54 @@ export default function HomePage() {
   const [orderSubmitted, setOrderSubmitted] = useState(false);
   const [submittingOrder, setSubmittingOrder] = useState(false);
 
+  // Profile Modal State
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [profileData, setProfileData] = useState<{
+    orders: any[];
+    productKeys: Array<{ key: string; plan: string; orderId: string; issuedAt: string }>;
+  } | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const [revealedKeys, setRevealedKeys] = useState<{ [key: string]: boolean }>({});
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const fetchUserProfile = async (email: string) => {
+    setLoadingProfile(true);
+    try {
+      const res = await fetch(`/api/user/profile?email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      if (data.success) {
+        setProfileData({
+          orders: data.orders || [],
+          productKeys: data.productKeys || []
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingProfile(false);
+    }
+  };
+
+  const handleOpenProfile = () => {
+    if (user?.email) {
+      fetchUserProfile(user.email);
+      setShowProfileModal(true);
+    }
+  };
+
+  const toggleRevealKey = (key: string) => {
+    setRevealedKeys(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
+  const handleCopyKey = (key: string) => {
+    navigator.clipboard.writeText(key);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
+
   // Linux command copy state
   const [copiedLinux, setCopiedLinux] = useState(false);
 
@@ -195,18 +243,28 @@ export default function HomePage() {
             </Link>
 
             {user ? (
-              <span
+              <button
+                type="button"
+                onClick={handleOpenProfile}
                 className="font-mono"
                 style={{
                   fontSize: '12px',
                   color: '#ffffff',
                   background: 'rgba(255, 255, 255, 0.15)',
                   padding: '3px 8px',
-                  borderRadius: 'var(--radius)'
+                  borderRadius: 'var(--radius)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
                 }}
+                title="View Profile & Product Keys"
               >
-                {user.name}
-              </span>
+                <span>👤</span>
+                <span>{user.name}</span>
+                <span style={{ fontSize: '10px', opacity: 0.8 }}>[Keys]</span>
+              </button>
             ) : (
               <button
                 type="button"
@@ -286,7 +344,22 @@ export default function HomePage() {
               <a href="#faq" style={{ color: 'var(--text)', textDecoration: 'none', fontSize: '13px' }}>FAQs</a>
               <Link href="/community" style={{ color: 'var(--text)', textDecoration: 'none', fontSize: '13px' }}>Community</Link>
               {user ? (
-                <span className="font-mono" style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{user.name}</span>
+                <button
+                  type="button"
+                  onClick={handleOpenProfile}
+                  className="font-mono"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    textAlign: 'left',
+                    color: 'var(--accent)',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                    padding: 0
+                  }}
+                >
+                  👤 {user.name} (View Keys)
+                </button>
               ) : (
                 <button
                   type="button"
@@ -1197,6 +1270,237 @@ export default function HomePage() {
                 </form>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* 3. USER PROFILE & PRODUCT KEYS MODAL */}
+      {showProfileModal && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '20px'
+          }}
+        >
+          <div className="card" style={{ maxWidth: '520px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', borderBottom: '1px solid var(--border)', paddingBottom: '10px' }}>
+              <div>
+                <h3 style={{ fontSize: '16px' }}>Account &amp; License Keys</h3>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  Manage your personal profile and access your genuine ADIOS product keys.
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowProfileModal(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', color: 'var(--text-muted)' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* User Details Box */}
+            <div
+              style={{
+                background: 'var(--surface-alt)',
+                border: '1px solid var(--border)',
+                padding: '12px 14px',
+                borderRadius: 'var(--radius)',
+                marginBottom: '18px',
+                fontSize: '13px'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Name:</span>
+                <b>{user?.name}</b>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Email:</span>
+                <span className="font-mono">{user?.email}</span>
+              </div>
+              {user?.phone && (
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Phone:</span>
+                  <span className="font-mono">{user?.phone}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Product Keys Section */}
+            <div style={{ marginBottom: '18px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: 600 }}>Your Genuine Product Keys</h4>
+                <button
+                  type="button"
+                  onClick={() => user?.email && fetchUserProfile(user.email)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--accent)',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textDecoration: 'underline'
+                  }}
+                >
+                  Refresh
+                </button>
+              </div>
+
+              {loadingProfile ? (
+                <div style={{ padding: '16px', textAlign: 'center', fontSize: '13px', color: 'var(--text-muted)' }}>
+                  Loading your product keys...
+                </div>
+              ) : profileData?.productKeys && profileData.productKeys.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {profileData.productKeys.map((pk, idx) => {
+                    const isRevealed = revealedKeys[pk.key] || false;
+                    const maskedKey = pk.key.slice(0, 10) + '••••-••••';
+                    const isCopied = copiedKey === pk.key;
+
+                    return (
+                      <div
+                        key={idx}
+                        style={{
+                          background: 'var(--surface)',
+                          border: '1px solid var(--border)',
+                          borderRadius: 'var(--radius)',
+                          padding: '12px 14px'
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--ok)' }}>
+                            ● {pk.plan}
+                          </span>
+                          <span className="font-mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                            {pk.issuedAt}
+                          </span>
+                        </div>
+
+                        {/* Hidden / Revealed Key Input + Action Buttons */}
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                          <input
+                            type="text"
+                            readOnly
+                            value={isRevealed ? pk.key : maskedKey}
+                            className="font-mono"
+                            style={{
+                              flex: 1,
+                              height: '32px',
+                              padding: '0 8px',
+                              fontSize: '13px',
+                              fontWeight: 600,
+                              background: 'var(--surface-alt)',
+                              border: '1px solid var(--border)',
+                              borderRadius: 'var(--radius)',
+                              color: 'var(--text)',
+                              letterSpacing: '0.5px'
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => toggleRevealKey(pk.key)}
+                            className="btn btn-secondary"
+                            style={{ height: '32px', padding: '0 10px', fontSize: '12px' }}
+                            title={isRevealed ? 'Hide product key' : 'Reveal full product key'}
+                          >
+                            {isRevealed ? 'Hide' : 'Reveal'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleCopyKey(pk.key)}
+                            className="btn btn-primary"
+                            style={{ height: '32px', padding: '0 10px', fontSize: '12px' }}
+                            title="Copy product key to clipboard"
+                          >
+                            {isCopied ? 'Copied!' : 'Copy'}
+                          </button>
+                        </div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                          Paste this key in the desktop app under <b>Help → Activate Product Key</b> to enable cloud sync.
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    background: 'var(--surface-alt)',
+                    border: '1px dashed var(--border)',
+                    padding: '16px',
+                    borderRadius: 'var(--radius)',
+                    textAlign: 'center',
+                    fontSize: '13px',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <p style={{ marginBottom: '8px' }}>No active product key registered under this account yet.</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowProfileModal(false);
+                      setShowCheckoutModal(true);
+                    }}
+                    className="btn btn-secondary"
+                    style={{ height: '30px', fontSize: '12px' }}
+                  >
+                    Buy Lifetime Key (₹999)
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Pending Verifications */}
+            {profileData?.orders && profileData.orders.some(o => o.status === 'Pending Verification') && (
+              <div
+                style={{
+                  background: '#fffbeb',
+                  border: '1px solid #fef3c7',
+                  padding: '10px 12px',
+                  borderRadius: 'var(--radius)',
+                  fontSize: '12px',
+                  color: '#92400e',
+                  marginBottom: '16px'
+                }}
+              >
+                <b>Pending Verification:</b> A payment reference is currently under review by our admin team.
+                Your key will appear here as soon as the transaction is confirmed.
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setUser(null);
+                  setShowProfileModal(false);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#b91c1c',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  padding: 0
+                }}
+              >
+                Sign out
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowProfileModal(false)}
+                className="btn btn-secondary"
+                style={{ height: '32px' }}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
