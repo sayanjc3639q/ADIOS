@@ -160,51 +160,19 @@ QHeaderView::section {
     border: 1px solid #e2e8f0;
     font-weight: 600;
 }
-QTabWidget::pane {
-    border-top: 1px solid #cbd5e1;
-    background: #ffffff;
-    top: -1px;
-}
-QTabBar {
-    background: transparent;
-    qproperty-drawBase: 0;
-}
 QTabBar::tab {
     background: #f1f5f9;
     color: #475569;
-    padding: 6px 12px 6px 10px;
+    padding: 6px 14px;
     border: 1px solid #cbd5e1;
-    border-bottom: 1px solid #cbd5e1;
-    margin-right: 3px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    min-height: 20px;
-}
-QTabBar::tab:hover:!selected {
-    background: #f8fafc;
-    color: #1e293b;
-    border-color: #94a3b8;
+    border-bottom: none;
+    margin-right: -1px;
 }
 QTabBar::tab:selected {
     background: #ffffff;
     color: #0284c7;
-    font-weight: 600;
-    border-color: #cbd5e1;
+    font-weight: bold;
     border-bottom: 2px solid #0284c7;
-    margin-bottom: -1px;
-}
-QTabBar::close-button {
-    image: url(resources/icons/tab_close.svg);
-    subcontrol-position: right;
-    margin-left: 6px;
-    padding: 2px;
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-}
-QTabBar::close-button:hover {
-    image: url(resources/icons/tab_close_hover.svg);
-    background: #fee2e2;
 }
 QStatusBar {
     background: #f1f3f5;
@@ -217,13 +185,8 @@ DARK_CLASSIC_STYLESHEET = """
 QToolTip { color: #ffffff; background-color: #2b2b2b; border: 1px solid #767676; }
 QTableView { gridline-color: #383838; background-color: #1e1e1e; alternate-background-color: #252526; color: #d4d4d4; selection-background-color: #0e639c; selection-color: #ffffff; }
 QHeaderView::section { background-color: #252526; color: #cccccc; padding: 4px; border: 1px solid #383838; font-weight: 600; }
-QTabWidget::pane { border-top: 1px solid #3c3c3c; background: #1e1e1e; top: -1px; }
-QTabBar { background: transparent; qproperty-drawBase: 0; }
-QTabBar::tab { background: #2d2d2d; color: #969696; padding: 6px 12px 6px 10px; border: 1px solid #3c3c3c; border-bottom: 1px solid #3c3c3c; margin-right: 3px; border-top-left-radius: 4px; border-top-right-radius: 4px; min-height: 20px; }
-QTabBar::tab:hover:!selected { background: #333333; color: #d4d4d4; }
-QTabBar::tab:selected { background: #1e1e1e; color: #ffffff; font-weight: bold; border-color: #3c3c3c; border-bottom: 2px solid #007acc; margin-bottom: -1px; }
-QTabBar::close-button { image: url(resources/icons/tab_close_dark.svg); subcontrol-position: right; margin-left: 6px; padding: 2px; width: 14px; height: 14px; border-radius: 3px; }
-QTabBar::close-button:hover { image: url(resources/icons/tab_close_dark_hover.svg); background: #7f1d1d; }
+QTabBar::tab { background: #2d2d2d; color: #969696; padding: 6px 14px; border: 1px solid #3c3c3c; border-bottom: none; margin-right: -1px; }
+QTabBar::tab:selected { background: #1e1e1e; color: #ffffff; font-weight: bold; border-bottom: 2px solid #007acc; }
 QGroupBox { border: 1px solid #3c3c3c; margin-top: 10px; padding-top: 10px; font-weight: bold; }
 QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 4px; color: #4fc1ff; }
 QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QComboBox { background-color: #252526; color: #cccccc; border: 1px solid #3c3c3c; padding: 3px 5px; border-radius: 2px; }
@@ -247,12 +210,8 @@ MONOKAI_STYLESHEET = """
 QToolTip { color: #f8f8f2; background-color: #383a32; border: 1px solid #75715e; }
 QTableView { gridline-color: #49483e; background-color: #272822; alternate-background-color: #32332c; color: #f8f8f2; selection-background-color: #f92672; selection-color: #ffffff; }
 QHeaderView::section { background-color: #383a32; color: #e6db74; padding: 4px; border: 1px solid #49483e; font-weight: bold; }
-QTabWidget::pane { border-top: 1px solid #49483e; background: #272822; top: -1px; }
-QTabBar { background: transparent; qproperty-drawBase: 0; }
-QTabBar::tab { background: #3e3d32; color: #a6e22e; padding: 6px 12px 6px 10px; border: 1px solid #49483e; border-bottom: 1px solid #49483e; margin-right: 3px; border-top-left-radius: 4px; border-top-right-radius: 4px; min-height: 20px; }
-QTabBar::tab:selected { background: #272822; color: #f8f8f2; font-weight: bold; border-color: #49483e; border-bottom: 2px solid #a6e22e; margin-bottom: -1px; }
-QTabBar::close-button { image: url(resources/icons/tab_close_dark.svg); subcontrol-position: right; margin-left: 6px; padding: 2px; width: 14px; height: 14px; border-radius: 3px; }
-QTabBar::close-button:hover { image: url(resources/icons/tab_close_dark_hover.svg); background: #f92672; }
+QTabBar::tab { background: #3e3d32; color: #a6e22e; padding: 6px 14px; border: 1px solid #49483e; border-bottom: none; margin-right: -1px; }
+QTabBar::tab:selected { background: #272822; color: #f8f8f2; font-weight: bold; border-bottom: 2px solid #a6e22e; }
 QGroupBox { border: 1px solid #75715e; margin-top: 10px; padding-top: 10px; font-weight: bold; }
 QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 4px; color: #a6e22e; }
 QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QComboBox { background-color: #383a32; color: #f8f8f2; border: 1px solid #49483e; padding: 3px 5px; border-radius: 2px; }
@@ -276,12 +235,8 @@ TOKYO_NIGHT_STYLESHEET = """
 QToolTip { color: #c0caf5; background-color: #24283b; border: 1px solid #414868; }
 QTableView { gridline-color: #2f3549; background-color: #1a1b26; alternate-background-color: #24283b; color: #c0caf5; selection-background-color: #7aa2f7; selection-color: #1a1b26; }
 QHeaderView::section { background-color: #24283b; color: #7dcfff; padding: 4px; border: 1px solid #2f3549; font-weight: bold; }
-QTabWidget::pane { border-top: 1px solid #2f3549; background: #1a1b26; top: -1px; }
-QTabBar { background: transparent; qproperty-drawBase: 0; }
-QTabBar::tab { background: #24283b; color: #a9b1d6; padding: 6px 12px 6px 10px; border: 1px solid #2f3549; border-bottom: 1px solid #2f3549; margin-right: 3px; border-top-left-radius: 4px; border-top-right-radius: 4px; min-height: 20px; }
-QTabBar::tab:selected { background: #1a1b26; color: #7aa2f7; font-weight: bold; border-color: #2f3549; border-bottom: 2px solid #7aa2f7; margin-bottom: -1px; }
-QTabBar::close-button { image: url(resources/icons/tab_close_dark.svg); subcontrol-position: right; margin-left: 6px; padding: 2px; width: 14px; height: 14px; border-radius: 3px; }
-QTabBar::close-button:hover { image: url(resources/icons/tab_close_dark_hover.svg); background: #f7768e; }
+QTabBar::tab { background: #24283b; color: #a9b1d6; padding: 6px 14px; border: 1px solid #2f3549; border-bottom: none; margin-right: -1px; }
+QTabBar::tab:selected { background: #1a1b26; color: #7aa2f7; font-weight: bold; border-bottom: 2px solid #7aa2f7; }
 QGroupBox { border: 1px solid #414868; margin-top: 10px; padding-top: 10px; font-weight: bold; }
 QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 4px; color: #bb9af7; }
 QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QComboBox { background-color: #24283b; color: #c0caf5; border: 1px solid #414868; padding: 3px 5px; border-radius: 2px; }
@@ -305,12 +260,8 @@ HIGH_CONTRAST_STYLESHEET = """
 QToolTip { color: #ffff00; background-color: #000000; border: 2px solid #ffffff; }
 QTableView { gridline-color: #ffffff; background-color: #000000; alternate-background-color: #121212; color: #ffffff; selection-background-color: #1a73e8; selection-color: #ffffff; border: 1px solid #ffffff; }
 QHeaderView::section { background-color: #000000; color: #ffff00; padding: 4px; border: 1px solid #ffffff; font-weight: bold; }
-QTabWidget::pane { border-top: 2px solid #ffffff; background: #000000; top: -1px; }
-QTabBar { background: transparent; qproperty-drawBase: 0; }
-QTabBar::tab { background: #1a1a1a; color: #ffffff; padding: 6px 12px 6px 10px; border: 1px solid #ffffff; border-bottom: 1px solid #ffffff; margin-right: 3px; border-top-left-radius: 4px; border-top-right-radius: 4px; min-height: 20px; }
-QTabBar::tab:selected { background: #000000; color: #ffff00; font-weight: bold; border-color: #ffffff; border-bottom: 3px solid #ffff00; margin-bottom: -1px; }
-QTabBar::close-button { image: url(resources/icons/tab_close_dark.svg); subcontrol-position: right; margin-left: 6px; padding: 2px; width: 14px; height: 14px; border-radius: 3px; }
-QTabBar::close-button:hover { image: url(resources/icons/tab_close_dark_hover.svg); background: #ffff00; }
+QTabBar::tab { background: #1a1a1a; color: #ffffff; padding: 6px 14px; border: 1px solid #ffffff; border-bottom: none; margin-right: -1px; }
+QTabBar::tab:selected { background: #000000; color: #ffff00; font-weight: bold; border-bottom: 3px solid #ffff00; }
 QGroupBox { border: 2px solid #ffffff; margin-top: 10px; padding-top: 10px; font-weight: bold; }
 QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 4px; color: #00ffff; }
 QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QComboBox { background-color: #000000; color: #ffffff; border: 2px solid #ffffff; padding: 3px 5px; border-radius: 0px; }
@@ -334,12 +285,8 @@ KIMBIE_STYLESHEET = """
 QToolTip { color: #dcb98c; background-color: #221a14; border: 1px solid #6b4d37; }
 QTableView { gridline-color: #4b3628; background-color: #221a14; alternate-background-color: #2a2019; color: #dcb98c; selection-background-color: #a5552d; selection-color: #ffffff; }
 QHeaderView::section { background-color: #362a21; color: #f08c3c; padding: 4px; border: 1px solid #4b3628; font-weight: bold; }
-QTabWidget::pane { border-top: 1px solid #4b3628; background: #221a14; top: -1px; }
-QTabBar { background: transparent; qproperty-drawBase: 0; }
-QTabBar::tab { background: #2f251c; color: #9f8065; padding: 6px 12px 6px 10px; border: 1px solid #4b3628; border-bottom: 1px solid #4b3628; margin-right: 3px; border-top-left-radius: 4px; border-top-right-radius: 4px; min-height: 20px; }
-QTabBar::tab:selected { background: #221a14; color: #f08c3c; font-weight: bold; border-color: #4b3628; border-bottom: 2px solid #f08c3c; margin-bottom: -1px; }
-QTabBar::close-button { image: url(resources/icons/tab_close_dark.svg); subcontrol-position: right; margin-left: 6px; padding: 2px; width: 14px; height: 14px; border-radius: 3px; }
-QTabBar::close-button:hover { image: url(resources/icons/tab_close_dark_hover.svg); background: #f08c3c; }
+QTabBar::tab { background: #2f251c; color: #9f8065; padding: 6px 14px; border: 1px solid #4b3628; border-bottom: none; margin-right: -1px; }
+QTabBar::tab:selected { background: #221a14; color: #f08c3c; font-weight: bold; border-bottom: 2px solid #f08c3c; }
 QGroupBox { border: 1px solid #5a4230; margin-top: 10px; padding-top: 10px; font-weight: bold; }
 QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 4px; color: #f08c3c; }
 QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QComboBox { background-color: #2f251c; color: #dcb98c; border: 1px solid #4b3628; padding: 3px 5px; border-radius: 2px; }
