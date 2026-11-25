@@ -154,245 +154,6 @@ const SUITE_APPS: SuiteApp[] = [
   }
 ];
 
-// ------------------- 20 AI UNSLOP DELIVERABLES -------------------
-interface UnslopItem {
-  id: number;
-  title: string;
-  category: 'High-Volume Communication' | 'High-Impact Strategy';
-  icon: string;
-  problem: string;
-  solution: string;
-  slopExample: string;
-  unslopExample: string;
-  deliverableBadge: string;
-}
-
-const UNSLOP_ITEMS: UnslopItem[] = [
-  // High-Volume Communications (1 to 15)
-  {
-    id: 1,
-    title: 'Blog posts and articles',
-    category: 'High-Volume Communication',
-    icon: 'FileText',
-    deliverableBadge: 'Editorial Content',
-    problem: 'Generic fluff ("In today\'s fast-paced digital world...", "it is important to remember...") with zero original data or stance.',
-    solution: 'Cuts preamble. Leads with primary thesis, proprietary benchmark numbers, and practical implementation trade-offs.',
-    slopExample: '"In the modern digital landscape of 2026, technology plays a pivotal role in revolutionizing our daily operational workflows..."',
-    unslopExample: '"Native Qt 6 code boots 4.2x faster than Chromium wrappers and uses 48MB RAM versus 820MB under load."'
-  },
-  {
-    id: 2,
-    title: 'Social media content (LinkedIn, Twitter, etc.)',
-    category: 'High-Volume Communication',
-    icon: 'Share2',
-    deliverableBadge: 'Social Growth',
-    problem: 'Forced emoji chains (🚀🔥💡), pretentious humblebrag hooks ("I was humbled to learn..."), and fabricated morality tales.',
-    solution: 'Crisp signal-to-noise ratio. Real architecture teardowns, actual commit logs, and engineering lessons learned.',
-    slopExample: '"🚀 Thrilled and humbled to announce that we are disrupting paradigms! Agree? Thoughts? 👇"',
-    unslopExample: '"We replaced Electron with PySide6. Binary size dropped from 140MB to 34MB. Here are the 3 profiling diffs."'
-  },
-  {
-    id: 3,
-    title: 'Email campaigns and sequences',
-    category: 'High-Volume Communication',
-    icon: 'Mail',
-    deliverableBadge: 'Lifecycle Marketing',
-    problem: 'Robotic templates, exaggerated urgency ("Act NOW before this closes forever!"), and tone-deaf personalization tokens.',
-    solution: 'Straightforward plain-text communication respecting the user\'s attention with a single, clear purpose.',
-    slopExample: '"Hope this email finds you well in these unprecedented times! Are you maximizing your true synergy?"',
-    unslopExample: '"Your ADIOS offline backup completed at 18:00 today. 14 items archived to your D: drive."'
-  },
-  {
-    id: 4,
-    title: 'Sales outreach (cold emails)',
-    category: 'High-Volume Communication',
-    icon: 'Send',
-    deliverableBadge: 'Outbound Sales',
-    problem: 'Fake familiarity ("Saw you work at X!"), endless paragraphs asking for "15 minutes of your time", and vague value propositions.',
-    solution: 'Three-sentence problem-solver: names the specific friction, shows concrete proof, and gives a zero-friction opt-in.',
-    slopExample: '"I\'d love to pick your brain for 15 minutes to synergize your enterprise pipeline."',
-    unslopExample: '"Most hospital OPD desks lose 12 minutes per admission to web browser latency. Here is a 30-second video of ADIOS offline check-in."'
-  },
-  {
-    id: 5,
-    title: 'Ad copy (Google, Meta, LinkedIn)',
-    category: 'High-Volume Communication',
-    icon: 'Sparkles',
-    deliverableBadge: 'Paid Performance',
-    problem: 'Clickbait buzzwords ("Revolutionize your life with AI!") that lead to low intent and high bounce rates.',
-    solution: 'Benefit-driven technical clarity with upfront pricing and verified platform capabilities.',
-    slopExample: '"The #1 AI-powered super app changing the universe forever. Click here now!"',
-    unslopExample: '"Offline-first GST Billing & Barcode POS. Zero recurring subscriptions. Perpetual license for ₹2,499."'
-  },
-  {
-    id: 6,
-    title: 'Support responses',
-    category: 'High-Volume Communication',
-    icon: 'HelpCircle',
-    deliverableBadge: 'Customer Success',
-    problem: 'Patronizing canned empathy ("I truly understand your immense frustration") without actually answering the technical question.',
-    solution: 'Direct, polite troubleshooting steps, immediate resolution, and exact file paths.',
-    slopExample: '"We hear you, and we sincerely apologize for any profound inconvenience this experience has caused you!"',
-    unslopExample: '"To restore your database, copy your backup file to C:\\Users\\...\\adios.db and restart the application."'
-  },
-  {
-    id: 7,
-    title: 'Product descriptions',
-    category: 'High-Volume Communication',
-    icon: 'Briefcase',
-    deliverableBadge: 'Catalog & Store',
-    problem: 'Adjective stuffing ("revolutionary, groundbreaking, best-in-class") that says nothing about what the product actually does.',
-    solution: 'Technical specifications, supported file formats, exact dimensions, and runtime prerequisites.',
-    slopExample: '"A revolutionary, cutting-edge paradigm designed to elevate your personal journey."',
-    unslopExample: '"64-bit Windows offline executable. Stores transactions locally in SQLite with ₹ Indian Rupee formatting."'
-  },
-  {
-    id: 8,
-    title: 'Meeting summaries',
-    category: 'High-Volume Communication',
-    icon: 'Users',
-    deliverableBadge: 'Productivity',
-    problem: 'Lengthy transcripts of pleasantries with unassigned, vague action items like "Team will look into synergies".',
-    solution: 'Structured: Decisions Made, Open Blockers, and Owners with specific target dates.',
-    slopExample: '"The attendees engaged in a lively and robust discussion about various strategic viewpoints."',
-    unslopExample: '"Decision: Hospital OPD check-in will run offline-first. Owner: Sayan. Date: Dec 1."'
-  },
-  {
-    id: 9,
-    title: 'Video scripts',
-    category: 'High-Volume Communication',
-    icon: 'Video',
-    deliverableBadge: 'Media & Demos',
-    problem: 'Over-scripted intros ("What is up guys, don\'t forget to like and subscribe") before touching any real product screen.',
-    solution: 'Immediate hook displaying product UI in frame 1, followed by a fast step-by-step walkthrough.',
-    slopExample: '"Hey everybody! Before we dive into today\'s mindblowing video, smash that bell icon!"',
-    unslopExample: '"Here is how you generate a GST thermal invoice in 1.2 seconds without internet."'
-  },
-  {
-    id: 10,
-    title: 'SEO content briefs',
-    category: 'High-Volume Communication',
-    icon: 'FileSearch',
-    deliverableBadge: 'Search Strategy',
-    problem: 'Keyword stuffing lists with repetitive header structures designed solely to fool search engines.',
-    solution: 'Search intent mapping, user pain points, competitor gaps, and verifiable reference citations.',
-    slopExample: '"Keywords: best management app, top management app 2026, buy management app online free."',
-    unslopExample: '"Intent: Clinic administrators looking for offline OPD prescription software that works without cloud outages."'
-  },
-  {
-    id: 11,
-    title: 'Landing page copy',
-    category: 'High-Volume Communication',
-    icon: 'Layout',
-    deliverableBadge: 'Conversion UI',
-    problem: 'Hero banners full of meaningless abstract poetry ("Transform the way you see tomorrow").',
-    solution: 'Bold, transparent headline stating what the software does, who it is for, and how much it costs.',
-    slopExample: '"Reimagine the canvas of your operational dreams through next-generation intelligence."',
-    unslopExample: '"Offline-first desktop management suites for Personal Finances, Hospitals, Hotels, POS & Academics."'
-  },
-  {
-    id: 12,
-    title: 'Follow-up emails',
-    category: 'High-Volume Communication',
-    icon: 'Send',
-    deliverableBadge: 'Sales Cadence',
-    problem: 'Aggressive guilt-trips ("Just bubbling this to the top of your inbox since you didn\'t reply").',
-    solution: 'Shares a newly released relevant feature or benchmark without demanding emotional labor.',
-    slopExample: '"I see you have been ignoring my emails. Did I say something wrong?"',
-    unslopExample: '"We just added ₹ Rupee PDF report exports in v2.0.0-alpha.1. You can test the Windows installer here."'
-  },
-  {
-    id: 13,
-    title: 'Case study drafts',
-    category: 'High-Volume Communication',
-    icon: 'CheckCircle2',
-    deliverableBadge: 'Customer Proof',
-    problem: 'Fictionalized testimonials praising "the incredible seamless team" without a single verified metric.',
-    solution: 'Rigorous before-and-after baseline metrics: latency, hardware costs, license savings, and uptime.',
-    slopExample: '"Client X felt so much more harmonious and empowered after adopting our solution!"',
-    unslopExample: '"Clinic reduced patient admission wait times from 8.5 minutes to 45 seconds using offline local SQLite storage."'
-  },
-  {
-    id: 14,
-    title: 'Email newsletter content',
-    category: 'High-Volume Communication',
-    icon: 'Mail',
-    deliverableBadge: 'Subscriber Value',
-    problem: 'Weekly digests consisting of curated link dumps without original commentary or proprietary insight.',
-    solution: 'One deep engineering teardown per edition with source code snippets and reproducible benchmarks.',
-    slopExample: '"Here are 15 AI tools you cannot live without this Tuesday! Tool 1 will shock you!"',
-    unslopExample: '"How Qt 6 memory arenas handle 50,000 ledger rows without triggering Python garbage collection pauses."'
-  },
-  {
-    id: 15,
-    title: 'Internal communications (Slack responses, etc.)',
-    category: 'High-Volume Communication',
-    icon: 'Share2',
-    deliverableBadge: 'Team Alignment',
-    problem: 'Endless back-and-forth threads discussing scheduling or replying with generic "looks good to me".',
-    solution: 'Decisive, asynchronous answers with context, links, and explicit next steps.',
-    slopExample: '"Hey team, thoughts on this? Maybe we should sync up to brainstorm about the plan?"',
-    unslopExample: '"PR #42 approved. Merged to feature/color-themes after passing all 16 pytest suites."'
-  },
-
-  // The High-Impact Category (16 to 20)
-  {
-    id: 16,
-    title: '16. PRDs and feature specs',
-    category: 'High-Impact Strategy',
-    icon: 'Layers',
-    deliverableBadge: 'Product Architecture',
-    problem: 'Vague user stories ("As a user I want magic") with zero technical boundary constraints, latency SLAs, or failure modes.',
-    solution: 'Rigorous technical requirements: schema models, error states, offline fallback behavior, and database migration safety.',
-    slopExample: '"The user should experience a delightful synchronization flow that feels deeply intuitive."',
-    unslopExample: '"Sync Engine: Must handle 500 concurrent conflict items using Last-Write-Wins timestamps and write to local SQLite WAL in <15ms."'
-  },
-  {
-    id: 17,
-    title: '17. Technical documentation',
-    category: 'High-Impact Strategy',
-    icon: 'FileText',
-    deliverableBadge: 'Developer Platform',
-    problem: 'Auto-generated docstrings that repeat the function name (`get_user(): gets user`) without explaining parameters or failure states.',
-    solution: 'Exact parameter types, return models, exception tables, and copy-pasteable working code samples.',
-    slopExample: '"AuthManager: A class that manages authentication in an authentic manner."',
-    unslopExample: '"AuthManager.verify_key(key: str) -> KeyValidationResult. Validates ADIOS-PERS, ADIOS-HOSP, ADIOS-HOTL checksums offline."'
-  },
-  {
-    id: 18,
-    title: '18. Executive memos',
-    category: 'High-Impact Strategy',
-    icon: 'Briefcase',
-    deliverableBadge: 'Leadership & Board',
-    problem: 'Dense corporate jargon hiding bad news under optimistic corporate cheerleading.',
-    solution: 'Bottom Line Up Front (BLUF): What is happening, why it matters, financial exposure, and required capital decision.',
-    slopExample: '"We are optimizing our trajectory toward synergistic excellence amidst dynamic market variables."',
-    unslopExample: '"BLUF: Transitioning ADIOS to a monorepo structure saves ₹1.2L/month in deployment overhead and unlocks 4 enterprise app suites."'
-  },
-  {
-    id: 19,
-    title: '19. Client deliverables and reports',
-    category: 'High-Impact Strategy',
-    icon: 'CheckCircle2',
-    deliverableBadge: 'Client Success',
-    problem: 'Bloated 80-page slide decks designed to justify billing hours without actionable executive summaries.',
-    solution: 'Audit findings ranked by business severity, cost of inaction, and validated implementation timeframes.',
-    slopExample: '"Our strategic deep-dive holistically evaluated the overall health of your infrastructure."',
-    unslopExample: '"Audit Result: Identified 3 critical N+1 queries causing 4.8s lag during month-end closing. Remediation patches provided."'
-  },
-  {
-    id: 20,
-    title: '20. Proposals and pitch decks',
-    category: 'High-Impact Strategy',
-    icon: 'Sparkles',
-    deliverableBadge: 'Commercial Strategy',
-    problem: 'Hyperbolic claims ("Total Addressable Market: $500 Billion!") without verifiable unit economics or defensible technology.',
-    solution: 'Defensible unit economics, working software proof, customer unit margins, and clear product distribution architecture.',
-    slopExample: '"We are the Uber of enterprise AI hospital software and will capture 80% of global hospitals by Q3."',
-    unslopExample: '"ADIOS captures Tier 2/3 private clinics neglected by cloud SaaS. ₹4,999 perpetual license with 82% gross margins."'
-  }
-];
-
 export default function HomePage() {
   // Authentication Modal State
   const [user, setUser] = useState<{ id?: number; name: string; email: string; phone: string; role?: string } | null>(null);
@@ -423,11 +184,6 @@ export default function HomePage() {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [copiedLinux, setCopiedLinux] = useState(false);
 
-  // Unslop Filter State
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'High-Volume Communication' | 'High-Impact Strategy'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeUnslopId, setActiveUnslopId] = useState<number>(1);
-
   const toggleCartItem = (appId: string) => {
     setCart(prev =>
       prev.includes(appId) ? prev.filter(id => id !== appId) : [...prev, appId]
@@ -439,15 +195,6 @@ export default function HomePage() {
   const discountRate = cart.length >= 4 ? 0.25 : cart.length >= 2 ? 0.15 : 0;
   const discountAmount = Math.round(subtotal * discountRate);
   const totalAmount = subtotal - discountAmount;
-
-  const filteredUnslop = UNSLOP_ITEMS.filter(item => {
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          item.solution.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
-  const activeDeliverable = UNSLOP_ITEMS.find(i => i.id === activeUnslopId) || UNSLOP_ITEMS[0];
 
   const fetchUserProfile = async (email: string) => {
     setLoadingProfile(true);
@@ -612,16 +359,13 @@ export default function HomePage() {
                 </span>
                 <span style={{ color: 'var(--ms-border-strong)' }}>|</span>
                 <span style={{ fontSize: '14px', color: 'var(--ms-text-secondary)', fontWeight: 500 }}>
-                  Enterprise Suites &amp; AI Unslop
+                  Enterprise Management Suites
                 </span>
               </div>
             </Link>
 
             {/* Top Navigation Links */}
             <nav style={{ display: 'flex', alignItems: 'center', gap: '22px', marginLeft: '24px' }} className="desktop-nav">
-              <a href="#unslop" style={{ color: 'var(--ms-text)', fontSize: '13.5px', fontWeight: 500 }}>
-                AI Unslop Hub
-              </a>
               <a href="#suites" style={{ color: 'var(--ms-text)', fontSize: '13.5px', fontWeight: 500 }}>
                 App Suites
               </a>
@@ -702,30 +446,30 @@ export default function HomePage() {
         >
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--ms-blue-light)', border: '1px solid var(--ms-blue-tint)', padding: '4px 10px', borderRadius: 'var(--ms-radius-sm)', marginBottom: '16px' }}>
-              <Sparkles size={14} color="var(--ms-blue)" />
+              <ShieldCheck size={14} color="var(--ms-blue)" />
               <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--ms-blue)' }}>
-                Microsoft-Grade Engineering · AI Unslop Standard
+                Offline-First Architecture · Native Desktop Engine
               </span>
             </div>
 
             <h1 style={{ marginBottom: '16px' }}>
-              Zero AI Fluff.<br />
+              Enterprise Desktop Suites.<br />
               Zero SaaS Subscriptions.
             </h1>
 
             <p style={{ fontSize: '16.5px', lineHeight: 1.6, marginBottom: '24px' }}>
-              ADIOS replaces generic AI filler and bloated web applications with compiled, offline-first management suites
-              and verifiable content generation across all 20 professional deliverables.
+              ADIOS replaces bloated web SaaS applications with compiled, offline-first management systems
+              for Personal Finances, Hospitals, Hotels, GST Billing, and Academics.
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
-              <a href="#unslop" className="ms-btn ms-btn-primary" style={{ height: '42px', padding: '0 20px' }}>
-                <Sparkles size={16} />
-                <span>Explore 20 AI Unslop Deliverables</span>
+              <a href="#suites" className="ms-btn ms-btn-primary" style={{ height: '42px', padding: '0 20px' }}>
+                <Building2 size={16} />
+                <span>Explore Application Suites</span>
               </a>
 
-              <a href="#suites" className="ms-btn ms-btn-secondary" style={{ height: '42px', padding: '0 18px' }}>
-                <span>View Enterprise Suites</span>
+              <a href="#pricing" className="ms-btn ms-btn-secondary" style={{ height: '42px', padding: '0 18px' }}>
+                <span>Configure Suite Bundle</span>
                 <ChevronRight size={15} />
               </a>
             </div>
@@ -754,10 +498,10 @@ export default function HomePage() {
             <div style={{ background: 'var(--ms-surface-subtle)', borderBottom: '1px solid var(--ms-border)', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#0078d4' }}></div>
-                <span style={{ fontSize: '12px', fontWeight: 600 }}>ADIOS AI Unslop Engine · Active Benchmark</span>
+                <span style={{ fontSize: '12px', fontWeight: 600 }}>ADIOS Personal Manager v2.0.0-alpha.1</span>
               </div>
               <span className="ms-badge" style={{ background: 'var(--ms-green-light)', color: 'var(--ms-green)' }}>
-                Signal: 98.4%
+                Offline SQLite Active
               </span>
             </div>
             <div style={{ position: 'relative', width: '100%', background: 'var(--ms-surface-alt)' }}>
@@ -773,215 +517,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3. AI UNSLOP SHOWCASE & THE 20 PROFESSIONAL DELIVERABLES */}
-        <section id="unslop" style={{ marginBottom: '64px' }}>
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ color: 'var(--ms-blue)', fontSize: '12.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
-              Content Quality Revolution
-            </div>
-            <h2>The 20 AI Unslop Deliverables</h2>
-            <p style={{ marginTop: '6px', maxWidth: '780px' }}>
-              Standard LLMs default to generic, sycophantic word salad (&quot;in today&apos;s fast-paced digital world...&quot;).
-              ADIOS enforces crisp, signal-first communication across both daily high-volume tasks and expensive high-impact strategic documentation.
-            </p>
-          </div>
-
-          {/* Filters & Search Control Bar */}
-          <div
-            className="ms-card"
-            style={{
-              padding: '12px 18px',
-              marginBottom: '20px',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: '12px',
-              background: 'var(--ms-surface-alt)'
-            }}
-          >
-            {/* Category tabs */}
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('all')}
-                className={`ms-btn ms-btn-sm ${selectedCategory === 'all' ? 'ms-btn-primary' : 'ms-btn-secondary'}`}
-              >
-                All 20 Deliverables
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('High-Volume Communication')}
-                className={`ms-btn ms-btn-sm ${selectedCategory === 'High-Volume Communication' ? 'ms-btn-primary' : 'ms-btn-secondary'}`}
-              >
-                High-Volume (1-15)
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('High-Impact Strategy')}
-                className={`ms-btn ms-btn-sm ${selectedCategory === 'High-Impact Strategy' ? 'ms-btn-primary' : 'ms-btn-secondary'}`}
-              >
-                High-Impact Strategy (16-20)
-              </button>
-            </div>
-
-            {/* Search Input */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '240px' }}>
-              <Search size={15} color="var(--ms-text-secondary)" />
-              <input
-                type="text"
-                placeholder="Search deliverable or use case..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                style={{ height: '32px', width: '100%', fontSize: '13px' }}
-              />
-            </div>
-          </div>
-
-          {/* Master-Detail Interactive Deliverables Grid */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(300px, 1fr) minmax(360px, 1.4fr)',
-              gap: '24px',
-              alignItems: 'start'
-            }}
-          >
-            {/* Left: Scrollable List of Deliverables */}
-            <div
-              className="ms-card"
-              style={{
-                maxHeight: '620px',
-                overflowY: 'auto',
-                padding: '8px'
-              }}
-            >
-              {filteredUnslop.map(item => {
-                const isSelected = item.id === activeUnslopId;
-                const isHighImpact = item.category === 'High-Impact Strategy';
-
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => setActiveUnslopId(item.id)}
-                    style={{
-                      padding: '12px 14px',
-                      borderRadius: 'var(--ms-radius-sm)',
-                      background: isSelected ? 'var(--ms-blue-light)' : 'transparent',
-                      borderLeft: isSelected ? '3px solid var(--ms-blue)' : '3px solid transparent',
-                      cursor: 'pointer',
-                      marginBottom: '4px',
-                      transition: 'all 120ms ease'
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 600, color: isHighImpact ? 'var(--ms-orange)' : 'var(--ms-blue)' }}>
-                        {isHighImpact ? 'High Impact' : 'High Volume'} · #{item.id}
-                      </span>
-                      <span className="ms-badge" style={{ background: 'var(--ms-surface-subtle)', color: 'var(--ms-text-secondary)', fontSize: '10.5px' }}>
-                        {item.deliverableBadge}
-                      </span>
-                    </div>
-
-                    <div style={{ fontWeight: isSelected ? 700 : 600, fontSize: '14px', color: isSelected ? 'var(--ms-blue)' : 'var(--ms-text)' }}>
-                      {item.title}
-                    </div>
-
-                    <div style={{ fontSize: '12px', color: 'var(--ms-text-secondary)', marginTop: '4px', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {item.solution}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Right: Active Deliverable Side-by-Side Comparison */}
-            <div
-              className="ms-card"
-              style={{
-                padding: '28px',
-                border: '1px solid var(--ms-border-strong)'
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                <div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ms-blue)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
-                    Deliverable #{activeDeliverable.id} · {activeDeliverable.category}
-                  </div>
-                  <h3 style={{ fontSize: '22px' }}>{activeDeliverable.title}</h3>
-                </div>
-
-                <span className="ms-badge" style={{ background: 'var(--ms-blue-light)', color: 'var(--ms-blue)', padding: '5px 10px', fontSize: '12px' }}>
-                  {activeDeliverable.deliverableBadge}
-                </span>
-              </div>
-
-              {/* The Core Problem vs Solution */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '22px' }}>
-                <div style={{ background: 'var(--ms-surface-subtle)', padding: '14px', borderRadius: 'var(--ms-radius-sm)', border: '1px solid var(--ms-border)' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ms-orange)', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                    <AlertCircle size={14} />
-                    <span>The Generic AI Slop Failure:</span>
-                  </div>
-                  <div style={{ fontSize: '13px', color: 'var(--ms-text-secondary)', lineHeight: 1.5 }}>
-                    {activeDeliverable.problem}
-                  </div>
-                </div>
-
-                <div style={{ background: 'var(--ms-blue-light)', padding: '14px', borderRadius: 'var(--ms-radius-sm)', border: '1px solid var(--ms-blue-tint)' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ms-blue)', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                    <CheckCircle2 size={14} />
-                    <span>The ADIOS Unslop Standard:</span>
-                  </div>
-                  <div style={{ fontSize: '13px', color: 'var(--ms-text)', lineHeight: 1.5 }}>
-                    {activeDeliverable.solution}
-                  </div>
-                </div>
-              </div>
-
-              {/* Direct Text Teardown Example */}
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--ms-text-secondary)', marginBottom: '8px' }}>
-                  Direct Output Comparison:
-                </div>
-
-                {/* AI Slop Quote */}
-                <div style={{ background: 'rgba(216, 59, 1, 0.05)', borderLeft: '3px solid var(--ms-orange)', padding: '12px 14px', borderRadius: '0 var(--ms-radius-sm) var(--ms-radius-sm) 0', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--ms-orange)', marginBottom: '3px', textTransform: 'uppercase' }}>
-                    Typical LLM Draft (Fluff &amp; Filler):
-                  </div>
-                  <div style={{ fontSize: '13px', fontStyle: 'italic', color: 'var(--ms-text)' }}>
-                    {activeDeliverable.slopExample}
-                  </div>
-                </div>
-
-                {/* Unslop Quote */}
-                <div style={{ background: 'rgba(16, 124, 16, 0.06)', borderLeft: '3px solid var(--ms-green)', padding: '12px 14px', borderRadius: '0 var(--ms-radius-sm) var(--ms-radius-sm) 0' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--ms-green)', marginBottom: '3px', textTransform: 'uppercase' }}>
-                    ADIOS Verified Delivery:
-                  </div>
-                  <div style={{ fontSize: '13.5px', fontWeight: 500, color: 'var(--ms-text)' }}>
-                    {activeDeliverable.unslopExample}
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--ms-border)', paddingTop: '16px' }}>
-                <span style={{ fontSize: '12.5px', color: 'var(--ms-text-tertiary)' }}>
-                  Integrated across all 5 ADIOS Application Suites
-                </span>
-
-                <a href="#suites" className="ms-btn ms-btn-primary ms-btn-sm">
-                  <span>Activate with Desktop Suite</span>
-                  <ArrowRight size={13} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. THE 5 ADIOS APPLICATION SUITES (MICROSOFT 365 APP MATRIX) */}
-        <section id="suites" style={{ marginBottom: '64px', borderTop: '1px solid var(--ms-border)', paddingTop: '48px' }}>
+        {/* 3. THE 5 ADIOS APPLICATION SUITES (MICROSOFT 365 APP MATRIX) */}
+        <section id="suites" style={{ marginBottom: '64px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '28px', gap: '16px' }}>
             <div>
               <div style={{ color: 'var(--ms-blue)', fontSize: '12.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
