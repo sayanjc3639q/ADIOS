@@ -1154,13 +1154,13 @@ export default function HomePage() {
                 gap: '9px',
                 padding: '9px 24px',
                 borderRadius: '30px',
-                border: downloadPlatform === 'macos' ? '1.5px solid #111827' : '1px solid #e5e7eb',
-                background: downloadPlatform === 'macos' ? '#111827' : '#ffffff',
+                border: downloadPlatform === 'macos' ? '1.5px solid #0067b8' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'macos' ? '#0067b8' : '#ffffff',
                 color: downloadPlatform === 'macos' ? '#ffffff' : '#374151',
                 fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
-                boxShadow: downloadPlatform === 'macos' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
+                boxShadow: downloadPlatform === 'macos' ? '0 2px 8px rgba(0, 103, 184, 0.25)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
@@ -1180,13 +1180,13 @@ export default function HomePage() {
                 gap: '9px',
                 padding: '9px 24px',
                 borderRadius: '30px',
-                border: downloadPlatform === 'windows' ? '1.5px solid #111827' : '1px solid #e5e7eb',
-                background: downloadPlatform === 'windows' ? '#111827' : '#ffffff',
+                border: downloadPlatform === 'windows' ? '1.5px solid #0067b8' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'windows' ? '#0067b8' : '#ffffff',
                 color: downloadPlatform === 'windows' ? '#ffffff' : '#374151',
                 fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
-                boxShadow: downloadPlatform === 'windows' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
+                boxShadow: downloadPlatform === 'windows' ? '0 2px 8px rgba(0, 103, 184, 0.25)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
@@ -1206,13 +1206,13 @@ export default function HomePage() {
                 gap: '9px',
                 padding: '9px 24px',
                 borderRadius: '30px',
-                border: downloadPlatform === 'linux' ? '1.5px solid #111827' : '1px solid #e5e7eb',
-                background: downloadPlatform === 'linux' ? '#111827' : '#ffffff',
+                border: downloadPlatform === 'linux' ? '1.5px solid #0067b8' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'linux' ? '#0067b8' : '#ffffff',
                 color: downloadPlatform === 'linux' ? '#ffffff' : '#374151',
                 fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
-                boxShadow: downloadPlatform === 'linux' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
+                boxShadow: downloadPlatform === 'linux' ? '0 2px 8px rgba(0, 103, 184, 0.25)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
@@ -1230,13 +1230,13 @@ export default function HomePage() {
                 gap: '9px',
                 padding: '9px 24px',
                 borderRadius: '30px',
-                border: downloadPlatform === 'googlebook' ? '1.5px solid #111827' : '1px solid #e5e7eb',
-                background: downloadPlatform === 'googlebook' ? '#111827' : '#ffffff',
+                border: downloadPlatform === 'googlebook' ? '1.5px solid #0067b8' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'googlebook' ? '#0067b8' : '#ffffff',
                 color: downloadPlatform === 'googlebook' ? '#ffffff' : '#374151',
                 fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
-                boxShadow: downloadPlatform === 'googlebook' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
+                boxShadow: downloadPlatform === 'googlebook' ? '0 2px 8px rgba(0, 103, 184, 0.25)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
@@ -1269,9 +1269,9 @@ export default function HomePage() {
               </h3>
               <span
                 style={{
-                  background: '#eef2ff',
-                  color: '#4338ca',
-                  border: '1px solid #c7d2fe',
+                  background: 'rgba(0, 103, 184, 0.1)',
+                  color: '#0067b8',
+                  border: '1px solid rgba(0, 103, 184, 0.25)',
                   fontSize: '12.5px',
                   fontWeight: 600,
                   padding: '3px 10px',
@@ -1303,18 +1303,18 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: '#111827',
+                    background: '#0067b8',
                     color: '#ffffff',
                     padding: '12px 28px',
                     borderRadius: '30px',
                     fontSize: '14.5px',
                     fontWeight: 600,
                     textDecoration: 'none',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                    boxShadow: '0 2px 8px rgba(0, 103, 184, 0.3)',
                     transition: 'all 0.15s ease'
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#1f2937')}
-                  onMouseLeave={e => (e.currentTarget.style.background = '#111827')}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#005da6')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#0067b8')}
                 >
                   Download for x64
                 </a>
@@ -1357,15 +1357,18 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: '#111827',
+                    background: '#0067b8',
                     color: '#ffffff',
                     padding: '12px 28px',
                     borderRadius: '30px',
                     fontSize: '14.5px',
                     fontWeight: 600,
                     textDecoration: 'none',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                    boxShadow: '0 2px 8px rgba(0, 103, 184, 0.3)',
+                    transition: 'all 0.15s ease'
                   }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#005da6')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#0067b8')}
                 >
                   Download for Apple Silicon (M1-M4)
                 </a>
@@ -1398,15 +1401,18 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: '#111827',
+                    background: '#0067b8',
                     color: '#ffffff',
                     padding: '12px 28px',
                     borderRadius: '30px',
                     fontSize: '14.5px',
                     fontWeight: 600,
                     textDecoration: 'none',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                    boxShadow: '0 2px 8px rgba(0, 103, 184, 0.3)',
+                    transition: 'all 0.15s ease'
                   }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#005da6')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#0067b8')}
                 >
                   Download AppImage (.tar.gz)
                 </a>
@@ -1437,9 +1443,9 @@ export default function HomePage() {
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
                 <span
                   style={{
-                    background: '#fef3c7',
-                    color: '#92400e',
-                    border: '1px solid #fde68a',
+                    background: '#eff6ff',
+                    color: '#1d4ed8',
+                    border: '1px solid #bfdbfe',
                     padding: '10px 20px',
                     borderRadius: '20px',
                     fontSize: '14px',
@@ -1479,9 +1485,9 @@ export default function HomePage() {
               </h3>
               <span
                 style={{
-                  background: '#eef2ff',
-                  color: '#4338ca',
-                  border: '1px solid #c7d2fe',
+                  background: 'rgba(0, 103, 184, 0.1)',
+                  color: '#0067b8',
+                  border: '1px solid rgba(0, 103, 184, 0.25)',
                   fontSize: '12.5px',
                   fontWeight: 600,
                   padding: '3px 10px',
@@ -1562,16 +1568,18 @@ export default function HomePage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: '#111827',
+                background: '#0067b8',
                 color: '#ffffff',
                 padding: '10px 24px',
                 borderRadius: '30px',
                 fontSize: '14px',
                 fontWeight: 600,
-                textDecoration: 'none'
+                textDecoration: 'none',
+                boxShadow: '0 2px 8px rgba(0, 103, 184, 0.3)',
+                transition: 'all 0.15s ease'
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#1f2937')}
-              onMouseLeave={e => (e.currentTarget.style.background = '#111827')}
+              onMouseEnter={e => (e.currentTarget.style.background = '#005da6')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#0067b8')}
             >
               Download for x64
             </a>
