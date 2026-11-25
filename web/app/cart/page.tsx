@@ -9,7 +9,7 @@ import { ArrowLeft, Trash2, Check, ShieldCheck, ShoppingCart, User } from 'lucid
 
 function CartContent() {
   const searchParams = useSearchParams();
-  const [cart, setCart] = useState<string[]>(['personal']);
+  const [cart, setCart] = useState<string[]>([]);
   const [user, setUser] = useState<{ id?: number; name: string; email: string; phone: string } | null>(null);
 
   // Auth modal
@@ -125,7 +125,7 @@ function CartContent() {
       {/* Header */}
       <header
         style={{
-          height: '54px',
+          height: '66px',
           background: '#ffffff',
           borderBottom: '1px solid #e6e6e6',
           display: 'flex',

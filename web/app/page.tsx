@@ -49,8 +49,8 @@ export default function HomePage() {
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
 
-  // Cart & Pricing
-  const [cart, setCart] = useState<string[]>(['personal']);
+  // Cart & Pricing - Empty by default
+  const [cart, setCart] = useState<string[]>([]);
   const [suitesMenuOpen, setSuitesMenuOpen] = useState(false);
 
   // Search feature state
@@ -170,7 +170,7 @@ export default function HomePage() {
       {/* 1. ADIOS MANAGEMENT SUITES HEADER (Surface-style layout) */}
       <header
         style={{
-          height: '54px',
+          height: '66px',
           background: '#ffffff',
           borderBottom: '1px solid #e6e6e6',
           display: 'flex',
@@ -183,26 +183,26 @@ export default function HomePage() {
       >
         <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Left: ADIOS Logo Mark & Brand + Navigation */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-              <div style={{ position: 'relative', width: '28px', height: '28px' }}>
+              <div style={{ position: 'relative', width: '32px', height: '32px' }}>
                 <Image
                   src="/logo.png"
                   alt="ADIOS Logo"
-                  width={28}
-                  height={28}
+                  width={32}
+                  height={32}
                   style={{ objectFit: 'contain' }}
                   priority
                 />
               </div>
-              <span style={{ fontSize: '18px', fontWeight: 600, color: '#1a1429', letterSpacing: '-0.02em' }}>
+              <span style={{ fontSize: '20px', fontWeight: 600, color: '#1a1429', letterSpacing: '-0.02em' }}>
                 ADIOS
               </span>
             </Link>
 
             {/* Top Nav Menu matching Surface showcase styling */}
-            <nav style={{ display: 'flex', alignItems: 'center', gap: '22px' }} className="desktop-nav">
-              <Link href="/product/personal" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+            <nav style={{ display: 'flex', alignItems: 'center', gap: '26px' }} className="desktop-nav">
+              <Link href="/product/personal" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 Personal
               </Link>
 
@@ -223,13 +223,13 @@ export default function HomePage() {
                     alignItems: 'center',
                     gap: '4px',
                     color: '#262626',
-                    fontSize: '13px',
+                    fontSize: '14px',
                     fontWeight: 450,
                     cursor: 'pointer'
                   }}
                 >
                   <span>Suites</span>
-                  <ChevronDown size={13} style={{ transform: suitesMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
+                  <ChevronDown size={14} style={{ transform: suitesMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
                 </button>
 
                 {suitesMenuOpen && (
@@ -246,10 +246,10 @@ export default function HomePage() {
                       style={{
                         background: '#ffffff',
                         border: '1px solid #e6e6e6',
-                        borderRadius: '4px',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                        minWidth: '220px',
-                        padding: '6px 0'
+                        borderRadius: '6px',
+                        boxShadow: '0 10px 28px rgba(0,0,0,0.12)',
+                        minWidth: '230px',
+                        padding: '8px 0'
                       }}
                     >
                       <Link
@@ -257,9 +257,9 @@ export default function HomePage() {
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
                           display: 'block',
-                          padding: '8px 16px',
+                          padding: '10px 18px',
                           color: '#262626',
-                          fontSize: '13px',
+                          fontSize: '13.5px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
@@ -272,9 +272,9 @@ export default function HomePage() {
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
                           display: 'block',
-                          padding: '8px 16px',
+                          padding: '10px 18px',
                           color: '#262626',
-                          fontSize: '13px',
+                          fontSize: '13.5px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
@@ -287,9 +287,9 @@ export default function HomePage() {
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
                           display: 'block',
-                          padding: '8px 16px',
+                          padding: '10px 18px',
                           color: '#262626',
-                          fontSize: '13px',
+                          fontSize: '13.5px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
@@ -303,37 +303,37 @@ export default function HomePage() {
               </div>
 
               {/* Single small name for GST POS Billing -> POS */}
-              <Link href="/product/billing" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+              <Link href="/product/billing" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 POS
               </Link>
 
               {/* Clean Pricing link pointing to pricing section */}
-              <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+              <a href="#pricing" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 Pricing
               </a>
 
               {/* Direct Link to About ADIOS Uniqueness Section */}
-              <a href="#about" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+              <a href="#about" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 About ADIOS
               </a>
 
               {/* Direct Link to FAQs */}
-              <a href="#faqs" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+              <a href="#faqs" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 FAQs
               </a>
 
-              <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+              <a href="#downloads" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 Downloads
               </a>
-              <Link href="/community" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+              <Link href="/community" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 Community
               </Link>
             </nav>
           </div>
 
           {/* Right: All Suites dropdown, Search, Cart & Profile with First/Last Name */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <a href="#suites" style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '13px', color: '#262626', fontWeight: 450, textDecoration: 'none' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '22px' }}>
+            <a href="#suites" style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '14px', color: '#262626', fontWeight: 450, textDecoration: 'none' }}>
               <span>All Suites</span>
               <ChevronDown size={14} />
             </a>
@@ -370,12 +370,12 @@ export default function HomePage() {
                     alignItems: 'center',
                     gap: '6px',
                     cursor: 'pointer',
-                    fontSize: '13px',
+                    fontSize: '14px',
                     color: '#262626'
                   }}
                 >
                   <span>Search</span>
-                  <Search size={15} />
+                  <Search size={16} />
                 </button>
               )}
 
@@ -1125,31 +1125,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. DOWNLOAD ADIOS & CLI (HARMONIZED WITH REST OF NATIVE DARK THEME) */}
-      <section id="downloads" style={{ padding: '60px 6% 80px 6%', maxWidth: '1080px', margin: '0 auto', width: '100%', borderTop: '1px solid var(--border)' }}>
-        {/* Main Title */}
-        <div style={{ marginBottom: '36px' }}>
-          <div
-            className="font-mono"
-            style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#4da6ff', fontWeight: 600, marginBottom: '8px' }}
-          >
-            OFFICIAL BINARIES &amp; RUNTIME
-          </div>
+      {/* 7. DOWNLOAD ADIOS & CLI (CLEAN LIGHT SURFACE THEME MATCHING REST OF WEBSITE) */}
+      <section id="downloads" style={{ padding: '80px 6% 96px 6%', maxWidth: '1080px', margin: '0 auto', width: '100%', borderTop: '1px solid #e6e6e6' }}>
+        {/* Main Title matching clean modern style */}
+        <div style={{ marginBottom: '44px' }}>
           <h2
             style={{
-              fontSize: 'clamp(32px, 4vw, 44px)',
+              fontSize: 'clamp(36px, 4.5vw, 54px)',
               fontWeight: 500,
-              color: '#ffffff',
+              color: '#1a1429',
               lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              marginBottom: '24px'
+              letterSpacing: '-0.025em',
+              marginBottom: '32px'
             }}
           >
             Download ADIOS
           </h2>
 
-          {/* OS Platform Selector Pills in native dark surface */}
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+          {/* OS Platform Selector Rounded Pills */}
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             {/* macOS Pill */}
             <button
               type="button"
@@ -1157,19 +1151,20 @@ export default function HomePage() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                borderRadius: '20px',
-                border: downloadPlatform === 'macos' ? '1px solid var(--accent)' : '1px solid var(--border)',
-                background: downloadPlatform === 'macos' ? 'var(--accent)' : 'var(--surface)',
-                color: downloadPlatform === 'macos' ? '#ffffff' : 'var(--text-secondary)',
-                fontSize: '13px',
+                gap: '9px',
+                padding: '9px 24px',
+                borderRadius: '30px',
+                border: downloadPlatform === 'macos' ? '1.5px solid #111827' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'macos' ? '#111827' : '#ffffff',
+                color: downloadPlatform === 'macos' ? '#ffffff' : '#374151',
+                fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
+                boxShadow: downloadPlatform === 'macos' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 170 170" fill="currentColor">
+              <svg width="15" height="15" viewBox="0 0 170 170" fill="currentColor">
                 <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-5.99-9.13-10.74-19.56-14.25-31.28-3.52-11.73-5.28-23.08-5.28-34.07 0-14.35 3.52-26.24 10.56-35.66 7.04-9.42 16.03-14.19 26.96-14.32 4.58 0 9.82 1.15 15.72 3.44 5.9 2.29 9.87 3.47 11.9 3.56 1.83 0 5.86-1.19 12.09-3.56 6.22-2.38 11.45-3.48 15.69-3.3 12.16.59 21.84 4.87 29.02 12.83-10.63 6.43-15.84 15.22-15.63 26.37.22 8.7 3.55 15.93 10 21.68 6.45 5.75 14.12 8.97 23.01 9.66-2.29 7.08-5.15 14.16-8.58 21.23zM119.22 33.64c0-7.39 2.65-14.25 7.96-20.59 5.3-6.33 11.83-10.23 19.59-11.7.92 7.17-1.39 14.1-6.93 20.8-5.54 6.7-12.42 10.74-20.62 11.49z" />
               </svg>
               <span>macOS</span>
@@ -1182,19 +1177,20 @@ export default function HomePage() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                borderRadius: '20px',
-                border: downloadPlatform === 'windows' ? '1px solid var(--accent)' : '1px solid var(--border)',
-                background: downloadPlatform === 'windows' ? 'var(--accent)' : 'var(--surface)',
-                color: downloadPlatform === 'windows' ? '#ffffff' : 'var(--text-secondary)',
-                fontSize: '13px',
+                gap: '9px',
+                padding: '9px 24px',
+                borderRadius: '30px',
+                border: downloadPlatform === 'windows' ? '1.5px solid #111827' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'windows' ? '#111827' : '#ffffff',
+                color: downloadPlatform === 'windows' ? '#ffffff' : '#374151',
+                fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
+                boxShadow: downloadPlatform === 'windows' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M0 2.222L6.5 1.333V7.5H0V2.222zm7.5-1.467L16 0v7.5H7.5V.755zM0 8.5h6.5v6.167L0 13.778V8.5zm7.5 0H16V16l-8.5-.755V8.5z" />
               </svg>
               <span>Windows</span>
@@ -1207,19 +1203,20 @@ export default function HomePage() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                borderRadius: '20px',
-                border: downloadPlatform === 'linux' ? '1px solid var(--accent)' : '1px solid var(--border)',
-                background: downloadPlatform === 'linux' ? 'var(--accent)' : 'var(--surface)',
-                color: downloadPlatform === 'linux' ? '#ffffff' : 'var(--text-secondary)',
-                fontSize: '13px',
+                gap: '9px',
+                padding: '9px 24px',
+                borderRadius: '30px',
+                border: downloadPlatform === 'linux' ? '1.5px solid #111827' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'linux' ? '#111827' : '#ffffff',
+                color: downloadPlatform === 'linux' ? '#ffffff' : '#374151',
+                fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
+                boxShadow: downloadPlatform === 'linux' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
-              <span style={{ fontSize: '14px' }}>🐧</span>
+              <span style={{ fontSize: '15px' }}>🐧</span>
               <span>Linux</span>
             </button>
 
@@ -1230,19 +1227,20 @@ export default function HomePage() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                borderRadius: '20px',
-                border: downloadPlatform === 'googlebook' ? '1px solid var(--accent)' : '1px solid var(--border)',
-                background: downloadPlatform === 'googlebook' ? 'var(--accent)' : 'var(--surface)',
-                color: downloadPlatform === 'googlebook' ? '#ffffff' : 'var(--text-secondary)',
-                fontSize: '13px',
+                gap: '9px',
+                padding: '9px 24px',
+                borderRadius: '30px',
+                border: downloadPlatform === 'googlebook' ? '1.5px solid #111827' : '1px solid #e5e7eb',
+                background: downloadPlatform === 'googlebook' ? '#111827' : '#ffffff',
+                color: downloadPlatform === 'googlebook' ? '#ffffff' : '#374151',
+                fontSize: '14.5px',
                 fontWeight: 500,
                 cursor: 'pointer',
+                boxShadow: downloadPlatform === 'googlebook' ? '0 2px 6px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.03)',
                 transition: 'all 0.15s ease'
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
@@ -1256,27 +1254,28 @@ export default function HomePage() {
         {/* SECTION 1: ADIOS APP CONTAINER */}
         <div
           style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: '6px',
-            padding: '28px',
-            marginBottom: '28px'
+            background: '#ffffff',
+            border: '1px solid #e6e6e6',
+            borderRadius: '12px',
+            padding: '36px',
+            marginBottom: '40px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <h3 style={{ fontSize: '22px', fontWeight: 500, color: '#ffffff' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <h3 style={{ fontSize: '28px', fontWeight: 500, color: '#1a1429', letterSpacing: '-0.015em' }}>
                 ADIOS App
               </h3>
               <span
                 style={{
-                  background: 'rgba(0, 120, 212, 0.2)',
-                  color: '#4da6ff',
-                  border: '1px solid rgba(0, 120, 212, 0.4)',
-                  fontSize: '11.5px',
+                  background: '#eef2ff',
+                  color: '#4338ca',
+                  border: '1px solid #c7d2fe',
+                  fontSize: '12.5px',
                   fontWeight: 600,
-                  padding: '2px 8px',
-                  borderRadius: '3px',
+                  padding: '3px 10px',
+                  borderRadius: '20px',
                   fontFamily: 'monospace'
                 }}
               >
@@ -1284,38 +1283,40 @@ export default function HomePage() {
               </span>
             </div>
 
-            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '13.5px', color: '#737373', fontWeight: 450 }}>
               Native compiled desktop binary
             </div>
           </div>
 
-          <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '22px', fontWeight: 350, maxWidth: '720px' }}>
-            Complete standalone desktop manager with full offline SQLite storage, zero-telemetry privacy, and native Qt performance.
+          <p style={{ fontSize: '15.5px', color: '#505050', lineHeight: 1.6, marginBottom: '26px', fontWeight: 350, maxWidth: '780px' }}>
+            Complete standalone desktop manager with full offline SQLite storage, zero-telemetry privacy, and compiled Qt 6 performance.
           </p>
 
           {/* Download Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '14px', marginBottom: '24px' }}>
             {downloadPlatform === 'windows' && (
               <>
                 <a
                   href="/api/download"
                   download
-                  className="btn btn-primary"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--accent)',
+                    background: '#111827',
                     color: '#ffffff',
-                    padding: '10px 24px',
-                    borderRadius: '4px',
-                    fontSize: '13.5px',
+                    padding: '12px 28px',
+                    borderRadius: '30px',
+                    fontSize: '14.5px',
                     fontWeight: 600,
                     textDecoration: 'none',
-                    border: '1px solid var(--accent)'
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                    transition: 'all 0.15s ease'
                   }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#1f2937')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#111827')}
                 >
-                  Download for x64 (.exe)
+                  Download for x64
                 </a>
                 <a
                   href="/api/download"
@@ -1324,17 +1325,24 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--surface-alt)',
-                    color: 'var(--text)',
-                    border: '1px solid var(--border)',
-                    padding: '10px 24px',
-                    borderRadius: '4px',
-                    fontSize: '13.5px',
+                    background: '#f3f4f6',
+                    color: '#1f2937',
+                    border: '1px solid #e5e7eb',
+                    padding: '12px 28px',
+                    borderRadius: '30px',
+                    fontSize: '14.5px',
                     fontWeight: 500,
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    transition: 'all 0.15s ease'
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--border-strong)')}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = '#e5e7eb';
+                    e.currentTarget.style.borderColor = '#d1d5db';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = '#f3f4f6';
+                    e.currentTarget.style.borderColor = '#e5e7eb';
+                  }}
                 >
                   Download for ARM64
                 </a>
@@ -1349,13 +1357,14 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--accent)',
+                    background: '#111827',
                     color: '#ffffff',
-                    padding: '10px 24px',
-                    borderRadius: '4px',
-                    fontSize: '13.5px',
+                    padding: '12px 28px',
+                    borderRadius: '30px',
+                    fontSize: '14.5px',
                     fontWeight: 600,
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                   }}
                 >
                   Download for Apple Silicon (M1-M4)
@@ -1366,12 +1375,12 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--surface-alt)',
-                    color: 'var(--text)',
-                    border: '1px solid var(--border)',
-                    padding: '10px 24px',
-                    borderRadius: '4px',
-                    fontSize: '13.5px',
+                    background: '#f3f4f6',
+                    color: '#1f2937',
+                    border: '1px solid #e5e7eb',
+                    padding: '12px 28px',
+                    borderRadius: '30px',
+                    fontSize: '14.5px',
                     fontWeight: 500,
                     textDecoration: 'none'
                   }}
@@ -1389,13 +1398,14 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--accent)',
+                    background: '#111827',
                     color: '#ffffff',
-                    padding: '10px 24px',
-                    borderRadius: '4px',
-                    fontSize: '13.5px',
+                    padding: '12px 28px',
+                    borderRadius: '30px',
+                    fontSize: '14.5px',
                     fontWeight: 600,
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                   }}
                 >
                   Download AppImage (.tar.gz)
@@ -1408,12 +1418,12 @@ export default function HomePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--surface-alt)',
-                    color: 'var(--text)',
-                    border: '1px solid var(--border)',
-                    padding: '10px 24px',
-                    borderRadius: '4px',
-                    fontSize: '13.5px',
+                    background: '#f3f4f6',
+                    color: '#1f2937',
+                    border: '1px solid #e5e7eb',
+                    padding: '12px 28px',
+                    borderRadius: '30px',
+                    fontSize: '14.5px',
                     fontWeight: 500,
                     textDecoration: 'none'
                   }}
@@ -1427,12 +1437,12 @@ export default function HomePage() {
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
                 <span
                   style={{
-                    background: 'rgba(245, 158, 11, 0.15)',
-                    color: '#fbbf24',
-                    border: '1px solid rgba(245, 158, 11, 0.35)',
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    fontSize: '13px',
+                    background: '#fef3c7',
+                    color: '#92400e',
+                    border: '1px solid #fde68a',
+                    padding: '10px 20px',
+                    borderRadius: '20px',
+                    fontSize: '14px',
                     fontWeight: 500
                   }}
                 >
@@ -1443,38 +1453,39 @@ export default function HomePage() {
           </div>
 
           {/* Minimum Requirements */}
-          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', paddingTop: '14px', lineHeight: 1.5 }}>
-            <span style={{ color: 'var(--text)', fontWeight: 500 }}>System Requirements: </span>
-            {downloadPlatform === 'windows' && 'Windows 10 / 11 (64-bit) · 4 GB RAM · 200 MB free storage · No runtime installation required'}
-            {downloadPlatform === 'macos' && 'macOS 12.0 Monterey or later · Universal binary (Apple Silicon / Intel)'}
+          <div style={{ fontSize: '13.5px', color: '#616161', borderTop: '1px solid #f0f0f0', paddingTop: '18px', lineHeight: 1.6 }}>
+            <span style={{ color: '#262626', fontWeight: 600 }}>Minimum Requirements: </span>
+            {downloadPlatform === 'windows' && 'Windows 10 (64-bit) or later · 4 GB RAM · 200 MB Disk space'}
+            {downloadPlatform === 'macos' && 'macOS 12.0 Monterey or later · 4 GB RAM · Universal Apple Silicon / Intel'}
             {downloadPlatform === 'linux' && 'glibc 2.28+ · Ubuntu 20.04+, Debian 11+, Fedora 34+, Arch Linux'}
-            {downloadPlatform === 'googlebook' && 'ChromeOS with Linux (Beta) developer mode activated'}
+            {downloadPlatform === 'googlebook' && 'ChromeOS with Linux (Beta) environment enabled'}
           </div>
         </div>
 
         {/* SECTION 2: ADIOS CLI CONTAINER */}
         <div
           style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: '6px',
-            padding: '28px'
+            background: '#ffffff',
+            border: '1px solid #e6e6e6',
+            borderRadius: '12px',
+            padding: '36px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <h3 style={{ fontSize: '22px', fontWeight: 500, color: '#ffffff' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <h3 style={{ fontSize: '28px', fontWeight: 500, color: '#1a1429', letterSpacing: '-0.015em' }}>
                 ADIOS CLI
               </h3>
               <span
                 style={{
-                  background: 'rgba(0, 120, 212, 0.2)',
-                  color: '#4da6ff',
-                  border: '1px solid rgba(0, 120, 212, 0.4)',
-                  fontSize: '11.5px',
+                  background: '#eef2ff',
+                  color: '#4338ca',
+                  border: '1px solid #c7d2fe',
+                  fontSize: '12.5px',
                   fontWeight: 600,
-                  padding: '2px 8px',
-                  borderRadius: '3px',
+                  padding: '3px 10px',
+                  borderRadius: '20px',
                   fontFamily: 'monospace'
                 }}
               >
@@ -1482,33 +1493,33 @@ export default function HomePage() {
               </span>
             </div>
 
-            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
-              Headless command-line tool
+            <div style={{ fontSize: '13.5px', color: '#737373', fontWeight: 450 }}>
+              Headless command-line utility
             </div>
           </div>
 
-          <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '20px', fontWeight: 350, maxWidth: '720px' }}>
-            Headless command-line utility for database migrations, automated directory backup cronjobs, and encrypted sync key validation.
+          <p style={{ fontSize: '15.5px', color: '#505050', lineHeight: 1.6, marginBottom: '22px', fontWeight: 350, maxWidth: '780px' }}>
+            A fast, headless command-line interface for headless servers, backup cronjobs, automated licensing, and database migration tasks.
           </p>
 
-          {/* Terminal Code Snippet for Instant Installation */}
+          {/* Terminal Code Snippet with sleek dark slate container matching screenshot */}
           <div
             style={{
-              background: 'var(--surface-alt)',
-              border: '1px solid var(--border)',
-              borderRadius: '4px',
-              padding: '14px 18px',
+              background: '#0d131f',
+              borderRadius: '8px',
+              padding: '16px 22px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '16px',
-              maxWidth: '720px',
-              marginBottom: '20px'
+              maxWidth: '780px',
+              marginBottom: '24px',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.18)'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflowX: 'auto' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '13px', userSelect: 'none' }}>$</span>
-              <code className="font-mono" style={{ color: '#4da6ff', fontSize: '13.5px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', overflowX: 'auto' }}>
+              <span style={{ color: '#64748b', fontSize: '14.5px', userSelect: 'none' }}>$</span>
+              <code className="font-mono" style={{ color: '#ffffff', fontSize: '14.5px', fontWeight: 500 }}>
                 curl -fsSL https://get.adios.dev/cli.sh | sh
               </code>
             </div>
@@ -1521,42 +1532,46 @@ export default function HomePage() {
                 setTimeout(() => setCopiedCliCommand(false), 2000);
               }}
               style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid var(--border)',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
-                borderRadius: '3px',
-                padding: '6px 12px',
-                fontSize: '12px',
+                borderRadius: '6px',
+                padding: '7px 14px',
+                fontSize: '13px',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
                 cursor: 'pointer',
-                flexShrink: 0
+                flexShrink: 0,
+                transition: 'all 0.15s ease'
               }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)')}
             >
-              {copiedCliCommand ? <Check size={13} style={{ color: 'var(--ok)' }} /> : <Copy size={13} />}
+              {copiedCliCommand ? <Check size={14} style={{ color: '#4ade80' }} /> : <Copy size={14} />}
               <span>{copiedCliCommand ? 'Copied' : 'Copy'}</span>
             </button>
           </div>
 
           {/* Architecture Download Buttons for CLI binaries */}
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '14px', marginBottom: '22px' }}>
             <a
               href="/api/download?type=cli&arch=x64"
               download
-              className="btn btn-primary"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'var(--accent)',
+                background: '#111827',
                 color: '#ffffff',
-                padding: '8px 20px',
-                borderRadius: '4px',
-                fontSize: '13px',
+                padding: '10px 24px',
+                borderRadius: '30px',
+                fontSize: '14px',
                 fontWeight: 600,
                 textDecoration: 'none'
               }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#1f2937')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#111827')}
             >
               Download for x64
             </a>
@@ -1567,23 +1582,31 @@ export default function HomePage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'var(--surface-alt)',
-                color: 'var(--text)',
-                border: '1px solid var(--border)',
-                padding: '8px 20px',
-                borderRadius: '4px',
-                fontSize: '13px',
+                background: '#f3f4f6',
+                color: '#1f2937',
+                border: '1px solid #e5e7eb',
+                padding: '10px 24px',
+                borderRadius: '30px',
+                fontSize: '14px',
                 fontWeight: 500,
                 textDecoration: 'none'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#e5e7eb';
+                e.currentTarget.style.borderColor = '#d1d5db';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#f3f4f6';
+                e.currentTarget.style.borderColor = '#e5e7eb';
               }}
             >
               Download for ARM64
             </a>
           </div>
 
-          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
+          <div style={{ fontSize: '13.5px', color: '#616161' }}>
             <span>Also available via Python package manager: </span>
-            <code className="font-mono" style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', padding: '2px 6px', borderRadius: '3px', color: '#4da6ff' }}>
+            <code className="font-mono" style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', padding: '3px 8px', borderRadius: '4px', color: '#1e293b', fontWeight: 500 }}>
               pip install adios-cli
             </code>
           </div>
