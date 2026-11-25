@@ -1,97 +1,26 @@
 :root {
-  /* Microsoft 365 / Azure / Fluent 2 Design System Tokens */
-  --ms-bg: #f5f5f5;
-  --ms-surface: #ffffff;
-  --ms-surface-alt: #fbfbfb;
-  --ms-surface-subtle: #f0f0f0;
-  --ms-surface-hover: #f3f3f3;
-  --ms-surface-pressed: #ebebeb;
+  /* Microsoft.com Official Theme Palette */
+  --ms-nav-bg: #ffffff;
+  --ms-page-bg: #ffffff;
+  --ms-hero-gradient: linear-gradient(135deg, #e8e3f2 0%, #d8d0ea 40%, #c4b9e2 100%);
+  --ms-hero-dark-gradient: linear-gradient(135deg, #1b1928 0%, #252037 40%, #151320 100%);
 
-  --ms-border: #e0e0e0;
-  --ms-border-strong: #c7c7c7;
-  --ms-border-subtle: #edebe9;
+  --ms-text: #262626;
+  --ms-text-secondary: #505050;
+  --ms-text-muted: #737373;
 
-  --ms-text: #242424;
-  --ms-text-secondary: #616161;
-  --ms-text-tertiary: #757575;
-  --ms-text-disabled: #a19f9d;
+  --ms-blue: #0067b8;
+  --ms-blue-hover: #005da6;
+  --ms-blue-pressed: #005293;
+  --ms-purple-pill: #78248c;
 
-  /* Microsoft Brand Colors */
-  --ms-blue: #0078d4;
-  --ms-blue-hover: #106ebe;
-  --ms-blue-pressed: #005a9e;
-  --ms-blue-light: #eff6fc;
-  --ms-blue-tint: #deecf9;
+  --ms-border: #e6e6e6;
+  --ms-border-subtle: #f2f2f2;
 
-  /* Accent status colors */
-  --ms-green: #107c10;
-  --ms-green-light: #dff6dd;
-  --ms-orange: #d83b01;
-  --ms-orange-light: #fde7e9;
-  --ms-purple: #5c2d91;
-  --ms-purple-light: #f2eafd;
-  --ms-teal: #008272;
-  --ms-teal-light: #e0f2f1;
-
-  /* Microsoft Geometry (Fluent 2 uses subtle 4px to 8px radii) */
-  --ms-radius-sm: 4px;
-  --ms-radius-md: 6px;
-  --ms-radius-lg: 8px;
-  --ms-radius-xl: 12px;
-  --ms-radius-full: 9999px;
-
-  /* Elevation (Fluent Shadows) */
-  --ms-shadow-2: 0px 1.2px 3.6px rgba(0, 0, 0, 0.08), 0px 6.4px 14.4px rgba(0, 0, 0, 0.05);
-  --ms-shadow-4: 0px 1.6px 3.6px rgba(0, 0, 0, 0.1), 0px 0px 1px rgba(0, 0, 0, 0.15);
-  --ms-shadow-8: 0px 3.2px 7.2px rgba(0, 0, 0, 0.1), 0px 0.6px 1.8px rgba(0, 0, 0, 0.07);
-  --ms-shadow-16: 0px 6.4px 14.4px rgba(0, 0, 0, 0.12), 0px 1.2px 3.6px rgba(0, 0, 0, 0.08);
-  --ms-shadow-28: 0px 14px 28px rgba(0, 0, 0, 0.14), 0px 0px 8px rgba(0, 0, 0, 0.06);
-
-  /* Typography: Segoe UI Variable / Fluent system stack */
-  --font-segoe: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  --font-segoe: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   --font-mono: "Cascadia Code", "Consolas", monospace;
 
-  --container-max: 1260px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ms-bg: #111111;
-    --ms-surface: #1e1e1e;
-    --ms-surface-alt: #252525;
-    --ms-surface-subtle: #2d2d2d;
-    --ms-surface-hover: #333333;
-    --ms-surface-pressed: #3d3d3d;
-
-    --ms-border: #383838;
-    --ms-border-strong: #505050;
-    --ms-border-subtle: #2b2b2b;
-
-    --ms-text: #f3f3f3;
-    --ms-text-secondary: #b3b3b3;
-    --ms-text-tertiary: #8a8a8a;
-    --ms-text-disabled: #5e5e5e;
-
-    --ms-blue: #0078d4;
-    --ms-blue-hover: #2886de;
-    --ms-blue-pressed: #005a9e;
-    --ms-blue-light: #182e46;
-    --ms-blue-tint: #1c3b5a;
-
-    --ms-green: #36c257;
-    --ms-green-light: #16361e;
-    --ms-orange: #ff5c33;
-    --ms-orange-light: #3d1c15;
-    --ms-purple: #b180f0;
-    --ms-purple-light: #2c1a45;
-    --ms-teal: #2dd4bf;
-    --ms-teal-light: #133a36;
-
-    --ms-shadow-2: 0px 1px 3px rgba(0, 0, 0, 0.4);
-    --ms-shadow-4: 0px 2px 6px rgba(0, 0, 0, 0.4);
-    --ms-shadow-8: 0px 4px 12px rgba(0, 0, 0, 0.5);
-    --ms-shadow-16: 0px 8px 24px rgba(0, 0, 0, 0.6);
-  }
+  --container-max: 1600px;
 }
 
 * {
@@ -102,7 +31,7 @@
 
 html {
   font-family: var(--font-segoe);
-  background: var(--ms-bg);
+  background: var(--ms-page-bg);
   color: var(--ms-text);
   font-size: 15px;
   line-height: 1.5;
@@ -111,59 +40,45 @@ html {
 
 body {
   min-height: 100vh;
-  background: var(--ms-bg);
+  background: var(--ms-page-bg);
   color: var(--ms-text);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Microsoft Fluent Typographic Hierarchy */
-h1, h2, h3, h4, h5, h6 {
+/* Microsoft Headings */
+h1, h2, h3, h4 {
   font-family: var(--font-segoe);
   color: var(--ms-text);
   font-weight: 600;
   letter-spacing: -0.015em;
-  line-height: 1.2;
 }
 
 h1 {
-  font-size: clamp(34px, 4.2vw, 54px);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.12;
+  font-size: clamp(36px, 4.2vw, 56px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 h2 {
-  font-size: clamp(24px, 2.8vw, 36px);
+  font-size: clamp(24px, 2.5vw, 34px);
   font-weight: 600;
   letter-spacing: -0.015em;
 }
 
-h3 {
-  font-size: 19px;
-  font-weight: 600;
-}
-
-h4 {
-  font-size: 16px;
-  font-weight: 600;
-}
-
 p {
   color: var(--ms-text-secondary);
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 15.5px;
+  line-height: 1.55;
 }
 
 code, pre, .font-mono {
   font-family: var(--font-mono);
-  font-size: 13px;
 }
 
 a {
   color: var(--ms-blue);
   text-decoration: none;
-  transition: color 120ms ease;
 }
 
 a:hover {
@@ -171,171 +86,93 @@ a:hover {
   text-underline-offset: 3px;
 }
 
-/* Fluent Button System */
-.ms-btn {
+/* Official Microsoft Button Style */
+.ms-hero-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 38px;
-  padding: 0 18px;
-  font-family: var(--font-segoe);
-  font-size: 14px;
+  background: #0067b8;
+  color: #ffffff;
   font-weight: 600;
-  border-radius: var(--ms-radius-sm);
-  border: 1px solid transparent;
+  font-size: 15px;
+  padding: 10px 22px;
+  border-radius: 2px;
+  border: 1px solid #0067b8;
   cursor: pointer;
   text-decoration: none;
-  transition: all 120ms ease;
-  white-space: nowrap;
-  user-select: none;
+  transition: background-color 100ms ease;
 }
 
-.ms-btn:hover {
+.ms-hero-btn:hover {
+  background: #005da6;
+  border-color: #005da6;
+  color: #ffffff;
   text-decoration: none;
 }
 
-.ms-btn-primary {
-  background: var(--ms-blue);
-  color: #ffffff;
-  border-color: var(--ms-blue);
-}
-
-.ms-btn-primary:hover {
-  background: var(--ms-blue-hover);
-  border-color: var(--ms-blue-hover);
-}
-
-.ms-btn-primary:active {
-  background: var(--ms-blue-pressed);
-  border-color: var(--ms-blue-pressed);
-}
-
-.ms-btn-secondary {
-  background: var(--ms-surface);
-  color: var(--ms-text);
-  border-color: var(--ms-border-strong);
-}
-
-.ms-btn-secondary:hover {
-  background: var(--ms-surface-hover);
-  border-color: var(--ms-border-strong);
-}
-
-.ms-btn-secondary:active {
-  background: var(--ms-surface-pressed);
-}
-
-.ms-btn-subtle {
-  background: transparent;
-  color: var(--ms-text);
-  border-color: transparent;
-}
-
-.ms-btn-subtle:hover {
-  background: var(--ms-surface-hover);
-}
-
-.ms-btn-sm {
-  height: 30px;
-  padding: 0 12px;
-  font-size: 13px;
-}
-
-/* Fluent Tile / Card Component */
-.ms-card {
-  background: var(--ms-surface);
-  border: 1px solid var(--ms-border);
-  border-radius: var(--ms-radius-md);
-  box-shadow: var(--ms-shadow-2);
-  transition: all 160ms cubic-bezier(0.1, 0.9, 0.2, 1);
-}
-
-.ms-card:hover {
-  box-shadow: var(--ms-shadow-8);
-  border-color: var(--ms-border-strong);
-}
-
-.ms-card-elevated {
-  box-shadow: var(--ms-shadow-8);
-}
-
-.ms-badge {
+.ms-secondary-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 11.5px;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--ms-blue);
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: var(--ms-radius-sm);
-  line-height: 1.2;
+  font-size: 15px;
+  padding: 10px 18px;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-/* Fluent Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  background: var(--ms-surface);
-  border: 1px solid var(--ms-border);
-  border-radius: var(--ms-radius-md);
-  overflow: hidden;
+.ms-secondary-btn:hover {
+  text-decoration: underline;
 }
 
-th {
-  background: var(--ms-surface-subtle);
-  color: var(--ms-text);
+/* Coming Soon / Pill Badge */
+.ms-pill {
+  display: inline-block;
+  background: #78248c;
+  color: #ffffff;
   font-size: 12.5px;
-  font-weight: 600;
-  text-align: left;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--ms-border-strong);
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 3px;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
 }
 
-td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--ms-border);
-  color: var(--ms-text);
+/* Microsoft Cards */
+.ms-product-card {
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 0px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 150ms ease, transform 150ms ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justifyContent: space-between;
 }
 
-tr:last-child td {
-  border-bottom: none;
+.ms-product-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-tr:hover td {
-  background: var(--ms-surface-hover);
-}
-
-/* Clean Input controls */
-input, select, textarea {
-  background: var(--ms-surface);
-  color: var(--ms-text);
-  border: 1px solid var(--ms-border-strong);
-  border-bottom: 2px solid var(--ms-text-secondary);
-  border-radius: var(--ms-radius-sm);
-  font-family: var(--font-segoe);
-  font-size: 14px;
-  padding: 8px 12px;
-  transition: border-color 120ms ease;
-}
-
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--ms-border-strong);
-  border-bottom: 2px solid var(--ms-blue);
-}
-
-@media (max-width: 820px) {
+/* Responsive Nav */
+@media (max-width: 900px) {
   .desktop-nav {
     display: none !important;
   }
-  .mobile-nav {
-    display: block !important;
+  .mobile-menu-btn {
+    display: flex !important;
   }
 }
 
-@media (min-width: 821px) {
-  .mobile-nav {
+@media (min-width: 901px) {
+  .mobile-menu-btn {
     display: none !important;
   }
 }

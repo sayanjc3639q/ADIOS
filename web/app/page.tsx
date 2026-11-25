@@ -4,48 +4,34 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Sparkles,
-  Check,
-  Plus,
-  Trash2,
+  Search,
   ShoppingCart,
-  Download,
+  ChevronDown,
   User,
   Key,
   Eye,
   EyeOff,
   Copy,
-  ChevronRight,
-  ShieldCheck,
+  Check,
   Building2,
   Hotel,
   Receipt,
   GraduationCap,
   Users,
-  Search,
-  FileText,
-  Share2,
-  Mail,
-  Send,
-  HelpCircle,
-  Video,
-  FileSearch,
-  Layout,
-  Briefcase,
-  Layers,
-  ArrowRight,
-  Sliders,
-  Filter,
-  CheckCircle2,
-  AlertCircle,
-  ExternalLink
+  ShieldCheck,
+  ChevronRight,
+  Plus,
+  Trash2,
+  HardDrive,
+  Download,
+  Cpu,
+  Lock,
+  ArrowRight
 } from 'lucide-react';
 
-// ------------------- APPLICATION SUITES DATA -------------------
 interface SuiteApp {
   id: string;
   name: string;
-  badge: string;
   category: string;
   status: 'available' | 'in_development' | 'planned';
   statusLabel: string;
@@ -53,110 +39,99 @@ interface SuiteApp {
   description: string;
   keyPrefix: string;
   features: string[];
-  accentColor: string;
+  ctaLabel: string;
 }
 
 const SUITE_APPS: SuiteApp[] = [
   {
     id: 'personal',
     name: 'ADIOS Personal Manager',
-    badge: 'Desktop V2 Core',
     category: 'Productivity & Private Finances',
     status: 'available',
-    statusLabel: 'Open Alpha (Live Testing)',
+    statusLabel: 'Available now',
     price: 999,
-    description: 'All 10 personal modules: rupee transactions, exam schedules, study timer, and rolling backups.',
+    description: 'High-speed offline desktop manager for Indian Rupee cashflow, exam dates, study pomodoro, and local SQLite data.',
     keyPrefix: 'ADIOS-PERS',
-    accentColor: '#0078d4',
+    ctaLabel: 'Download for Windows',
     features: [
-      'Money transactions & accounts in Indian Rupees (₹)',
-      'Exam schedule, syllabus & seat tracking',
-      'Integrated study tracker with Pomodoro timer',
-      'Subscriptions tracker with 14-day renewal warnings',
-      'Automated rolling SQLite database backups'
+      '10 Core Modules built-in',
+      '₹ Indian Rupee financial cash flow',
+      'Integrated Study Pomodoro & Exam syllabus',
+      '100% Offline SQLite local persistence'
     ]
   },
   {
     id: 'hospital',
     name: 'ADIOS Hospital Management (HMS)',
-    badge: 'Enterprise Healthcare',
-    category: 'Clinical & Patient Operations',
+    category: 'Healthcare & Clinical',
     status: 'in_development',
-    statusLabel: 'Early Access (Q1 2027)',
+    statusLabel: 'Coming soon',
     price: 4999,
-    description: 'High-reliability hospital operation platform: OPD queue scheduling, IPD bed allocations, doctor rosters, and pharmacy inventory.',
+    description: 'Zero-latency hospital administration: OPD queue admissions, IPD bed matrix, doctor rosters, and pharmacy dispensing.',
     keyPrefix: 'ADIOS-HOSP',
-    accentColor: '#d13438',
+    ctaLabel: 'Join Early Access',
     features: [
-      'Patient registration with OPD appointment queues',
-      'IPD ward beds & occupancy tracking matrix',
-      'Doctor schedules, clinical notes & digital prescriptions',
-      'Pharmacy dispensing with batch & expiry tracking',
-      'Hospital billing, test receipts & claims ledger'
+      'Patient OPD & IPD admissions',
+      'Interactive bed & ward occupancy matrix',
+      'Doctor appointment queues & clinical notes',
+      'Pharmacy dispensing with batch management'
     ]
   },
   {
     id: 'hotel',
     name: 'ADIOS Hotel Management System',
-    badge: 'Hospitality Core',
-    category: 'Lodging & Guest Experience',
+    category: 'Hospitality & Front Desk',
     status: 'in_development',
-    statusLabel: 'Early Access (Q1 2027)',
+    statusLabel: 'Coming soon',
     price: 3999,
-    description: 'Intuitive front-desk PMS: room reservation calendar matrix, guest photo ID verification, banquet bookings, and kitchen dining POS.',
+    description: 'Front-desk PMS engineered for speed: room booking matrix, guest photo ID verification, and restaurant dining POS.',
     keyPrefix: 'ADIOS-HOTL',
-    accentColor: '#ca5010',
+    ctaLabel: 'Join Early Access',
     features: [
-      'Interactive room booking calendar matrix',
-      'Fast guest check-in with ID proof capture',
-      'Dining room service & restaurant billing POS',
-      'Housekeeping schedules & maintenance tracking',
-      'Banquet & event hall reservation ledger'
+      'Interactive room booking grid',
+      'Guest ID proof capture at check-in',
+      'Room service & restaurant dining POS',
+      'Housekeeping & laundry schedules'
     ]
   },
   {
     id: 'billing',
     name: 'ADIOS Point of Sale & GST Billing',
-    badge: 'Commercial Retail',
-    category: 'Retail, Wholesale & Inventory',
+    category: 'Commercial Retail & Wholesale',
     status: 'in_development',
-    statusLabel: 'Early Access (Q1 2027)',
+    statusLabel: 'Coming soon',
     price: 2499,
-    description: 'High-speed desktop checkout: barcode scanning, GST compliant invoices (B2B/B2C), stock alerts, and 80mm thermal receipt printing.',
+    description: 'Fast barcode checkout and compliant GST tax invoices (B2B/B2C), inventory alerts, and 80mm thermal receipts.',
     keyPrefix: 'ADIOS-BILL',
-    accentColor: '#107c10',
+    ctaLabel: 'Join Early Access',
     features: [
-      'Sub-second barcode checkout & item scanning',
-      'GST tax invoices (CGST/SGST/IGST + HSN lookup)',
-      'Real-time low-stock alerts & vendor purchase orders',
-      'Instant thermal 80mm / 58mm & A4 invoice printing',
-      'Customer accounts ledger & credit management'
+      'Instant barcode scanning checkout',
+      'GST tax invoices (CGST/SGST/IGST + HSN)',
+      'Real-time low-stock alerts & purchase ledger',
+      '80mm & 58mm thermal receipt printing'
     ]
   },
   {
     id: 'academics',
     name: 'ADIOS Academics & School Management',
-    badge: 'Institutional Education',
     category: 'Schools, Colleges & Coaching',
     status: 'planned',
-    statusLabel: 'Planned (Q2 2027)',
+    statusLabel: 'Planned',
     price: 3499,
-    description: 'School administration platform: student admissions, fee collections with automated SMS alerts, exam marksheet generation, and attendance.',
+    description: 'Educational institution suite: student admissions, fee collections with alerts, exam marksheet generator, and attendance.',
     keyPrefix: 'ADIOS-ACAD',
-    accentColor: '#5c2d91',
+    ctaLabel: 'Join Waitlist',
     features: [
-      'Student admissions & digital document archive',
-      'Term fee receipts & automated balance reminders',
+      'Student admissions & digital records archive',
+      'Term fee receipts & balance reminders',
       'Daily student & faculty attendance tracking',
-      'Comprehensive exam marksheet & report card builder',
-      'Timetable manager & campus notice broadcasts'
+      'Exam marksheet & report card builder'
     ]
   }
 ];
 
 export default function HomePage() {
-  // Authentication Modal State
-  const [user, setUser] = useState<{ id?: number; name: string; email: string; phone: string; role?: string } | null>(null);
+  const [user, setUser] = useState<{ id?: number; name: string; email: string; phone: string } | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'tester'>('signin');
   const [authName, setAuthName] = useState('');
@@ -166,14 +141,14 @@ export default function HomePage() {
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
 
-  // Cart & Pricing State
+  // Cart & Pricing
   const [cart, setCart] = useState<string[]>(['personal']);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [utrNumber, setUtrNumber] = useState('');
   const [orderSubmitted, setOrderSubmitted] = useState(false);
   const [submittingOrder, setSubmittingOrder] = useState(false);
 
-  // Profile Modal State
+  // Profile modal
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileData, setProfileData] = useState<{
     orders: any[];
@@ -182,7 +157,6 @@ export default function HomePage() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [revealedKeys, setRevealedKeys] = useState<{ [key: string]: boolean }>({});
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const [copiedLinux, setCopiedLinux] = useState(false);
 
   const toggleCartItem = (appId: string) => {
     setCart(prev =>
@@ -222,22 +196,13 @@ export default function HomePage() {
   };
 
   const toggleRevealKey = (key: string) => {
-    setRevealedKeys(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
+    setRevealedKeys(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleCopyKey = (key: string) => {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
-  };
-
-  const handleCopyLinux = () => {
-    navigator.clipboard.writeText('pip install adios-manager');
-    setCopiedLinux(true);
-    setTimeout(() => setCopiedLinux(false), 2000);
   };
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
@@ -315,728 +280,551 @@ export default function HomePage() {
     }
   };
 
+  // User initials for circle badge like "SM" in screenshot
+  const userInitials = user?.name
+    ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+    : 'SM';
+
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* 1. MICROSOFT 365 / AZURE STYLE TOP HEADER */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff' }}>
+      {/* 1. OFFICIAL MICROSOFT.COM HEADER */}
       <header
         style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 100,
-          background: 'var(--ms-surface)',
-          borderBottom: '1px solid var(--ms-border)',
-          height: '56px',
+          height: '54px',
+          background: '#ffffff',
+          borderBottom: '1px solid #e6e6e6',
           display: 'flex',
           alignItems: 'center',
-          padding: '0 24px',
-          boxShadow: 'var(--ms-shadow-2)'
+          padding: '0 5% 0 5%',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100
         }}
       >
-        <div
-          style={{
-            maxWidth: 'var(--container-max)',
-            width: '100%',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          {/* Microsoft Brand Grid + ADIOS Product Title */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Left: 4-Square Microsoft Emblem + Brand + Navigation */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
               {/* Microsoft 4-color grid emblem */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 9px)', gap: '2px' }}>
-                <div style={{ width: '9px', height: '9px', background: '#f25022' }}></div>
-                <div style={{ width: '9px', height: '9px', background: '#7fba00' }}></div>
-                <div style={{ width: '9px', height: '9px', background: '#00a4ef' }}></div>
-                <div style={{ width: '9px', height: '9px', background: '#ffb900' }}></div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 10px)', gap: '2px' }}>
+                <div style={{ width: '10px', height: '10px', background: '#f25022' }}></div>
+                <div style={{ width: '10px', height: '10px', background: '#7fba00' }}></div>
+                <div style={{ width: '10px', height: '10px', background: '#00a4ef' }}></div>
+                <div style={{ width: '10px', height: '10px', background: '#ffb900' }}></div>
               </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontWeight: 600, fontSize: '17px', color: 'var(--ms-text)', letterSpacing: '-0.01em' }}>
-                  ADIOS
-                </span>
-                <span style={{ color: 'var(--ms-border-strong)' }}>|</span>
-                <span style={{ fontSize: '14px', color: 'var(--ms-text-secondary)', fontWeight: 500 }}>
-                  Enterprise Management Suites
-                </span>
-              </div>
+              <span style={{ fontSize: '18px', fontWeight: 600, color: '#262626', letterSpacing: '-0.02em' }}>
+                Microsoft
+              </span>
             </Link>
 
-            {/* Top Navigation Links */}
-            <nav style={{ display: 'flex', alignItems: 'center', gap: '22px', marginLeft: '24px' }} className="desktop-nav">
-              <a href="#suites" style={{ color: 'var(--ms-text)', fontSize: '13.5px', fontWeight: 500 }}>
-                App Suites
+            {/* Microsoft Top Nav Menu matching screenshot */}
+            <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }} className="desktop-nav">
+              <a href="#personal" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+                Personal 365
               </a>
-              <a href="#pricing" style={{ color: 'var(--ms-text)', fontSize: '13.5px', fontWeight: 500 }}>
-                Pricing &amp; Cart
+              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+                Enterprise Suites
               </a>
-              <a href="#downloads" style={{ color: 'var(--ms-text)', fontSize: '13.5px', fontWeight: 500 }}>
-                Downloads
+              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+                Hospital &amp; Hotel
               </a>
-              <Link href="/community" style={{ color: 'var(--ms-text)', fontSize: '13.5px', fontWeight: 500 }}>
-                Community
+              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+                GST POS Billing
+              </a>
+              <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+                Surface &amp; Pricing
+              </a>
+              <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+                Windows Desktop
+              </a>
+              <Link href="/community" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+                Support
               </Link>
             </nav>
           </div>
 
-          {/* User Controls, Cart & CTA */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Right: All Microsoft dropdown, Search, Cart & User Circle (exact match to screenshot) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '13px', color: '#262626' }}>
+              <span>All Microsoft</span>
+              <ChevronDown size={14} />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '13px', color: '#262626' }}>
+              <span>Search</span>
+              <Search size={15} />
+            </div>
+
             <a
               href="#pricing"
-              className="ms-btn ms-btn-secondary ms-btn-sm"
-              title="Cart items"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '13px',
+                color: '#262626',
+                textDecoration: 'none'
+              }}
             >
-              <ShoppingCart size={14} color="var(--ms-blue)" />
-              <span>Cart ({cart.length})</span>
-              <span style={{ color: 'var(--ms-text-tertiary)' }}>·</span>
-              <span className="font-mono" style={{ fontWeight: 600 }}>₹{totalAmount.toLocaleString('en-IN')}</span>
-            </a>
-
-            {user ? (
-              <button
-                type="button"
-                onClick={handleOpenProfile}
-                className="ms-btn ms-btn-secondary ms-btn-sm"
-              >
-                <User size={13} color="var(--ms-blue)" />
-                <span>{user.name}</span>
-                <span className="ms-badge" style={{ background: 'var(--ms-blue-light)', color: 'var(--ms-blue)' }}>
-                  Keys
+              <span>Cart</span>
+              <ShoppingCart size={15} />
+              {cart.length > 0 && (
+                <span style={{ fontSize: '11px', background: '#0067b8', color: '#ffffff', padding: '1px 5px', borderRadius: '50%' }}>
+                  {cart.length}
                 </span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => { setAuthMode('signin'); setShowAuthModal(true); }}
-                className="ms-btn ms-btn-subtle ms-btn-sm"
-              >
-                Sign in
-              </button>
-            )}
-
-            <a
-              href="/api/download"
-              download
-              className="ms-btn ms-btn-primary ms-btn-sm"
-            >
-              <Download size={13} />
-              <span>Download .exe</span>
+              )}
             </a>
+
+            {/* Circular Profile Avatar (exact match: SM icon circle) */}
+            <div
+              onClick={() => {
+                if (user) handleOpenProfile();
+                else { setAuthMode('signin'); setShowAuthModal(true); }
+              }}
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: '1px solid #737373',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: '#262626',
+                cursor: 'pointer',
+                background: '#ffffff'
+              }}
+              title={user ? `Signed in as ${user.name}` : 'Sign in to ADIOS'}
+            >
+              {userInitials}
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main style={{ maxWidth: 'var(--container-max)', width: '100%', margin: '0 auto', padding: '36px 24px 80px', flex: 1 }}>
-        {/* 2. HERO: MICROSOFT FLUENT COMMAND CENTER */}
-        <section
-          className="ms-card"
-          style={{
-            background: 'linear-gradient(135deg, var(--ms-surface) 0%, var(--ms-surface-alt) 100%)',
-            border: '1px solid var(--ms-border)',
-            padding: '48px 40px',
-            marginBottom: '48px',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(340px, 1.2fr) minmax(320px, 1fr)',
-            gap: '40px',
-            alignItems: 'center'
-          }}
-        >
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--ms-blue-light)', border: '1px solid var(--ms-blue-tint)', padding: '4px 10px', borderRadius: 'var(--ms-radius-sm)', marginBottom: '16px' }}>
-              <ShieldCheck size={14} color="var(--ms-blue)" />
-              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--ms-blue)' }}>
-                Offline-First Architecture · Native Desktop Engine
-              </span>
-            </div>
-
-            <h1 style={{ marginBottom: '16px' }}>
-              Enterprise Desktop Suites.<br />
-              Zero SaaS Subscriptions.
-            </h1>
-
-            <p style={{ fontSize: '16.5px', lineHeight: 1.6, marginBottom: '24px' }}>
-              ADIOS replaces bloated web SaaS applications with compiled, offline-first management systems
-              for Personal Finances, Hospitals, Hotels, GST Billing, and Academics.
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
-              <a href="#suites" className="ms-btn ms-btn-primary" style={{ height: '42px', padding: '0 20px' }}>
-                <Building2 size={16} />
-                <span>Explore Application Suites</span>
-              </a>
-
-              <a href="#pricing" className="ms-btn ms-btn-secondary" style={{ height: '42px', padding: '0 18px' }}>
-                <span>Configure Suite Bundle</span>
-                <ChevronRight size={15} />
-              </a>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '18px', fontSize: '12.5px', color: 'var(--ms-text-secondary)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={15} color="var(--ms-green)" />
-                <span>100% Offline SQLite Core</span>
-              </div>
-              <div>•</div>
-              <div>Native 64-bit Windows / Linux</div>
-              <div>•</div>
-              <div>Perpetual Lifetime Ownership</div>
-            </div>
-          </div>
-
-          {/* Right Hero: UI Preview Box */}
-          <div
-            className="ms-card ms-card-elevated"
-            style={{
-              overflow: 'hidden',
-              background: 'var(--ms-surface)',
-              border: '1px solid var(--ms-border-strong)'
-            }}
-          >
-            <div style={{ background: 'var(--ms-surface-subtle)', borderBottom: '1px solid var(--ms-border)', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#0078d4' }}></div>
-                <span style={{ fontSize: '12px', fontWeight: 600 }}>ADIOS Personal Manager v2.0.0-alpha.1</span>
-              </div>
-              <span className="ms-badge" style={{ background: 'var(--ms-green-light)', color: 'var(--ms-green)' }}>
-                Offline SQLite Active
-              </span>
-            </div>
-            <div style={{ position: 'relative', width: '100%', background: 'var(--ms-surface-alt)' }}>
-              <Image
-                src="/app-screenshot.png"
-                alt="ADIOS Manager desktop application interface"
-                width={1280}
-                height={720}
-                priority
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* 3. THE 5 ADIOS APPLICATION SUITES (MICROSOFT 365 APP MATRIX) */}
-        <section id="suites" style={{ marginBottom: '64px' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '28px', gap: '16px' }}>
-            <div>
-              <div style={{ color: 'var(--ms-blue)', fontSize: '12.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
-                Enterprise Product Catalog
-              </div>
-              <h2>Application Suites Matrix</h2>
-              <p style={{ marginTop: '6px', maxWidth: '680px' }}>
-                Independent compiled desktop systems sharing the common offline SQLite runtime. Configure your custom suite package below.
-              </p>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '13px', color: 'var(--ms-text-secondary)' }}>Multi-app bundle saves up to 25%</span>
-              <a href="#pricing" className="ms-btn ms-btn-secondary ms-btn-sm">
-                <span>View Cart ({cart.length})</span>
-                <ChevronRight size={14} />
-              </a>
-            </div>
-          </div>
-
-          {/* Suites Grid */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-              gap: '20px'
-            }}
-          >
-            {SUITE_APPS.map(app => {
-              const inCart = cart.includes(app.id);
-              const isLive = app.status === 'available';
-
-              return (
-                <div
-                  key={app.id}
-                  className="ms-card"
-                  style={{
-                    padding: '24px',
-                    borderColor: inCart ? 'var(--ms-blue)' : 'var(--ms-border)',
-                    boxShadow: inCart ? 'var(--ms-shadow-16)' : 'var(--ms-shadow-2)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    background: inCart ? 'var(--ms-blue-light)' : 'var(--ms-surface)'
-                  }}
-                >
-                  <div>
-                    {/* Badge row */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                      <span className="ms-badge" style={{ background: 'var(--ms-surface-subtle)', color: 'var(--ms-text)' }}>
-                        {app.badge}
-                      </span>
-                      <span
-                        className="ms-badge"
-                        style={{
-                          background: isLive ? 'var(--ms-green-light)' : 'var(--ms-orange-light)',
-                          color: isLive ? 'var(--ms-green)' : 'var(--ms-orange)'
-                        }}
-                      >
-                        {app.statusLabel}
-                      </span>
-                    </div>
-
-                    {/* Suite Name & Icon */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-                      <div
-                        style={{
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: 'var(--ms-radius-sm)',
-                          background: `${app.accentColor}15`,
-                          border: `1px solid ${app.accentColor}30`,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0
-                        }}
-                      >
-                        {app.id === 'personal' && <Users size={20} color={app.accentColor} />}
-                        {app.id === 'hospital' && <Building2 size={20} color={app.accentColor} />}
-                        {app.id === 'hotel' && <Hotel size={20} color={app.accentColor} />}
-                        {app.id === 'billing' && <Receipt size={20} color={app.accentColor} />}
-                        {app.id === 'academics' && <GraduationCap size={20} color={app.accentColor} />}
-                      </div>
-
-                      <div>
-                        <h3 style={{ fontSize: '18px' }}>{app.name}</h3>
-                        <div style={{ fontSize: '12.5px', color: 'var(--ms-text-tertiary)' }}>
-                          {app.category}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p style={{ fontSize: '14px', lineHeight: 1.5, marginBottom: '16px' }}>
-                      {app.description}
-                    </p>
-
-                    {/* Feature bullets */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
-                      {app.features.map((feat, fIdx) => (
-                        <div key={fIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: 'var(--ms-text)' }}>
-                          <Check size={14} color="var(--ms-blue)" style={{ flexShrink: 0, marginTop: '3px' }} />
-                          <span>{feat}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Price & Action */}
-                  <div
-                    style={{
-                      borderTop: '1px solid var(--ms-border)',
-                      paddingTop: '16px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between'
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontSize: '11px', color: 'var(--ms-text-secondary)', textTransform: 'uppercase' }}>
-                        Perpetual License
-                      </div>
-                      <div className="font-mono" style={{ fontSize: '20px', fontWeight: 700, color: 'var(--ms-text)' }}>
-                        ₹{app.price.toLocaleString('en-IN')}
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => toggleCartItem(app.id)}
-                      className={inCart ? 'ms-btn ms-btn-secondary' : 'ms-btn ms-btn-primary'}
-                      style={{ height: '36px', fontSize: '13px' }}
-                    >
-                      {inCart ? (
-                        <>
-                          <Check size={14} color="var(--ms-green)" />
-                          <span>Added in Cart</span>
-                        </>
-                      ) : (
-                        <>
-                          <Plus size={14} />
-                          <span>Add to Cart</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* 5. PRICING & UPI CART CHECKOUT (MICROSOFT STORE STYLE) */}
-        <section id="pricing" style={{ marginBottom: '64px', borderTop: '1px solid var(--ms-border)', paddingTop: '48px' }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(340px, 1.2fr) minmax(320px, 1fr)',
-              gap: '36px',
-              alignItems: 'start'
-            }}
-          >
-            {/* Left: Licensing Guarantee Matrix */}
-            <div>
-              <div style={{ color: 'var(--ms-blue)', fontSize: '12.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
-                Transparent Commercial Terms
-              </div>
-              <h2>Perpetual Licensing Philosophy</h2>
-              <p style={{ marginTop: '8px', marginBottom: '20px' }}>
-                We believe in genuine software ownership. You pay once for your digital license key, operate your business offline with full control, and never worry about arbitrary price increases.
-              </p>
-
-              <table>
-                <thead>
-                  <tr>
-                    <th>Capability &amp; Support Guarantee</th>
-                    <th style={{ textAlign: 'center', width: '130px' }}>Offline Free</th>
-                    <th style={{ textAlign: 'center', width: '150px' }}>Lifetime License</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>All core suite modules &amp; features</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                  </tr>
-                  <tr>
-                    <td>Local SQLite database engine</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                  </tr>
-                  <tr>
-                    <td>Custom directory automated backups</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                  </tr>
-                  <tr>
-                    <td>Multi-device encrypted cloud sync</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-text-disabled)' }}>—</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                  </tr>
-                  <tr>
-                    <td>Priority key re-issue &amp; emergency recovery</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-text-disabled)' }}>—</td>
-                    <td style={{ textAlign: 'center', color: 'var(--ms-green)', fontWeight: 600 }}>✓</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            {/* Right: Interactive Suite Cart Checkout */}
-            <div
-              className="ms-card ms-card-elevated"
-              style={{
-                padding: '28px',
-                background: 'var(--ms-surface)',
-                border: '1px solid var(--ms-border-strong)'
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <ShoppingCart size={18} color="var(--ms-blue)" />
-                  <h3 style={{ fontSize: '18px' }}>Suite Order Summary</h3>
-                </div>
-                <span className="ms-badge" style={{ background: 'var(--ms-blue-light)', color: 'var(--ms-blue)' }}>
-                  {cart.length} {cart.length === 1 ? 'Suite' : 'Suites'}
-                </span>
-              </div>
-
-              {selectedApps.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--ms-text-secondary)', fontSize: '14px' }}>
-                  Your cart is empty. Choose suites above to bundle your software.
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-                  {selectedApps.map(item => (
-                    <div
-                      key={item.id}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '10px 12px',
-                        background: 'var(--ms-surface-subtle)',
-                        border: '1px solid var(--ms-border)',
-                        borderRadius: 'var(--ms-radius-sm)'
-                      }}
-                    >
-                      <div>
-                        <div style={{ fontWeight: 600, fontSize: '14px' }}>{item.name}</div>
-                        <div className="font-mono" style={{ fontSize: '11px', color: 'var(--ms-text-secondary)' }}>
-                          Prefix: {item.keyPrefix}
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span className="font-mono" style={{ fontWeight: 700 }}>
-                          ₹{item.price.toLocaleString('en-IN')}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => toggleCartItem(item.id)}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ms-text-secondary)' }}
-                          title="Remove"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Price Calculation Box */}
-              {selectedApps.length > 0 && (
-                <div style={{ background: 'var(--ms-surface-subtle)', border: '1px solid var(--ms-border)', borderRadius: 'var(--ms-radius-sm)', padding: '14px', marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', marginBottom: '6px' }}>
-                    <span style={{ color: 'var(--ms-text-secondary)' }}>Subtotal:</span>
-                    <span className="font-mono">₹{subtotal.toLocaleString('en-IN')}</span>
-                  </div>
-
-                  {discountRate > 0 && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', color: 'var(--ms-green)', marginBottom: '6px' }}>
-                      <span>Bundle Savings ({Math.round(discountRate * 100)}% off):</span>
-                      <span className="font-mono">-₹{discountAmount.toLocaleString('en-IN')}</span>
-                    </div>
-                  )}
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '17px', fontWeight: 700, borderTop: '1px dashed var(--ms-border-strong)', paddingTop: '8px', marginTop: '4px' }}>
-                    <span>Total Amount:</span>
-                    <span className="font-mono" style={{ color: 'var(--ms-blue)' }}>₹{totalAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                </div>
-              )}
-
-              <button
-                type="button"
-                onClick={() => handleStartPurchase()}
-                disabled={selectedApps.length === 0}
-                className="ms-btn ms-btn-primary"
-                style={{ width: '100%', height: '42px', fontSize: '14px' }}
-              >
-                Pay ₹{totalAmount.toLocaleString('en-IN')} via UPI / QR
-              </button>
-
-              <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '12px', color: 'var(--ms-text-tertiary)' }}>
-                Official UPI QR delivery · Manual verification within 1 hour
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 6. DOWNLOADS TABLE */}
-        <section id="downloads" style={{ marginBottom: '64px', borderTop: '1px solid var(--ms-border)', paddingTop: '48px' }}>
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ color: 'var(--ms-blue)', fontSize: '12.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
-              Installation Packages
-            </div>
-            <h2>Download Desktop Binaries</h2>
-            <p style={{ marginTop: '6px' }}>
-              Standard Windows and Linux executables. Standalone offline operation with no external runtime dependencies.
-            </p>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Platform</th>
-                <th>Operating System</th>
-                <th>Format</th>
-                <th>Release Lifecycle</th>
-                <th style={{ textAlign: 'right' }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Windows</b></td>
-                <td>Windows 10 / 11 (64-bit)</td>
-                <td><code className="font-mono">.exe (Inno Setup)</code></td>
-                <td>
-                  <span className="ms-badge" style={{ background: 'var(--ms-green-light)', color: 'var(--ms-green)' }}>
-                    Available (v2.0.0-alpha.1)
-                  </span>
-                </td>
-                <td style={{ textAlign: 'right' }}>
-                  <a href="/api/download" download className="ms-btn ms-btn-primary ms-btn-sm">
-                    <Download size={13} />
-                    <span>Download .exe</span>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td><b>Linux</b></td>
-                <td>Ubuntu, Debian, Fedora, Arch</td>
-                <td><code className="font-mono">PyPI Package</code></td>
-                <td>
-                  <span className="ms-badge" style={{ background: 'var(--ms-green-light)', color: 'var(--ms-green)' }}>
-                    Available (PyPI)
-                  </span>
-                </td>
-                <td style={{ textAlign: 'right' }}>
-                  <button type="button" onClick={handleCopyLinux} className="ms-btn ms-btn-secondary ms-btn-sm font-mono">
-                    {copiedLinux ? 'Copied pip command' : 'pip install adios-manager'}
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td><b>macOS</b></td>
-                <td>Apple Silicon &amp; Intel</td>
-                <td><code className="font-mono">.dmg universal</code></td>
-                <td>
-                  <span className="ms-badge" style={{ background: 'var(--ms-orange-light)', color: 'var(--ms-orange)' }}>
-                    Early Preview (Q1 2027)
-                  </span>
-                </td>
-                <td style={{ textAlign: 'right', color: 'var(--ms-text-disabled)', fontSize: '13px' }}>
-                  Coming soon
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </main>
-
-      {/* 7. MICROSOFT FOOTER */}
-      <footer
+      {/* 2. FULL-BLEED HERO: EXACT REPLICA OF MICROSOFT SURFACE SHOWCASE */}
+      <section
         style={{
-          background: 'var(--ms-surface)',
-          borderTop: '1px solid var(--ms-border)',
-          padding: '36px 24px',
-          fontSize: '13px',
-          color: 'var(--ms-text-secondary)'
+          width: '100%',
+          minHeight: '540px',
+          background: 'linear-gradient(135deg, #d3c7e8 0%, #b8a8dc 50%, #a291cf 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
+          padding: '48px 6% 64px 6%',
+          overflow: 'hidden'
         }}
       >
         <div
           style={{
-            maxWidth: 'var(--container-max)',
             width: '100%',
+            maxWidth: '1440px',
             margin: '0 auto',
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '16px'
+            display: 'grid',
+            gridTemplateColumns: 'minmax(320px, 1fr) minmax(360px, 1.25fr)',
+            gap: '40px',
+            alignItems: 'center'
           }}
         >
-          <div>
-            <div style={{ fontWeight: 600, color: 'var(--ms-text)', marginBottom: '3px' }}>
-              ADIOS Management Suites &amp; AI Unslop Platform
+          {/* Left Column: Product Statement */}
+          <div style={{ maxWidth: '540px', zIndex: 2 }}>
+            {/* "Coming soon" pill in exact purple styling */}
+            <div style={{ marginBottom: '18px' }}>
+              <span className="ms-pill">
+                Coming soon
+              </span>
             </div>
-            <div>Built with Microsoft Fluent principles by Sayan Maity. 100% Offline-first guarantee.</div>
+
+            {/* Product Headline */}
+            <h1
+              style={{
+                color: '#1a1429',
+                fontSize: 'clamp(36px, 4.4vw, 54px)',
+                fontWeight: 600,
+                lineHeight: 1.15,
+                letterSpacing: '-0.02em',
+                marginBottom: '16px'
+              }}
+            >
+              Our most optimised management lineup
+            </h1>
+
+            {/* Subtext description */}
+            <p
+              style={{
+                color: '#2c2242',
+                fontSize: '17px',
+                lineHeight: 1.5,
+                marginBottom: '28px',
+                fontWeight: 400
+              }}
+            >
+              Big ideas, busy days, operational moments. ADIOS Personal, Hospital, Hotel, POS and Academics
+              are engineered offline-first to keep pace.
+            </p>
+
+            {/* "Learn more" Primary Button */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <a href="#suites" className="ms-hero-btn">
+                Learn more
+              </a>
+
+              <a
+                href="/api/download"
+                download
+                className="ms-secondary-btn"
+                style={{ color: '#1a1429', textDecoration: 'underline' }}
+              >
+                Download Desktop .exe
+              </a>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ms-text-secondary)' }}>
-              GitHub Repo
-            </a>
-            <Link href="/community" style={{ color: 'var(--ms-text-secondary)' }}>Community</Link>
-            <Link href="/privacy" style={{ color: 'var(--ms-text-secondary)' }}>Privacy Policy</Link>
-            <Link href="/terms" style={{ color: 'var(--ms-text-secondary)' }}>Terms of Service</Link>
+          {/* Right Column: High-Resolution Product Showcase matching Laptop & Tablet visual */}
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '680px',
+                filter: 'drop-shadow(0 24px 40px rgba(24, 14, 46, 0.35))'
+              }}
+            >
+              <Image
+                src="/app-screenshot.png"
+                alt="ADIOS Surface Management Lineup"
+                width={1280}
+                height={720}
+                priority
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '4px',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  boxShadow: '0 20px 45px rgba(0, 0, 0, 0.3)'
+                }}
+              />
+
+              {/* Snapdragon badge style floating badge (matching bottom-right badge in screenshot) */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '-16px',
+                  right: '10px',
+                  background: '#0f0c18',
+                  color: '#ffffff',
+                  padding: '8px 12px',
+                  borderRadius: '6px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 18px rgba(0,0,0,0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <div style={{ width: '18px', height: '18px', borderRadius: '3px', background: '#0067b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 800 }}>
+                  A
+                </div>
+                <div>
+                  <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#9d91b8' }}>ENGINE ARCHITECTURE</div>
+                  <div style={{ fontSize: '11px', fontWeight: 700 }}>Qt 6 · Offline SQLite</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. PRODUCT SHOWCASE TILES: 5 SPECIALIZED MANAGEMENT SUITES */}
+      <section id="suites" style={{ padding: '60px 6% 40px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+        <div style={{ marginBottom: '32px' }}>
+          <h2 style={{ fontSize: '28px', color: '#262626', marginBottom: '8px' }}>
+            Engineered for High-Stakes Operations
+          </h2>
+          <p style={{ fontSize: '15px', color: '#505050' }}>
+            Choose the dedicated management application for your business. Every edition includes local SQLite isolation and perpetual lifetime licenses.
+          </p>
+        </div>
+
+        {/* 5-Suite Product Cards Grid (Microsoft Store format) */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '24px'
+          }}
+        >
+          {SUITE_APPS.map(app => {
+            const inCart = cart.includes(app.id);
+
+            return (
+              <div
+                key={app.id}
+                className="ms-product-card"
+                style={{
+                  padding: '24px',
+                  borderTop: inCart ? '4px solid #0067b8' : '1px solid #e6e6e6'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '11.5px', color: '#737373', textTransform: 'uppercase', fontWeight: 600 }}>
+                      {app.category}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '11.5px',
+                        fontWeight: 600,
+                        color: app.status === 'available' ? '#107c10' : '#78248c',
+                        background: app.status === 'available' ? '#dff6dd' : '#f2eafd',
+                        padding: '2px 8px',
+                        borderRadius: '2px'
+                      }}
+                    >
+                      {app.statusLabel}
+                    </span>
+                  </div>
+
+                  <h3 style={{ fontSize: '18px', color: '#262626', marginBottom: '8px' }}>
+                    {app.name}
+                  </h3>
+
+                  <p style={{ fontSize: '13.5px', color: '#505050', lineHeight: 1.5, marginBottom: '16px' }}>
+                    {app.description}
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
+                    {app.features.map((f, i) => (
+                      <div key={i} style={{ fontSize: '12.5px', color: '#262626', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ color: '#0067b8', fontWeight: 'bold' }}>✓</span>
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ borderTop: '1px solid #f2f2f2', paddingTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#737373' }}>Perpetual license</div>
+                    <div className="font-mono" style={{ fontSize: '18px', fontWeight: 700, color: '#262626' }}>
+                      ₹{app.price.toLocaleString('en-IN')}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => toggleCartItem(app.id)}
+                    className={inCart ? 'ms-secondary-btn' : 'ms-hero-btn'}
+                    style={{
+                      height: '34px',
+                      padding: '0 12px',
+                      fontSize: '13px'
+                    }}
+                  >
+                    {inCart ? (
+                      <span style={{ color: '#107c10', fontWeight: 600 }}>✓ In Cart</span>
+                    ) : (
+                      <span>Add to Cart</span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 4. SURFACE PRICING & UPI CART CHECKOUT (MICROSOFT STORE STYLE) */}
+      <section id="pricing" style={{ padding: '40px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+        <div
+          style={{
+            background: '#f7f7f7',
+            border: '1px solid #e6e6e6',
+            padding: '36px',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(320px, 1.2fr) minmax(300px, 1fr)',
+            gap: '36px',
+            alignItems: 'start'
+          }}
+        >
+          {/* Left: Licensing matrix */}
+          <div>
+            <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>
+              Perpetual Licensing Philosophy
+            </h2>
+            <p style={{ fontSize: '14.5px', color: '#505050', marginBottom: '20px' }}>
+              Unlike recurring SaaS subscription models, ADIOS is built on genuine perpetual software ownership.
+              Your software runs offline on your own hardware forever.
+            </p>
+
+            <table style={{ width: '100%', background: '#ffffff', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
+              <thead>
+                <tr style={{ background: '#f2f2f2' }}>
+                  <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Capability</th>
+                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6' }}>Community Free</th>
+                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6' }}>Lifetime License</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>All core modules &amp; features</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Local SQLite database storage</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Custom directory backups</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '10px 14px' }}>Multi-device encrypted cloud sync</td>
+                  <td style={{ textAlign: 'center', color: '#a19f9d' }}>—</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Right: Cart Summary Box */}
+          <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ fontSize: '17px', fontWeight: 600, color: '#262626' }}>Selected Suite Cart</div>
+              <span style={{ fontSize: '12px', background: '#eff6fc', color: '#0067b8', padding: '2px 8px', fontWeight: 600 }}>
+                {cart.length} {cart.length === 1 ? 'Suite' : 'Suites'}
+              </span>
+            </div>
+
+            {selectedApps.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '24px 0', color: '#737373', fontSize: '13.5px' }}>
+                Your cart is empty. Choose suites above to bundle your software.
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                {selectedApps.map(item => (
+                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: '#fbfbfb', border: '1px solid #f2f2f2', fontSize: '13px' }}>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{item.name}</div>
+                      <div className="font-mono" style={{ fontSize: '11px', color: '#737373' }}>Prefix: {item.keyPrefix}</div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="font-mono" style={{ fontWeight: 600 }}>₹{item.price.toLocaleString('en-IN')}</span>
+                      <button type="button" onClick={() => toggleCartItem(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#737373' }}>
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {selectedApps.length > 0 && (
+              <div style={{ background: '#f7f7f7', padding: '12px', marginBottom: '16px', fontSize: '13px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ color: '#737373' }}>Subtotal:</span>
+                  <span className="font-mono">₹{subtotal.toLocaleString('en-IN')}</span>
+                </div>
+                {discountRate > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#107c10', marginBottom: '4px' }}>
+                    <span>Bundle Savings ({Math.round(discountRate * 100)}%):</span>
+                    <span className="font-mono">-₹{discountAmount.toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 700, borderTop: '1px dashed #dcdcdc', paddingTop: '8px', marginTop: '4px' }}>
+                  <span>Total:</span>
+                  <span className="font-mono" style={{ color: '#0067b8' }}>₹{totalAmount.toLocaleString('en-IN')}</span>
+                </div>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => handleStartPurchase()}
+              disabled={selectedApps.length === 0}
+              className="ms-hero-btn"
+              style={{ width: '100%', height: '40px', fontSize: '14px' }}
+            >
+              Checkout via UPI / QR (₹{totalAmount.toLocaleString('en-IN')})
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. DOWNLOADS TABLE */}
+      <section id="downloads" style={{ padding: '0 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+        <h2 style={{ fontSize: '24px', marginBottom: '16px' }}>Downloads &amp; Runtime</h2>
+        <table style={{ width: '100%', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
+          <thead>
+            <tr style={{ background: '#f2f2f2' }}>
+              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Platform</th>
+              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Architecture</th>
+              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Channel</th>
+              <th style={{ padding: '10px 14px', textAlign: 'right', borderBottom: '1px solid #e6e6e6' }}>Get it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2' }}><b>Windows</b></td>
+              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2' }}>Windows 10 / 11 (64-bit)</td>
+              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2', color: '#107c10', fontWeight: 600 }}>Available (v2.0.0-alpha.1)</td>
+              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2', textAlign: 'right' }}>
+                <a href="/api/download" download className="ms-hero-btn" style={{ height: '30px', padding: '0 12px', fontSize: '12.5px' }}>
+                  Download .exe
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px 14px' }}><b>Linux</b></td>
+              <td style={{ padding: '12px 14px' }}>Ubuntu, Debian, Fedora, Arch</td>
+              <td style={{ padding: '12px 14px', color: '#107c10', fontWeight: 600 }}>Available (PyPI)</td>
+              <td style={{ padding: '12px 14px', textAlign: 'right' }}>
+                <code className="font-mono" style={{ background: '#f2f2f2', padding: '4px 8px', fontSize: '12px' }}>pip install adios-manager</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      {/* 6. OFFICIAL MICROSOFT FOOTER */}
+      <footer style={{ background: '#f2f2f2', borderTop: '1px solid #e6e6e6', padding: '36px 6%', fontSize: '12px', color: '#616161' }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+          <div>
+            <div style={{ fontWeight: 600, color: '#262626', marginBottom: '2px' }}>Microsoft-Grade Offline Management Systems</div>
+            <div>Built for speed and durability by Sayan Maity. 100% Offline-first guarantee.</div>
+          </div>
+          <div style={{ display: 'flex', gap: '20px' }}>
+            <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: '#616161' }}>GitHub</a>
+            <Link href="/community" style={{ color: '#616161' }}>Community</Link>
+            <Link href="/privacy" style={{ color: '#616161' }}>Privacy</Link>
+            <Link href="/terms" style={{ color: '#616161' }}>Terms</Link>
           </div>
         </div>
       </footer>
 
-      {/* 8. AUTHENTICATION & TESTER MODAL */}
+      {/* AUTH MODAL */}
       {showAuthModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.45)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-            padding: '20px'
-          }}
-        >
-          <div className="ms-card" style={{ maxWidth: '420px', width: '100%', padding: '28px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-              <h3 style={{ fontSize: '18px' }}>
-                {authMode === 'signin' ? 'Sign in to ADIOS' : authMode === 'tester' ? 'Register as Alpha Tester' : 'Create an Account'}
-              </h3>
-              <button
-                type="button"
-                onClick={() => { setShowAuthModal(false); setAuthError(''); }}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: 'var(--ms-text-secondary)' }}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Mode selection buttons */}
-            <div style={{ display: 'flex', background: 'var(--ms-surface-subtle)', borderRadius: 'var(--ms-radius-sm)', padding: '3px', marginBottom: '16px' }}>
-              <button
-                type="button"
-                onClick={() => { setAuthMode('signin'); setAuthError(''); }}
-                style={{
-                  flex: 1,
-                  padding: '6px 0',
-                  border: 'none',
-                  borderRadius: 'var(--ms-radius-sm)',
-                  background: authMode === 'signin' ? 'var(--ms-surface)' : 'transparent',
-                  color: authMode === 'signin' ? 'var(--ms-text)' : 'var(--ms-text-secondary)',
-                  fontWeight: authMode === 'signin' ? 600 : 400,
-                  fontSize: '12.5px',
-                  cursor: 'pointer',
-                  boxShadow: authMode === 'signin' ? 'var(--ms-shadow-2)' : 'none'
-                }}
-              >
-                Sign in
-              </button>
-              <button
-                type="button"
-                onClick={() => { setAuthMode('signup'); setAuthError(''); }}
-                style={{
-                  flex: 1,
-                  padding: '6px 0',
-                  border: 'none',
-                  borderRadius: 'var(--ms-radius-sm)',
-                  background: authMode === 'signup' ? 'var(--ms-surface)' : 'transparent',
-                  color: authMode === 'signup' ? 'var(--ms-text)' : 'var(--ms-text-secondary)',
-                  fontWeight: authMode === 'signup' ? 600 : 400,
-                  fontSize: '12.5px',
-                  cursor: 'pointer',
-                  boxShadow: authMode === 'signup' ? 'var(--ms-shadow-2)' : 'none'
-                }}
-              >
-                Create account
-              </button>
-              <button
-                type="button"
-                onClick={() => { setAuthMode('tester'); setAuthError(''); }}
-                style={{
-                  flex: 1,
-                  padding: '6px 0',
-                  border: 'none',
-                  borderRadius: 'var(--ms-radius-sm)',
-                  background: authMode === 'tester' ? 'var(--ms-surface)' : 'transparent',
-                  color: authMode === 'tester' ? 'var(--ms-blue)' : 'var(--ms-text-secondary)',
-                  fontWeight: authMode === 'tester' ? 600 : 400,
-                  fontSize: '12.5px',
-                  cursor: 'pointer',
-                  boxShadow: authMode === 'tester' ? 'var(--ms-shadow-2)' : 'none'
-                }}
-              >
-                Alpha Tester
-              </button>
-            </div>
-
-            {authMode === 'tester' && (
-              <div style={{ background: 'var(--ms-blue-light)', border: '1px solid var(--ms-blue-tint)', padding: '10px 12px', borderRadius: 'var(--ms-radius-sm)', fontSize: '12.5px', color: 'var(--ms-text)', marginBottom: '16px', lineHeight: 1.5 }}>
-                ✨ <b>Alpha Tester Program</b>: Instant complimentary testing license key provisioned to your account upon signup.
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '28px', maxWidth: '400px', width: '100%', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ fontWeight: 600, fontSize: '17px' }}>
+                {authMode === 'signin' ? 'Sign in' : authMode === 'tester' ? 'Join Alpha Testing' : 'Create Account'}
               </div>
-            )}
+              <button type="button" onClick={() => setShowAuthModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
+            </div>
+
+            <div style={{ display: 'flex', background: '#f2f2f2', padding: '2px', marginBottom: '16px' }}>
+              <button type="button" onClick={() => setAuthMode('signin')} style={{ flex: 1, padding: '6px', border: 'none', background: authMode === 'signin' ? '#ffffff' : 'transparent', fontWeight: authMode === 'signin' ? 600 : 400, fontSize: '12px', cursor: 'pointer' }}>Sign in</button>
+              <button type="button" onClick={() => setAuthMode('signup')} style={{ flex: 1, padding: '6px', border: 'none', background: authMode === 'signup' ? '#ffffff' : 'transparent', fontWeight: authMode === 'signup' ? 600 : 400, fontSize: '12px', cursor: 'pointer' }}>Sign up</button>
+              <button type="button" onClick={() => setAuthMode('tester')} style={{ flex: 1, padding: '6px', border: 'none', background: authMode === 'tester' ? '#ffffff' : 'transparent', color: authMode === 'tester' ? '#0067b8' : 'inherit', fontWeight: authMode === 'tester' ? 600 : 400, fontSize: '12px', cursor: 'pointer' }}>Alpha Tester</button>
+            </div>
 
             {authError && (
-              <div style={{ background: 'var(--ms-orange-light)', border: '1px solid var(--ms-orange)', color: 'var(--ms-orange)', padding: '10px 12px', fontSize: '12.5px', borderRadius: 'var(--ms-radius-sm)', marginBottom: '14px' }}>
+              <div style={{ background: '#fde7e9', border: '1px solid #d83b01', color: '#d83b01', padding: '8px 10px', fontSize: '12px', marginBottom: '12px' }}>
                 {authError}
               </div>
             )}
@@ -1044,146 +832,70 @@ export default function HomePage() {
             <form onSubmit={handleAuthSubmit}>
               {(authMode === 'signup' || authMode === 'tester') && (
                 <div style={{ marginBottom: '12px' }}>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, marginBottom: '4px' }}>
-                    Full name
-                  </label>
-                  <input
-                    type="text"
-                    value={authName}
-                    onChange={e => setAuthName(e.target.value)}
-                    required
-                    placeholder="Sayan Maity"
-                    style={{ width: '100%', height: '36px' }}
-                  />
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>Full name</label>
+                  <input type="text" value={authName} onChange={e => setAuthName(e.target.value)} required placeholder="Sayan Maity" style={{ width: '100%', height: '34px', border: '1px solid #8a8886', padding: '0 8px', fontSize: '13px' }} />
                 </div>
               )}
-
               <div style={{ marginBottom: '12px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, marginBottom: '4px' }}>
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  value={authEmail}
-                  onChange={e => setAuthEmail(e.target.value)}
-                  required
-                  placeholder="your.email@example.com"
-                  style={{ width: '100%', height: '36px' }}
-                />
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>Email address</label>
+                <input type="email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} required placeholder="your.email@example.com" style={{ width: '100%', height: '34px', border: '1px solid #8a8886', padding: '0 8px', fontSize: '13px' }} />
               </div>
-
               {(authMode === 'signup' || authMode === 'tester') && (
                 <div style={{ marginBottom: '12px' }}>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, marginBottom: '4px' }}>
-                    Phone number (optional)
-                  </label>
-                  <input
-                    type="tel"
-                    value={authPhone}
-                    onChange={e => setAuthPhone(e.target.value)}
-                    placeholder="+91 9876543210"
-                    style={{ width: '100%', height: '36px' }}
-                  />
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>Phone number (optional)</label>
+                  <input type="tel" value={authPhone} onChange={e => setAuthPhone(e.target.value)} placeholder="+91 9876543210" style={{ width: '100%', height: '34px', border: '1px solid #8a8886', padding: '0 8px', fontSize: '13px' }} />
                 </div>
               )}
-
-              <div style={{ marginBottom: '18px' }}>
-                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, marginBottom: '4px' }}>
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={authPassword}
-                  onChange={e => setAuthPassword(e.target.value)}
-                  required
-                  style={{ width: '100%', height: '36px' }}
-                />
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>Password</label>
+                <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} required style={{ width: '100%', height: '34px', border: '1px solid #8a8886', padding: '0 8px', fontSize: '13px' }} />
               </div>
-
-              <button
-                type="submit"
-                disabled={authLoading}
-                className="ms-btn ms-btn-primary"
-                style={{ width: '100%', height: '38px' }}
-              >
-                {authLoading ? 'Verifying...' : authMode === 'signin' ? 'Sign in' : authMode === 'tester' ? 'Register as Alpha Tester' : 'Create account'}
+              <button type="submit" disabled={authLoading} className="ms-hero-btn" style={{ width: '100%', height: '36px', fontSize: '13.5px' }}>
+                {authLoading ? 'Verifying...' : authMode === 'signin' ? 'Sign in' : authMode === 'tester' ? 'Register as Tester' : 'Create account'}
               </button>
             </form>
           </div>
         </div>
       )}
 
-      {/* 9. UPI CHECKOUT MODAL */}
+      {/* CHECKOUT MODAL */}
       {showCheckoutModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.45)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-            padding: '20px'
-          }}
-        >
-          <div className="ms-card" style={{ maxWidth: '440px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '28px' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '28px', maxWidth: '420px', width: '100%', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '17px' }}>UPI Payment Reference</h3>
-              <button
-                type="button"
-                onClick={() => setShowCheckoutModal(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: 'var(--ms-text-secondary)' }}
-              >
-                ✕
-              </button>
+              <div style={{ fontWeight: 600, fontSize: '17px' }}>UPI Payment Checkout</div>
+              <button type="button" onClick={() => setShowCheckoutModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
             </div>
 
             {orderSubmitted ? (
               <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'var(--ms-green-light)', color: 'var(--ms-green)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-                  <Check size={22} />
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#dff6dd', color: '#107c10', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>
+                  <Check size={20} />
                 </div>
-                <h4 style={{ fontSize: '16px', marginBottom: '8px' }}>Payment Reference Submitted</h4>
-                <p style={{ fontSize: '13.5px', color: 'var(--ms-text-secondary)', lineHeight: 1.5, marginBottom: '18px' }}>
+                <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '6px' }}>Payment Reference Submitted</div>
+                <p style={{ fontSize: '13px', color: '#505050', marginBottom: '16px' }}>
                   Thank you, <b>{user?.name}</b>. Your UPI reference (<b>{utrNumber}</b>) has been recorded.
-                  Your key will be issued directly to your profile and email once verified.
+                  Your license key will be issued upon bank verification.
                 </p>
-                <button
-                  type="button"
-                  onClick={() => { setShowCheckoutModal(false); setOrderSubmitted(false); }}
-                  className="ms-btn ms-btn-primary"
-                  style={{ width: '100%' }}
-                >
-                  Done
-                </button>
+                <button type="button" onClick={() => { setShowCheckoutModal(false); setOrderSubmitted(false); }} className="ms-hero-btn" style={{ width: '100%' }}>Done</button>
               </div>
             ) : (
               <div>
-                <div
-                  style={{
-                    background: 'var(--ms-surface-subtle)',
-                    border: '1px solid var(--ms-border)',
-                    padding: '16px',
-                    borderRadius: 'var(--ms-radius-sm)',
-                    textAlign: 'center',
-                    marginBottom: '18px'
-                  }}
-                >
-                  <div style={{ display: 'inline-block', background: '#ffffff', padding: '10px', borderRadius: 'var(--ms-radius-sm)', marginBottom: '10px' }}>
-                    <svg width="140" height="140" viewBox="0 0 100 100" fill="#1b1b1b">
+                <div style={{ background: '#f7f7f7', border: '1px solid #e6e6e6', padding: '16px', textAlign: 'center', marginBottom: '16px' }}>
+                  <div style={{ display: 'inline-block', background: '#ffffff', padding: '8px', border: '1px solid #e6e6e6', marginBottom: '8px' }}>
+                    <svg width="130" height="130" viewBox="0 0 100 100" fill="#1b1b1b">
                       <rect x="0" y="0" width="30" height="30" fill="#1b1b1b" />
                       <rect x="5" y="5" width="20" height="20" fill="#ffffff" />
-                      <rect x="10" y="10" width="10" height="10" fill="#0078d4" />
+                      <rect x="10" y="10" width="10" height="10" fill="#0067b8" />
                       <rect x="70" y="0" width="30" height="30" fill="#1b1b1b" />
                       <rect x="75" y="5" width="20" height="20" fill="#ffffff" />
-                      <rect x="80" y="10" width="10" height="10" fill="#0078d4" />
+                      <rect x="80" y="10" width="10" height="10" fill="#0067b8" />
                       <rect x="0" y="70" width="30" height="30" fill="#1b1b1b" />
                       <rect x="5" y="75" width="20" height="20" fill="#ffffff" />
-                      <rect x="10" y="80" width="10" height="10" fill="#0078d4" />
+                      <rect x="10" y="80" width="10" height="10" fill="#0067b8" />
                       <rect x="40" y="10" width="10" height="20" />
                       <rect x="55" y="15" width="8" height="8" />
-                      <rect x="40" y="40" width="20" height="20" fill="#0078d4" />
+                      <rect x="40" y="40" width="20" height="20" fill="#0067b8" />
                       <rect x="70" y="40" width="10" height="10" />
                       <rect x="85" y="55" width="12" height="12" />
                       <rect x="40" y="70" width="15" height="15" />
@@ -1191,40 +903,16 @@ export default function HomePage() {
                       <rect x="85" y="80" width="10" height="10" />
                     </svg>
                   </div>
-
-                  <div className="font-mono" style={{ fontSize: '13.5px', fontWeight: 600 }}>
-                    sayanjc3639q@oksbi
-                  </div>
-                  <div style={{ fontSize: '17px', fontWeight: 700, color: 'var(--ms-blue)', marginTop: '4px' }}>
-                    Total: ₹{totalAmount.toLocaleString('en-IN')}
-                  </div>
-                  <div style={{ fontSize: '12px', color: 'var(--ms-text-secondary)', marginTop: '2px' }}>
-                    Includes {cart.length} suite{cart.length > 1 ? 's' : ''} ({Math.round(discountRate * 100)}% bundle discount applied)
-                  </div>
+                  <div className="font-mono" style={{ fontSize: '13px', fontWeight: 600 }}>sayanjc3639q@oksbi</div>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: '#0067b8', marginTop: '4px' }}>Total: ₹{totalAmount.toLocaleString('en-IN')}</div>
                 </div>
 
                 <form onSubmit={handleOrderSubmit}>
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, marginBottom: '4px' }}>
-                      UPI Reference / UTR Number (12 Digits)*
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. 432190821941"
-                      value={utrNumber}
-                      onChange={e => setUtrNumber(e.target.value)}
-                      required
-                      className="font-mono"
-                      style={{ width: '100%', height: '38px' }}
-                    />
+                  <div style={{ marginBottom: '14px' }}>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>UPI Reference / UTR Number (12 digits)*</label>
+                    <input type="text" placeholder="e.g. 432190821941" value={utrNumber} onChange={e => setUtrNumber(e.target.value)} required className="font-mono" style={{ width: '100%', height: '36px', border: '1px solid #8a8886', padding: '0 8px', fontSize: '13px' }} />
                   </div>
-
-                  <button
-                    type="submit"
-                    disabled={submittingOrder}
-                    className="ms-btn ms-btn-primary"
-                    style={{ width: '100%', height: '40px' }}
-                  >
+                  <button type="submit" disabled={submittingOrder} className="ms-hero-btn" style={{ width: '100%', height: '38px', fontSize: '13.5px' }}>
                     {submittingOrder ? 'Submitting...' : 'Submit Payment Reference'}
                   </button>
                 </form>
@@ -1234,130 +922,51 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* 10. USER PROFILE & KEYS MODAL */}
+      {/* PROFILE MODAL */}
       {showProfileModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.45)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-            padding: '20px'
-          }}
-        >
-          <div className="ms-card" style={{ maxWidth: '520px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '28px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-              <div>
-                <h3 style={{ fontSize: '17px' }}>Account &amp; License Keys</h3>
-                <div style={{ fontSize: '12.5px', color: 'var(--ms-text-secondary)' }}>
-                  Manage your verified profile and genuine ADIOS perpetual keys.
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowProfileModal(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: 'var(--ms-text-secondary)' }}
-              >
-                ✕
-              </button>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '28px', maxWidth: '480px', width: '100%', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ fontWeight: 600, fontSize: '17px' }}>Account &amp; License Keys</div>
+              <button type="button" onClick={() => setShowProfileModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
             </div>
 
-            <div style={{ background: 'var(--ms-surface-subtle)', border: '1px solid var(--ms-border)', padding: '14px', borderRadius: 'var(--ms-radius-sm)', marginBottom: '20px', fontSize: '13px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span style={{ color: 'var(--ms-text-secondary)' }}>Name:</span>
-                <b>{user?.name}</b>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span style={{ color: 'var(--ms-text-secondary)' }}>Email:</span>
-                <span className="font-mono">{user?.email}</span>
-              </div>
-              {user?.phone && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: 'var(--ms-text-secondary)' }}>Phone:</span>
-                  <span className="font-mono">{user?.phone}</span>
-                </div>
-              )}
+            <div style={{ background: '#f7f7f7', padding: '12px', marginBottom: '16px', fontSize: '13px' }}>
+              <div><b>Name:</b> {user?.name}</div>
+              <div><b>Email:</b> {user?.email}</div>
+              {user?.phone && <div><b>Phone:</b> {user?.phone}</div>}
             </div>
 
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <h4 style={{ fontSize: '14.5px' }}>Genuine Product Keys</h4>
-                <button
-                  type="button"
-                  onClick={() => user?.email && fetchUserProfile(user.email)}
-                  style={{ background: 'none', border: 'none', color: 'var(--ms-blue)', fontSize: '12.5px', cursor: 'pointer' }}
-                >
-                  Refresh
-                </button>
-              </div>
-
-              {loadingProfile ? (
-                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--ms-text-secondary)' }}>
-                  Loading license keys...
-                </div>
-              ) : profileData?.productKeys && profileData.productKeys.length > 0 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {profileData.productKeys.map((pk, idx) => {
-                    const isRevealed = revealedKeys[pk.key] || false;
-                    const maskedKey = pk.key.slice(0, 10) + '••••-••••';
-                    const isCopied = copiedKey === pk.key;
-
-                    return (
-                      <div
-                        key={idx}
-                        style={{
-                          background: 'var(--ms-surface)',
-                          border: '1px solid var(--ms-border)',
-                          borderRadius: 'var(--ms-radius-sm)',
-                          padding: '12px 14px'
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                          <span style={{ fontWeight: 600, fontSize: '12.5px', color: 'var(--ms-blue)' }}>
-                            {pk.plan}
-                          </span>
-                          <span className="font-mono" style={{ fontSize: '11px', color: 'var(--ms-text-tertiary)' }}>
-                            Order: {pk.orderId}
-                          </span>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--ms-surface-subtle)', border: '1px solid var(--ms-border)', borderRadius: 'var(--ms-radius-sm)', padding: '6px 10px' }}>
-                          <span className="font-mono" style={{ fontSize: '13.5px', fontWeight: 600 }}>
-                            {isRevealed ? pk.key : maskedKey}
-                          </span>
-
-                          <div style={{ display: 'flex', gap: '6px' }}>
-                            <button
-                              type="button"
-                              onClick={() => toggleRevealKey(pk.key)}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ms-text-secondary)' }}
-                              title={isRevealed ? 'Hide' : 'Reveal'}
-                            >
-                              {isRevealed ? <EyeOff size={14} /> : <Eye size={14} />}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleCopyKey(pk.key)}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: isCopied ? 'var(--ms-green)' : 'var(--ms-text-secondary)' }}
-                              title="Copy"
-                            >
-                              {isCopied ? <Check size={14} /> : <Copy size={14} />}
-                            </button>
-                          </div>
+            <div style={{ fontWeight: 600, fontSize: '14px', marginBottom: '8px' }}>Your License Keys</div>
+            {loadingProfile ? (
+              <div style={{ textAlign: 'center', padding: '16px 0', fontSize: '13px', color: '#737373' }}>Loading keys...</div>
+            ) : profileData?.productKeys && profileData.productKeys.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {profileData.productKeys.map((pk, idx) => {
+                  const isRevealed = revealedKeys[pk.key] || false;
+                  const maskedKey = pk.key.slice(0, 10) + '••••-••••';
+                  const isCopied = copiedKey === pk.key;
+                  return (
+                    <div key={idx} style={{ background: '#fbfbfb', border: '1px solid #e6e6e6', padding: '10px 12px' }}>
+                      <div style={{ fontSize: '12px', color: '#0067b8', fontWeight: 600, marginBottom: '4px' }}>{pk.plan}</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="font-mono" style={{ fontSize: '13px', fontWeight: 600 }}>{isRevealed ? pk.key : maskedKey}</span>
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <button type="button" onClick={() => toggleRevealKey(pk.key)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#737373' }}>
+                            {isRevealed ? <EyeOff size={14} /> : <Eye size={14} />}
+                          </button>
+                          <button type="button" onClick={() => handleCopyKey(pk.key)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: isCopied ? '#107c10' : '#737373' }}>
+                            {isCopied ? <Check size={14} /> : <Copy size={14} />}
+                          </button>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--ms-text-tertiary)', fontSize: '13px' }}>
-                  No active keys found.
-                </div>
-              )}
-            </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '16px 0', fontSize: '13px', color: '#737373' }}>No active keys found.</div>
+            )}
           </div>
         </div>
       )}
