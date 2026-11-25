@@ -147,6 +147,7 @@ export default function HomePage() {
   const [utrNumber, setUtrNumber] = useState('');
   const [orderSubmitted, setOrderSubmitted] = useState(false);
   const [submittingOrder, setSubmittingOrder] = useState(false);
+  const [suitesMenuOpen, setSuitesMenuOpen] = useState(false);
 
   // Profile modal
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -303,7 +304,7 @@ export default function HomePage() {
       >
         <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Left: ADIOS Logo Mark & Brand + Navigation */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
               <div style={{ position: 'relative', width: '28px', height: '28px' }}>
                 <Image
@@ -320,61 +321,118 @@ export default function HomePage() {
               </span>
             </Link>
 
-            {/* Version & Testing Status Badge in Nav */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span
-                style={{
-                  background: '#0067b8',
-                  color: '#ffffff',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  padding: '3px 8px',
-                  borderRadius: '4px',
-                  fontFamily: 'monospace',
-                  letterSpacing: '0.02em'
-                }}
-              >
-                v2.0.0-alpha.1
-              </span>
-              <span
-                style={{
-                  border: '1px solid rgba(16, 124, 16, 0.4)',
-                  background: '#dff6dd',
-                  color: '#107c10',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  padding: '2px 8px',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px'
-                }}
-              >
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#107c10' }}></span>
-                Open for Testing
-              </span>
-            </div>
-
             {/* Top Nav Menu matching Surface showcase styling */}
-            <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }} className="desktop-nav">
+            <nav style={{ display: 'flex', alignItems: 'center', gap: '22px' }} className="desktop-nav">
               <a href="#personal" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
                 Personal
               </a>
+
+              {/* Business Suites Dropdown Group */}
+              <div
+                style={{ position: 'relative' }}
+                onMouseEnter={() => setSuitesMenuOpen(true)}
+                onMouseLeave={() => setSuitesMenuOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setSuitesMenuOpen(!suitesMenuOpen)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    color: '#262626',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <span>Suites</span>
+                  <ChevronDown size={13} style={{ transform: suitesMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
+                </button>
+
+                {suitesMenuOpen && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: '0',
+                      paddingTop: '8px',
+                      zIndex: 150
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: '#ffffff',
+                        border: '1px solid #e6e6e6',
+                        borderRadius: '4px',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                        minWidth: '220px',
+                        padding: '6px 0'
+                      }}
+                    >
+                      <a
+                        href="#suites"
+                        onClick={() => setSuitesMenuOpen(false)}
+                        style={{
+                          display: 'block',
+                          padding: '8px 16px',
+                          color: '#262626',
+                          fontSize: '13px',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        Hospital HMS
+                      </a>
+                      <a
+                        href="#suites"
+                        onClick={() => setSuitesMenuOpen(false)}
+                        style={{
+                          display: 'block',
+                          padding: '8px 16px',
+                          color: '#262626',
+                          fontSize: '13px',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        Hotel PMS
+                      </a>
+                      <a
+                        href="#suites"
+                        onClick={() => setSuitesMenuOpen(false)}
+                        style={{
+                          display: 'block',
+                          padding: '8px 16px',
+                          color: '#262626',
+                          fontSize: '13px',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        Academics
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Single small name for GST POS Billing -> POS */}
               <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
-                Hospital HMS
+                POS
               </a>
-              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
-                Hotel PMS
-              </a>
-              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
-                GST POS Billing
-              </a>
-              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
-                Academics
-              </a>
+
+              {/* Clean Pricing link (Cart removed from text since Cart icon exists on right) */}
               <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
-                Pricing &amp; Cart
+                Pricing
               </a>
+
               <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
                 Downloads
               </a>
