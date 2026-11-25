@@ -67,7 +67,15 @@ export async function PATCH(req: NextRequest) {
     }
 
     if (action === 'approve') {
-      const generatedKey = customKey || `ADIOS-PRO-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+      let prefix = 'ADIOS-PRO';
+      const planLower = (order.plan || '').toLowerCase();
+      if (planLower.includes('hospital')) prefix = 'ADIOS-HOSP';
+      else if (planLower.includes('hotel')) prefix = 'ADIOS-HOTL';
+      else if (planLower.includes('billing') || planLower.includes('pos')) prefix = 'ADIOS-BILL';
+      else if (planLower.includes('academic') || planLower.includes('school')) prefix = 'ADIOS-ACAD';
+      else if (planLower.includes('personal')) prefix = 'ADIOS-PERS';
+
+      const generatedKey = customKey || `${prefix}-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
       order.status = 'Approved & Key Issued';
       order.issuedKey = generatedKey;
     } else if (action === 'reject') {

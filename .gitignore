@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+/lib/
 lib64/
 parts/
 sdist/
@@ -43,8 +43,8 @@ node_modules/
 web/.next/
 web/node_modules/
 
-# Admin Server (private / local only)
-admin/
+# Admin Server (private / local only root folder)
+/admin/
 
 # PyInstaller
 *.spec
