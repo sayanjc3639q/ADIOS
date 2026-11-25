@@ -57,6 +57,10 @@ export default function HomePage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Downloads tab state: 'windows' | 'macos' | 'linux' | 'googlebook'
+  const [downloadPlatform, setDownloadPlatform] = useState<'windows' | 'macos' | 'linux' | 'googlebook'>('windows');
+  const [copiedCliCommand, setCopiedCliCommand] = useState(false);
+
   // FAQ Accordion state
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
@@ -1121,39 +1125,427 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. DOWNLOADS TABLE */}
-      <section id="downloads" style={{ padding: '0 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
-        <h2 style={{ fontSize: '24px', marginBottom: '16px', fontWeight: 400 }}>Downloads &amp; Runtime</h2>
-        <table style={{ width: '100%', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
-          <thead>
-            <tr style={{ background: '#f2f2f2' }}>
-              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Platform</th>
-              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Architecture</th>
-              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Channel</th>
-              <th style={{ padding: '10px 14px', textAlign: 'right', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Get it</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2' }}><b>Windows</b></td>
-              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2' }}>Windows 10 / 11 (64-bit)</td>
-              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2', color: '#107c10', fontWeight: 500 }}>Available (v2.0.0-alpha.1)</td>
-              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2', textAlign: 'right' }}>
-                <a href="/api/download" download className="ms-hero-btn" style={{ height: '30px', padding: '0 12px', fontSize: '12.5px' }}>
-                  Download .exe
+      {/* 7. DOWNLOAD ADIOS & CLI (MATCHING SCREENSHOT LAYOUT) */}
+      <section id="downloads" style={{ padding: '60px 6% 80px 6%', maxWidth: '1080px', margin: '0 auto', width: '100%', borderTop: '1px solid #e6e6e6' }}>
+        {/* Main Title matching screenshot */}
+        <div style={{ marginBottom: '32px' }}>
+          <h1
+            style={{
+              fontSize: 'clamp(36px, 4.5vw, 56px)',
+              fontWeight: 450,
+              color: '#1a1429',
+              lineHeight: 1.1,
+              letterSpacing: '-0.025em',
+              marginBottom: '28px'
+            }}
+          >
+            Download ADIOS
+          </h1>
+
+          {/* OS Platform Selector Pills (macOS, Windows, Linux, Googlebook) */}
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            {/* macOS Pill */}
+            <button
+              type="button"
+              onClick={() => setDownloadPlatform('macos')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 18px',
+                borderRadius: '24px',
+                border: downloadPlatform === 'macos' ? '1px solid #1a1429' : '1px solid #d1d5db',
+                background: downloadPlatform === 'macos' ? '#1a1429' : '#ffffff',
+                color: downloadPlatform === 'macos' ? '#ffffff' : '#1f2937',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 170 170" fill="currentColor">
+                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-5.99-9.13-10.74-19.56-14.25-31.28-3.52-11.73-5.28-23.08-5.28-34.07 0-14.35 3.52-26.24 10.56-35.66 7.04-9.42 16.03-14.19 26.96-14.32 4.58 0 9.82 1.15 15.72 3.44 5.9 2.29 9.87 3.47 11.9 3.56 1.83 0 5.86-1.19 12.09-3.56 6.22-2.38 11.45-3.48 15.69-3.3 12.16.59 21.84 4.87 29.02 12.83-10.63 6.43-15.84 15.22-15.63 26.37.22 8.7 3.55 15.93 10 21.68 6.45 5.75 14.12 8.97 23.01 9.66-2.29 7.08-5.15 14.16-8.58 21.23zM119.22 33.64c0-7.39 2.65-14.25 7.96-20.59 5.3-6.33 11.83-10.23 19.59-11.7.92 7.17-1.39 14.1-6.93 20.8-5.54 6.7-12.42 10.74-20.62 11.49z"/>
+              </svg>
+              <span>macOS</span>
+            </button>
+
+            {/* Windows Pill */}
+            <button
+              type="button"
+              onClick={() => setDownloadPlatform('windows')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 18px',
+                borderRadius: '24px',
+                border: downloadPlatform === 'windows' ? '1px solid #1a1429' : '1px solid #d1d5db',
+                background: downloadPlatform === 'windows' ? '#1a1429' : '#ffffff',
+                color: downloadPlatform === 'windows' ? '#ffffff' : '#1f2937',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M0 2.222L6.5 1.333V7.5H0V2.222zm7.5-1.467L16 0v7.5H7.5V.755zM0 8.5h6.5v6.167L0 13.778V8.5zm7.5 0H16V16l-8.5-.755V8.5z"/>
+              </svg>
+              <span>Windows</span>
+            </button>
+
+            {/* Linux Pill */}
+            <button
+              type="button"
+              onClick={() => setDownloadPlatform('linux')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 18px',
+                borderRadius: '24px',
+                border: downloadPlatform === 'linux' ? '1px solid #1a1429' : '1px solid #d1d5db',
+                background: downloadPlatform === 'linux' ? '#1a1429' : '#ffffff',
+                color: downloadPlatform === 'linux' ? '#ffffff' : '#1f2937',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <span style={{ fontSize: '15px' }}>🐧</span>
+              <span>Linux</span>
+            </button>
+
+            {/* Googlebook Pill */}
+            <button
+              type="button"
+              onClick={() => setDownloadPlatform('googlebook')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 18px',
+                borderRadius: '24px',
+                border: downloadPlatform === 'googlebook' ? '1px solid #1a1429' : '1px solid #d1d5db',
+                background: downloadPlatform === 'googlebook' ? '#1a1429' : '#ffffff',
+                color: downloadPlatform === 'googlebook' ? '#ffffff' : '#1f2937',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+              </svg>
+              <span>Googlebook</span>
+            </button>
+          </div>
+        </div>
+
+        {/* SECTION 1: ADIOS APP (Matching screenshot) */}
+        <div style={{ paddingTop: '28px', paddingBottom: '36px', borderBottom: '1px solid #e5e7eb' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: 500, color: '#111827' }}>
+              ADIOS App
+            </h2>
+            <span
+              style={{
+                background: '#eff6ff',
+                color: '#1d4ed8',
+                fontSize: '12px',
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: '6px',
+                fontFamily: 'monospace'
+              }}
+            >
+              v2.0.0-alpha.1
+            </span>
+          </div>
+
+          {/* Action Download Buttons matching screenshot: Download for x64 / Download for ARM64 */}
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
+            {downloadPlatform === 'windows' && (
+              <>
+                <a
+                  href="/api/download"
+                  download
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#111827',
+                    color: '#ffffff',
+                    padding: '12px 28px',
+                    borderRadius: '24px',
+                    fontSize: '14.5px',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    transition: 'background 0.15s ease'
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#1f2937')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#111827')}
+                >
+                  Download for x64
                 </a>
-              </td>
-            </tr>
-            <tr>
-              <td style={{ padding: '12px 14px' }}><b>Linux</b></td>
-              <td style={{ padding: '12px 14px' }}>Ubuntu, Debian, Fedora, Arch</td>
-              <td style={{ padding: '12px 14px', color: '#107c10', fontWeight: 500 }}>Available (PyPI)</td>
-              <td style={{ padding: '12px 14px', textAlign: 'right' }}>
-                <code className="font-mono" style={{ background: '#f2f2f2', padding: '4px 8px', fontSize: '12px' }}>pip install adios-manager</code>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <a
+                  href="/api/download"
+                  download
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#f3f4f6',
+                    color: '#1f2937',
+                    padding: '12px 28px',
+                    borderRadius: '24px',
+                    fontSize: '14.5px',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    transition: 'background 0.15s ease'
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#e5e7eb')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#f3f4f6')}
+                >
+                  Download for ARM64
+                </a>
+              </>
+            )}
+
+            {downloadPlatform === 'macos' && (
+              <>
+                <a
+                  href="/api/download?platform=mac-apple-silicon"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#111827',
+                    color: '#ffffff',
+                    padding: '12px 28px',
+                    borderRadius: '24px',
+                    fontSize: '14.5px',
+                    fontWeight: 500,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Download for Apple Silicon (M1-M4)
+                </a>
+                <a
+                  href="/api/download?platform=mac-intel"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#f3f4f6',
+                    color: '#1f2937',
+                    padding: '12px 28px',
+                    borderRadius: '24px',
+                    fontSize: '14.5px',
+                    fontWeight: 500,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Download for Intel x64
+                </a>
+              </>
+            )}
+
+            {downloadPlatform === 'linux' && (
+              <>
+                <a
+                  href="/api/download?platform=linux-appimage"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#111827',
+                    color: '#ffffff',
+                    padding: '12px 28px',
+                    borderRadius: '24px',
+                    fontSize: '14.5px',
+                    fontWeight: 500,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Download AppImage (.tar.gz)
+                </a>
+                <a
+                  href="https://pypi.org/project/adios-manager/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#f3f4f6',
+                    color: '#1f2937',
+                    padding: '12px 28px',
+                    borderRadius: '24px',
+                    fontSize: '14.5px',
+                    fontWeight: 500,
+                    textDecoration: 'none'
+                  }}
+                >
+                  View on PyPI
+                </a>
+              </>
+            )}
+
+            {downloadPlatform === 'googlebook' && (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+                <span
+                  style={{
+                    background: '#fef3c7',
+                    color: '#92400e',
+                    padding: '10px 20px',
+                    borderRadius: '24px',
+                    fontSize: '13.5px',
+                    fontWeight: 500
+                  }}
+                >
+                  ChromeOS / Linux Crostini Container Build Available
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Minimum Requirements */}
+          <div style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.5 }}>
+            <div style={{ fontWeight: 500, color: '#374151' }}>Minimum Requirements</div>
+            <div>
+              {downloadPlatform === 'windows' && 'Windows 10 (64-bit) or later · 4 GB RAM · 200 MB Disk space'}
+              {downloadPlatform === 'macos' && 'macOS 12.0 Monterey or later · Apple Silicon or Intel 64-bit'}
+              {downloadPlatform === 'linux' && 'glibc 2.28+ · Ubuntu 20.04+, Debian 11+, Fedora 34+, Arch'}
+              {downloadPlatform === 'googlebook' && 'ChromeOS with Linux (Beta) developer mode activated'}
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION 2: ADIOS CLI (User requested: also add CLI) */}
+        <div style={{ paddingTop: '32px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: 500, color: '#111827' }}>
+              ADIOS CLI
+            </h2>
+            <span
+              style={{
+                background: '#eff6ff',
+                color: '#1d4ed8',
+                fontSize: '12px',
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: '6px',
+                fontFamily: 'monospace'
+              }}
+            >
+              v1.5.16
+            </span>
+          </div>
+
+          <p style={{ fontSize: '14.5px', color: '#4b5563', marginBottom: '20px', fontWeight: 350, maxWidth: '680px' }}>
+            A fast, headless command-line interface for headless servers, backup cronjobs, automated licensing, and database migration tasks.
+          </p>
+
+          {/* Terminal Code Snippet for Instant Installation */}
+          <div
+            style={{
+              background: '#0f172a',
+              borderRadius: '8px',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '16px',
+              maxWidth: '680px',
+              marginBottom: '16px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', overflowX: 'auto' }}>
+              <span style={{ color: '#94a3b8', fontSize: '13px', userSelect: 'none' }}>$</span>
+              <code className="font-mono" style={{ color: '#f8fafc', fontSize: '13.5px' }}>
+                curl -fsSL https://get.adios.dev/cli.sh | sh
+              </code>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText('curl -fsSL https://get.adios.dev/cli.sh | sh');
+                setCopiedCliCommand(true);
+                setTimeout(() => setCopiedCliCommand(false), 2000);
+              }}
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: '#f8fafc',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                fontSize: '12px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+                flexShrink: 0
+              }}
+            >
+              {copiedCliCommand ? <Check size={13} style={{ color: '#4ade80' }} /> : <Copy size={13} />}
+              <span>{copiedCliCommand ? 'Copied' : 'Copy'}</span>
+            </button>
+          </div>
+
+          {/* Architecture Download Buttons for CLI binaries */}
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
+            <a
+              href="/api/download?type=cli&arch=x64"
+              download
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#111827',
+                color: '#ffffff',
+                padding: '10px 24px',
+                borderRadius: '24px',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                textDecoration: 'none'
+              }}
+            >
+              Download for x64
+            </a>
+            <a
+              href="/api/download?type=cli&arch=arm64"
+              download
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#f3f4f6',
+                color: '#1f2937',
+                padding: '10px 24px',
+                borderRadius: '24px',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                textDecoration: 'none'
+              }}
+            >
+              Download for ARM64
+            </a>
+          </div>
+
+          <div style={{ fontSize: '13px', color: '#6b7280' }}>
+            <span>Also available via Python package manager: </span>
+            <code className="font-mono" style={{ background: '#f3f4f6', padding: '2px 6px', borderRadius: '4px', color: '#111827' }}>
+              pip install adios-cli
+            </code>
+          </div>
+        </div>
       </section>
 
       {/* 8. REDESIGNED PROFESSIONAL MICROSOFT-GRADE FOOTER */}
