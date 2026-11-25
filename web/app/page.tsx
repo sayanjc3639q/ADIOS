@@ -29,9 +29,14 @@ import {
   ArrowRight,
   Sparkles,
   ExternalLink,
-  X
+  X,
+  HelpCircle,
+  Zap,
+  Layers,
+  Database
 } from 'lucide-react';
 import { SUITE_APPS, SuiteApp } from './lib/suites';
+import { FAQS, UNIQUENESS_STORIES } from './lib/about-adios';
 
 export default function HomePage() {
   const [user, setUser] = useState<{ id?: number; name: string; email: string; phone: string } | null>(null);
@@ -51,6 +56,9 @@ export default function HomePage() {
   // Search feature state
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // FAQ Accordion state
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Profile modal
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -298,6 +306,16 @@ export default function HomePage() {
               {/* Clean Pricing link pointing to pricing section */}
               <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
                 Pricing
+              </a>
+
+              {/* Direct Link to About ADIOS Uniqueness Section */}
+              <a href="#about" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+                About ADIOS
+              </a>
+
+              {/* Direct Link to FAQs */}
+              <a href="#faqs" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
+                FAQs
               </a>
 
               <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
@@ -767,7 +785,224 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. PERPETUAL LICENSING & CART PREVIEW */}
+      {/* 4. ABOUT ADIOS & ITS UNIQUENESS (ALTERNATING IMAGE + STORY LAYOUT) */}
+      <section id="about" style={{ padding: '40px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%', borderTop: '1px solid #e6e6e6' }}>
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 64px auto' }}>
+          <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#78248c', fontWeight: 600, marginBottom: '8px' }}>
+            ENGINEERING PHILOSOPHY
+          </div>
+          <h2 style={{ fontSize: '32px', color: '#1a1429', fontWeight: 400, marginBottom: '16px', lineHeight: 1.2 }}>
+            About ADIOS: What Makes It Different
+          </h2>
+          <p style={{ fontSize: '16px', color: '#505050', lineHeight: 1.6, fontWeight: 350 }}>
+            In an industry obsessed with forced cloud subscriptions, recurring micro-transactions, and latency-ridden web apps,
+            ADIOS returns computing power to the physical device on your desk.
+          </p>
+        </div>
+
+        {/* Alternating Story Blocks (Image left / Text right, then reversed) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '80px' }}>
+          {UNIQUENESS_STORIES.map((story, index) => {
+            const isReversed = index % 2 === 1;
+
+            return (
+              <div
+                key={index}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                  gap: '56px',
+                  alignItems: 'center'
+                }}
+              >
+                {/* Visual / Screenshot with Deep Shadow */}
+                <div style={{ order: isReversed ? 2 : 1, position: 'relative' }}>
+                  <div
+                    style={{
+                      background: '#f8f8fa',
+                      border: '1px solid #e6e6e6',
+                      borderRadius: '8px',
+                      padding: '24px',
+                      boxShadow: '0 20px 40px rgba(0,0,0,0.06)',
+                      position: 'relative'
+                    }}
+                  >
+                    <Image
+                      src={story.image}
+                      alt={story.title}
+                      width={1280}
+                      height={720}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        borderRadius: '4px',
+                        border: '1px solid rgba(0,0,0,0.08)'
+                      }}
+                    />
+
+                    {/* Floating Badge Tag */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '16px',
+                        left: '16px',
+                        background: '#1a1429',
+                        color: '#ffffff',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        padding: '4px 10px',
+                        borderRadius: '2px',
+                        letterSpacing: '0.04em'
+                      }}
+                    >
+                      {story.badge}
+                    </div>
+
+                    {/* Quick Metric Bar */}
+                    <div
+                      style={{
+                        marginTop: '18px',
+                        paddingTop: '16px',
+                        borderTop: '1px solid #ebebeb',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gap: '12px',
+                        textAlign: 'center'
+                      }}
+                    >
+                      {story.metrics.map((m, mIdx) => (
+                        <div key={mIdx}>
+                          <div style={{ fontSize: '11px', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{m.label}</div>
+                          <div className="font-mono" style={{ fontSize: '16px', fontWeight: 600, color: '#0067b8', marginTop: '2px' }}>{m.value}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Narrative / Description Content */}
+                <div style={{ order: isReversed ? 1 : 2 }}>
+                  <div style={{ fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#0067b8', fontWeight: 600, marginBottom: '10px' }}>
+                    {story.tag}
+                  </div>
+
+                  <h3 style={{ fontSize: '26px', color: '#1a1429', fontWeight: 400, lineHeight: 1.25, marginBottom: '16px' }}>
+                    {story.title}
+                  </h3>
+
+                  <p style={{ fontSize: '15px', color: '#505050', lineHeight: 1.6, fontWeight: 350, marginBottom: '24px' }}>
+                    {story.description}
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
+                    {story.points.map((pt, pIdx) => (
+                      <div key={pIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#262626' }}>
+                        <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: '#dff6dd', color: '#107c10', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', flexShrink: 0, marginTop: '2px' }}>
+                          <Check size={12} />
+                        </div>
+                        <span style={{ fontWeight: 350 }}>{pt}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link href="#pricing" className="ms-secondary-btn" style={{ padding: '0', color: '#0067b8', fontWeight: 500, fontSize: '14px' }}>
+                    Explore Perpetual Pricing →
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 5. FREQUENTLY ASKED QUESTIONS (FAQS) ACCORDION */}
+      <section id="faqs" style={{ padding: '60px 6% 60px 6%', maxWidth: '1000px', margin: '0 auto', width: '100%', borderTop: '1px solid #e6e6e6' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#0067b8', fontWeight: 600, marginBottom: '8px' }}>
+            TRANSPARENT ANSWERS
+          </div>
+          <h2 style={{ fontSize: '30px', color: '#262626', fontWeight: 400, marginBottom: '12px' }}>
+            Frequently Asked Questions
+          </h2>
+          <p style={{ fontSize: '15px', color: '#505050', fontWeight: 350 }}>
+            Everything you need to know about ADIOS architecture, offline SQLite data storage, and perpetual software licenses.
+          </p>
+        </div>
+
+        {/* FAQ Accordion List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {FAQS.map((faq, index) => {
+            const isOpen = openFaqIndex === index;
+
+            return (
+              <div
+                key={index}
+                style={{
+                  border: '1px solid #e6e6e6',
+                  borderRadius: '6px',
+                  background: isOpen ? '#fafafa' : '#ffffff',
+                  transition: 'background 0.2s ease, border-color 0.2s ease',
+                  overflow: 'hidden'
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                  style={{
+                    width: '100%',
+                    padding: '20px 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    background: 'transparent',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#737373', letterSpacing: '0.04em', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+                      {faq.category}
+                    </span>
+                    <span style={{ fontSize: '16px', color: '#262626', fontWeight: 450 }}>
+                      {faq.question}
+                    </span>
+                  </div>
+                  <ChevronDown
+                    size={18}
+                    style={{
+                      color: isOpen ? '#0067b8' : '#737373',
+                      transform: isOpen ? 'rotate(180deg)' : 'none',
+                      transition: 'transform 0.2s ease',
+                      flexShrink: 0
+                    }}
+                  />
+                </button>
+
+                {isOpen && (
+                  <div style={{ padding: '0 24px 22px 24px', color: '#505050', fontSize: '14.5px', lineHeight: 1.6, fontWeight: 350, borderTop: '1px solid #f2f2f2', paddingTop: '16px' }}>
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ marginTop: '36px', textAlign: 'center', fontSize: '13.5px', color: '#737373' }}>
+          Have more questions? Join the discussion on our{' '}
+          <Link href="/community" style={{ color: '#0067b8', fontWeight: 500 }}>
+            Community Forum
+          </Link>{' '}
+          or inspect the open architecture on{' '}
+          <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: '#0067b8', fontWeight: 500 }}>
+            GitHub
+          </a>.
+        </div>
+      </section>
+
+      {/* 6. PERPETUAL LICENSING & CART PREVIEW */}
       <section id="pricing" style={{ padding: '20px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <div
           style={{
@@ -886,7 +1121,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. DOWNLOADS TABLE */}
+      {/* 7. DOWNLOADS TABLE */}
       <section id="downloads" style={{ padding: '0 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <h2 style={{ fontSize: '24px', marginBottom: '16px', fontWeight: 400 }}>Downloads &amp; Runtime</h2>
         <table style={{ width: '100%', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
@@ -921,7 +1156,7 @@ export default function HomePage() {
         </table>
       </section>
 
-      {/* 6. REDESIGNED PROFESSIONAL MICROSOFT-GRADE FOOTER */}
+      {/* 8. REDESIGNED PROFESSIONAL MICROSOFT-GRADE FOOTER */}
       <footer style={{ background: '#f2f2f2', borderTop: '1px solid #e6e6e6', padding: '48px 6% 36px 6%', fontSize: '13px', color: '#616161' }}>
         <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
           {/* Multi-column sitemap matching Microsoft footer */}
