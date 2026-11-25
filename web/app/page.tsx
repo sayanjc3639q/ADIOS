@@ -26,109 +26,12 @@ import {
   Download,
   Cpu,
   Lock,
-  ArrowRight
+  ArrowRight,
+  Sparkles,
+  ExternalLink,
+  X
 } from 'lucide-react';
-
-interface SuiteApp {
-  id: string;
-  name: string;
-  category: string;
-  status: 'available' | 'in_development' | 'planned';
-  statusLabel: string;
-  price: number;
-  description: string;
-  keyPrefix: string;
-  features: string[];
-  ctaLabel: string;
-}
-
-const SUITE_APPS: SuiteApp[] = [
-  {
-    id: 'personal',
-    name: 'ADIOS Personal Manager',
-    category: 'Productivity & Private Finances',
-    status: 'available',
-    statusLabel: 'Available now',
-    price: 999,
-    description: 'High-speed offline desktop manager for Indian Rupee cashflow, exam dates, study pomodoro, and local SQLite data.',
-    keyPrefix: 'ADIOS-PERS',
-    ctaLabel: 'Download for Windows',
-    features: [
-      '10 Core Modules built-in',
-      '₹ Indian Rupee financial cash flow',
-      'Integrated Study Pomodoro & Exam syllabus',
-      '100% Offline SQLite local persistence'
-    ]
-  },
-  {
-    id: 'hospital',
-    name: 'ADIOS Hospital Management (HMS)',
-    category: 'Healthcare & Clinical',
-    status: 'in_development',
-    statusLabel: 'Coming soon',
-    price: 4999,
-    description: 'Zero-latency hospital administration: OPD queue admissions, IPD bed matrix, doctor rosters, and pharmacy dispensing.',
-    keyPrefix: 'ADIOS-HOSP',
-    ctaLabel: 'Join Early Access',
-    features: [
-      'Patient OPD & IPD admissions',
-      'Interactive bed & ward occupancy matrix',
-      'Doctor appointment queues & clinical notes',
-      'Pharmacy dispensing with batch management'
-    ]
-  },
-  {
-    id: 'hotel',
-    name: 'ADIOS Hotel Management System',
-    category: 'Hospitality & Front Desk',
-    status: 'in_development',
-    statusLabel: 'Coming soon',
-    price: 3999,
-    description: 'Front-desk PMS engineered for speed: room booking matrix, guest photo ID verification, and restaurant dining POS.',
-    keyPrefix: 'ADIOS-HOTL',
-    ctaLabel: 'Join Early Access',
-    features: [
-      'Interactive room booking grid',
-      'Guest ID proof capture at check-in',
-      'Room service & restaurant dining POS',
-      'Housekeeping & laundry schedules'
-    ]
-  },
-  {
-    id: 'billing',
-    name: 'ADIOS Point of Sale & GST Billing',
-    category: 'Commercial Retail & Wholesale',
-    status: 'in_development',
-    statusLabel: 'Coming soon',
-    price: 2499,
-    description: 'Fast barcode checkout and compliant GST tax invoices (B2B/B2C), inventory alerts, and 80mm thermal receipts.',
-    keyPrefix: 'ADIOS-BILL',
-    ctaLabel: 'Join Early Access',
-    features: [
-      'Instant barcode scanning checkout',
-      'GST tax invoices (CGST/SGST/IGST + HSN)',
-      'Real-time low-stock alerts & purchase ledger',
-      '80mm & 58mm thermal receipt printing'
-    ]
-  },
-  {
-    id: 'academics',
-    name: 'ADIOS Academics & School Management',
-    category: 'Schools, Colleges & Coaching',
-    status: 'planned',
-    statusLabel: 'Planned',
-    price: 3499,
-    description: 'Educational institution suite: student admissions, fee collections with alerts, exam marksheet generator, and attendance.',
-    keyPrefix: 'ADIOS-ACAD',
-    ctaLabel: 'Join Waitlist',
-    features: [
-      'Student admissions & digital records archive',
-      'Term fee receipts & balance reminders',
-      'Daily student & faculty attendance tracking',
-      'Exam marksheet & report card builder'
-    ]
-  }
-];
+import { SUITE_APPS, SuiteApp } from './lib/suites';
 
 export default function HomePage() {
   const [user, setUser] = useState<{ id?: number; name: string; email: string; phone: string } | null>(null);
@@ -143,11 +46,11 @@ export default function HomePage() {
 
   // Cart & Pricing
   const [cart, setCart] = useState<string[]>(['personal']);
-  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-  const [utrNumber, setUtrNumber] = useState('');
-  const [orderSubmitted, setOrderSubmitted] = useState(false);
-  const [submittingOrder, setSubmittingOrder] = useState(false);
   const [suitesMenuOpen, setSuitesMenuOpen] = useState(false);
+
+  // Search feature state
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Profile modal
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -241,50 +144,14 @@ export default function HomePage() {
     }
   };
 
-  const handleStartPurchase = (specificAppId?: string) => {
-    if (specificAppId && !cart.includes(specificAppId)) {
-      setCart(prev => [...prev, specificAppId]);
-    }
-    if (!user) {
-      setShowAuthModal(true);
-    } else {
-      setShowCheckoutModal(true);
-    }
-  };
-
-  const handleOrderSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!utrNumber || !user) return;
-    setSubmittingOrder(true);
-
-    const planSummary = selectedApps.map(a => a.name).join(' + ') || 'Personal Lifetime Key';
-
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-          utrNumber,
-          amount: totalAmount,
-          plan: planSummary
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setOrderSubmitted(true);
-      }
-    } finally {
-      setSubmittingOrder(false);
-    }
-  };
-
-  // User initials for circle badge like "SM" in screenshot
-  const userInitials = user?.name
-    ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
-    : 'SM';
+  // Filtered products for search
+  const filteredProducts = searchQuery.trim()
+    ? SUITE_APPS.filter(app =>
+        app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        app.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        app.category.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff' }}>
@@ -316,16 +183,16 @@ export default function HomePage() {
                   priority
                 />
               </div>
-              <span style={{ fontSize: '18px', fontWeight: 700, color: '#1a1429', letterSpacing: '-0.02em' }}>
+              <span style={{ fontSize: '18px', fontWeight: 600, color: '#1a1429', letterSpacing: '-0.02em' }}>
                 ADIOS
               </span>
             </Link>
 
             {/* Top Nav Menu matching Surface showcase styling */}
             <nav style={{ display: 'flex', alignItems: 'center', gap: '22px' }} className="desktop-nav">
-              <a href="#personal" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+              <Link href="/product/personal" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
                 Personal
-              </a>
+              </Link>
 
               {/* Business Suites Dropdown Group */}
               <div
@@ -345,7 +212,7 @@ export default function HomePage() {
                     gap: '4px',
                     color: '#262626',
                     fontSize: '13px',
-                    fontWeight: 500,
+                    fontWeight: 450,
                     cursor: 'pointer'
                   }}
                 >
@@ -373,8 +240,8 @@ export default function HomePage() {
                         padding: '6px 0'
                       }}
                     >
-                      <a
-                        href="#suites"
+                      <Link
+                        href="/product/hospital"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
                           display: 'block',
@@ -387,9 +254,9 @@ export default function HomePage() {
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
                         Hospital HMS
-                      </a>
-                      <a
-                        href="#suites"
+                      </Link>
+                      <Link
+                        href="/product/hotel"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
                           display: 'block',
@@ -402,9 +269,9 @@ export default function HomePage() {
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
                         Hotel PMS
-                      </a>
-                      <a
-                        href="#suites"
+                      </Link>
+                      <Link
+                        href="/product/academics"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
                           display: 'block',
@@ -417,45 +284,130 @@ export default function HomePage() {
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
                         Academics
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Single small name for GST POS Billing -> POS */}
-              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+              <Link href="/product/billing" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
                 POS
-              </a>
+              </Link>
 
-              {/* Clean Pricing link (Cart removed from text since Cart icon exists on right) */}
-              <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+              {/* Clean Pricing link pointing to pricing section */}
+              <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
                 Pricing
               </a>
 
-              <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+              <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
                 Downloads
               </a>
-              <Link href="/community" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+              <Link href="/community" style={{ color: '#262626', fontSize: '13px', fontWeight: 450 }}>
                 Community
               </Link>
             </nav>
           </div>
 
-          {/* Right: All Suites dropdown, Search, Cart & User Circle */}
+          {/* Right: All Suites dropdown, Search, Cart & Profile with First/Last Name */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '13px', color: '#262626', fontWeight: 500 }}>
+            <a href="#suites" style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '13px', color: '#262626', fontWeight: 450, textDecoration: 'none' }}>
               <span>All Suites</span>
               <ChevronDown size={14} />
+            </a>
+
+            {/* Functional Search Bar */}
+            <div style={{ position: 'relative' }}>
+              {searchOpen ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    placeholder="Search suites, features..."
+                    autoFocus
+                    className="ms-search-input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
+                    style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#737373', display: 'flex' }}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(true)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    color: '#262626'
+                  }}
+                >
+                  <span>Search</span>
+                  <Search size={15} />
+                </button>
+              )}
+
+              {/* Search Results Dropdown */}
+              {searchOpen && searchQuery.trim() && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: '320px',
+                    background: '#ffffff',
+                    border: '1px solid #e6e6e6',
+                    borderRadius: '4px',
+                    boxShadow: '0 12px 28px rgba(0,0,0,0.14)',
+                    zIndex: 200,
+                    maxHeight: '340px',
+                    overflowY: 'auto'
+                  }}
+                >
+                  <div style={{ padding: '8px 12px', fontSize: '11px', textTransform: 'uppercase', color: '#737373', borderBottom: '1px solid #f2f2f2', fontWeight: 600 }}>
+                    Matching Products ({filteredProducts.length})
+                  </div>
+                  {filteredProducts.length === 0 ? (
+                    <div style={{ padding: '16px', fontSize: '13px', color: '#737373', textAlign: 'center' }}>
+                      No matching suites found.
+                    </div>
+                  ) : (
+                    filteredProducts.map(prod => (
+                      <Link
+                        key={prod.id}
+                        href={`/product/${prod.id}`}
+                        onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
+                        style={{
+                          display: 'block',
+                          padding: '10px 14px',
+                          borderBottom: '1px solid #f7f7f7',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f9f9f9')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <div style={{ fontSize: '13.5px', fontWeight: 500, color: '#262626' }}>{prod.name}</div>
+                        <div style={{ fontSize: '11.5px', color: '#737373', marginTop: '2px' }}>₹{prod.price.toLocaleString('en-IN')} · {prod.category}</div>
+                      </Link>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '13px', color: '#262626' }}>
-              <span>Search</span>
-              <Search size={15} />
-            </div>
-
-            <a
-              href="#pricing"
+            {/* Cart Link leading directly to /cart */}
+            <Link
+              href="/cart"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -472,37 +424,70 @@ export default function HomePage() {
                   {cart.length}
                 </span>
               )}
-            </a>
+            </Link>
 
-            {/* Circular Profile Avatar (exact match: SM icon circle) */}
-            <div
-              onClick={() => {
-                if (user) handleOpenProfile();
-                else { setAuthMode('signin'); setShowAuthModal(true); }
-              }}
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                border: '1px solid #737373',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '12px',
-                fontWeight: 600,
-                color: '#262626',
-                cursor: 'pointer',
-                background: '#ffffff'
-              }}
-              title={user ? `Signed in as ${user.name}` : 'Sign in to ADIOS'}
-            >
-              {userInitials}
-            </div>
+            {/* Profile Section: Profile Icon or First + Last Name */}
+            {user ? (
+              <div
+                onClick={handleOpenProfile}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  border: '1px solid #e6e6e6',
+                  background: '#f9f9f9'
+                }}
+                title={`Signed in as ${user.name}`}
+              >
+                <div
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    background: '#0067b8',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <User size={13} />
+                </div>
+                <span style={{ fontSize: '13px', fontWeight: 500, color: '#262626' }}>
+                  {user.name}
+                </span>
+              </div>
+            ) : (
+              <div
+                onClick={() => { setAuthMode('signin'); setShowAuthModal(true); }}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  border: '1px solid #8a8886',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#262626',
+                  cursor: 'pointer',
+                  background: '#ffffff',
+                  transition: 'background 0.15s ease'
+                }}
+                title="Sign in to ADIOS"
+                onMouseEnter={e => (e.currentTarget.style.background = '#f2f2f2')}
+                onMouseLeave={e => (e.currentTarget.style.background = '#ffffff')}
+              >
+                <User size={15} />
+              </div>
+            )}
           </div>
         </div>
       </header>
 
-      {/* 2. FULL-BLEED HERO: EXACT REPLICA OF MICROSOFT SURFACE SHOWCASE */}
+      {/* 2. FULL-BLEED HERO: SURFACE SHOWCASE WITH THIN ELEGANT FONTS */}
       <section
         style={{
           width: '100%',
@@ -528,7 +513,6 @@ export default function HomePage() {
         >
           {/* Left Column: Product Statement */}
           <div style={{ maxWidth: '540px', zIndex: 2 }}>
-            {/* "Open for Testing" pill in purple styling */}
             <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span className="ms-pill">
                 Open Alpha Testing
@@ -539,7 +523,7 @@ export default function HomePage() {
                   backdropFilter: 'blur(8px)',
                   color: '#2c2242',
                   fontSize: '11px',
-                  fontWeight: 600,
+                  fontWeight: 500,
                   padding: '4px 10px',
                   borderRadius: '12px',
                   border: '1px solid rgba(255, 255, 255, 0.9)'
@@ -554,9 +538,9 @@ export default function HomePage() {
               style={{
                 color: '#1a1429',
                 fontSize: 'clamp(36px, 4.4vw, 54px)',
-                fontWeight: 600,
+                fontWeight: 400,
                 lineHeight: 1.15,
-                letterSpacing: '-0.02em',
+                letterSpacing: '-0.025em',
                 marginBottom: '16px'
               }}
             >
@@ -568,16 +552,16 @@ export default function HomePage() {
               style={{
                 color: '#2c2242',
                 fontSize: '17px',
-                lineHeight: 1.5,
+                lineHeight: 1.55,
                 marginBottom: '28px',
-                fontWeight: 400
+                fontWeight: 350
               }}
             >
               Big ideas, busy operations, zero latency. ADIOS Personal, Hospital, Hotel, POS and Academics
               are engineered offline-first with compiled C++/Qt performance and SQLite persistence.
             </p>
 
-            {/* "Learn more" Primary Button */}
+            {/* "Explore Suites" Primary Button */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <a href="#suites" className="ms-hero-btn">
                 Explore Suites
@@ -619,7 +603,7 @@ export default function HomePage() {
                 }}
               />
 
-              {/* Snapdragon badge style floating badge (matching bottom-right badge in screenshot) */}
+              {/* Floating Architecture Badge */}
               <div
                 style={{
                   position: 'absolute',
@@ -636,12 +620,12 @@ export default function HomePage() {
                   gap: '8px'
                 }}
               >
-                <div style={{ width: '18px', height: '18px', borderRadius: '3px', background: '#0067b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 800 }}>
+                <div style={{ width: '18px', height: '18px', borderRadius: '3px', background: '#0067b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700 }}>
                   A
                 </div>
                 <div>
                   <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#9d91b8' }}>ENGINE ARCHITECTURE</div>
-                  <div style={{ fontSize: '11px', fontWeight: 700 }}>Qt 6 · Offline SQLite</div>
+                  <div style={{ fontSize: '11px', fontWeight: 600 }}>Qt 6 · Offline SQLite</div>
                 </div>
               </div>
             </div>
@@ -649,23 +633,49 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. PRODUCT SHOWCASE TILES: 5 SPECIALIZED MANAGEMENT SUITES */}
-      <section id="suites" style={{ padding: '60px 6% 40px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
-        <div style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '28px', color: '#262626', marginBottom: '8px' }}>
-            Engineered for High-Stakes Operations
+      {/* QUICK NAV CATEGORY ICONS (Microsoft.com Surface row) */}
+      <section style={{ padding: '36px 6% 20px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: '32px' }}>
+          <Link href="/product/personal" className="ms-quick-link">
+            <Cpu size={22} />
+            <span>Personal Manager</span>
+          </Link>
+          <Link href="/product/hospital" className="ms-quick-link">
+            <Building2 size={22} />
+            <span>Hospital HMS</span>
+          </Link>
+          <Link href="/product/hotel" className="ms-quick-link">
+            <Hotel size={22} />
+            <span>Hotel PMS</span>
+          </Link>
+          <Link href="/product/billing" className="ms-quick-link">
+            <Receipt size={22} />
+            <span>POS &amp; GST Billing</span>
+          </Link>
+          <Link href="/product/academics" className="ms-quick-link">
+            <GraduationCap size={22} />
+            <span>Academics Suite</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* 3. PRODUCT SHOWCASE SECTION (EXACT MICROSOFT STORE 4-COLUMN CARDS) */}
+      <section id="suites" style={{ padding: '40px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+        <div style={{ marginBottom: '36px' }}>
+          <h2 style={{ fontSize: '28px', color: '#262626', marginBottom: '8px', fontWeight: 400 }}>
+            Featured Management Suites
           </h2>
-          <p style={{ fontSize: '15px', color: '#505050' }}>
-            Choose the dedicated management application for your business. Every edition includes local SQLite isolation and perpetual lifetime licenses.
+          <p style={{ fontSize: '15px', color: '#505050', fontWeight: 350 }}>
+            Purpose-built native applications engineered with compiled Qt performance and zero cloud lock-in.
           </p>
         </div>
 
-        {/* 5-Suite Product Cards Grid (Microsoft Store format) */}
+        {/* 4-to-5 Column Product Cards Grid matching the uploaded image */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '24px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '28px'
           }}
         >
           {SUITE_APPS.map(app => {
@@ -675,72 +685,81 @@ export default function HomePage() {
               <div
                 key={app.id}
                 className="ms-product-card"
-                style={{
-                  padding: '24px',
-                  borderTop: inCart ? '4px solid #0067b8' : '1px solid #e6e6e6'
-                }}
               >
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '11.5px', color: '#737373', textTransform: 'uppercase', fontWeight: 600 }}>
-                      {app.category}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: '11.5px',
-                        fontWeight: 600,
-                        color: app.status === 'available' ? '#107c10' : '#78248c',
-                        background: app.status === 'available' ? '#dff6dd' : '#f2eafd',
-                        padding: '2px 8px',
-                        borderRadius: '2px'
-                      }}
-                    >
-                      {app.statusLabel}
-                    </span>
-                  </div>
-
-                  <h3 style={{ fontSize: '18px', color: '#262626', marginBottom: '8px' }}>
-                    {app.name}
-                  </h3>
-
-                  <p style={{ fontSize: '13.5px', color: '#505050', lineHeight: 1.5, marginBottom: '16px' }}>
-                    {app.description}
-                  </p>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
-                    {app.features.map((f, i) => (
-                      <div key={i} style={{ fontSize: '12.5px', color: '#262626', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ color: '#0067b8', fontWeight: 'bold' }}>✓</span>
-                        <span>{f}</span>
-                      </div>
-                    ))}
+                {/* Product Card Top Image Banner */}
+                <div style={{ position: 'relative', width: '100%', height: '170px', background: '#f5f5f5', overflow: 'hidden' }}>
+                  <Image
+                    src={app.image}
+                    alt={app.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    style={{ objectFit: 'cover' }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '12px',
+                      left: '12px',
+                      background: app.status === 'available' ? '#107c10' : '#78248c',
+                      color: '#ffffff',
+                      fontSize: '11px',
+                      fontWeight: 500,
+                      padding: '3px 8px',
+                      borderRadius: '2px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em'
+                    }}
+                  >
+                    {app.statusLabel}
                   </div>
                 </div>
 
-                <div style={{ borderTop: '1px solid #f2f2f2', paddingTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                {/* Product Card Content */}
+                <div style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
                   <div>
-                    <div style={{ fontSize: '11px', color: '#737373' }}>Perpetual license</div>
-                    <div className="font-mono" style={{ fontSize: '18px', fontWeight: 700, color: '#262626' }}>
-                      ₹{app.price.toLocaleString('en-IN')}
+                    <h3 style={{ fontSize: '18px', color: '#262626', fontWeight: 450, marginBottom: '8px' }}>
+                      {app.name}
+                    </h3>
+                    <p style={{ fontSize: '13.5px', color: '#505050', lineHeight: 1.5, marginBottom: '16px', fontWeight: 350 }}>
+                      {app.shortDescription}
+                    </p>
+
+                    <div style={{ fontSize: '12.5px', color: '#737373', marginBottom: '18px' }}>
+                      Perpetual license: <b style={{ color: '#262626', fontWeight: 600 }}>₹{app.price.toLocaleString('en-IN')}</b>
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => toggleCartItem(app.id)}
-                    className={inCart ? 'ms-secondary-btn' : 'ms-hero-btn'}
-                    style={{
-                      height: '34px',
-                      padding: '0 12px',
-                      fontSize: '13px'
-                    }}
-                  >
-                    {inCart ? (
-                      <span style={{ color: '#107c10', fontWeight: 600 }}>✓ In Cart</span>
-                    ) : (
-                      <span>Add to Cart</span>
-                    )}
-                  </button>
+                  {/* Button Action Row */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '12px', borderTop: '1px solid #f2f2f2' }}>
+                    <Link
+                      href={`/product/${app.id}`}
+                      className="ms-hero-btn"
+                      style={{
+                        flex: 1,
+                        height: '36px',
+                        fontSize: '13px',
+                        padding: '0 12px'
+                      }}
+                    >
+                      Learn more
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={() => toggleCartItem(app.id)}
+                      className={inCart ? 'ms-secondary-btn' : 'ms-secondary-btn'}
+                      style={{
+                        height: '36px',
+                        padding: '0 12px',
+                        fontSize: '12.5px',
+                        border: '1px solid #e6e6e6',
+                        color: inCart ? '#107c10' : '#0067b8',
+                        fontWeight: 500
+                      }}
+                    >
+                      {inCart ? '✓ Added' : '+ Cart'}
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -748,8 +767,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. SURFACE PRICING & UPI CART CHECKOUT (MICROSOFT STORE STYLE) */}
-      <section id="pricing" style={{ padding: '40px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+      {/* 4. PERPETUAL LICENSING & CART PREVIEW */}
+      <section id="pricing" style={{ padding: '20px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <div
           style={{
             background: '#f7f7f7',
@@ -763,10 +782,10 @@ export default function HomePage() {
         >
           {/* Left: Licensing matrix */}
           <div>
-            <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>
+            <h2 style={{ fontSize: '24px', marginBottom: '8px', fontWeight: 400 }}>
               Perpetual Licensing Philosophy
             </h2>
-            <p style={{ fontSize: '14.5px', color: '#505050', marginBottom: '20px' }}>
+            <p style={{ fontSize: '14.5px', color: '#505050', marginBottom: '20px', fontWeight: 350 }}>
               Unlike recurring SaaS subscription models, ADIOS is built on genuine perpetual software ownership.
               Your software runs offline on your own hardware forever.
             </p>
@@ -774,41 +793,41 @@ export default function HomePage() {
             <table style={{ width: '100%', background: '#ffffff', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
               <thead>
                 <tr style={{ background: '#f2f2f2' }}>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Capability</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6' }}>Community Free</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6' }}>Lifetime License</th>
+                  <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Capability</th>
+                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Community Free</th>
+                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Lifetime License</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>All core modules &amp; features</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
                 </tr>
                 <tr>
                   <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Local SQLite database storage</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
                 </tr>
                 <tr>
                   <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Custom directory backups</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
                 </tr>
                 <tr>
                   <td style={{ padding: '10px 14px' }}>Multi-device encrypted cloud sync</td>
                   <td style={{ textAlign: 'center', color: '#a19f9d' }}>—</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          {/* Right: Cart Summary Box */}
+          {/* Right: Cart Summary Box with link to dedicated /cart */}
           <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{ fontSize: '17px', fontWeight: 600, color: '#262626' }}>Selected Suite Cart</div>
-              <span style={{ fontSize: '12px', background: '#eff6fc', color: '#0067b8', padding: '2px 8px', fontWeight: 600 }}>
+              <div style={{ fontSize: '17px', fontWeight: 500, color: '#262626' }}>Selected Suite Cart</div>
+              <span style={{ fontSize: '12px', background: '#eff6fc', color: '#0067b8', padding: '2px 8px', fontWeight: 500 }}>
                 {cart.length} {cart.length === 1 ? 'Suite' : 'Suites'}
               </span>
             </div>
@@ -822,11 +841,11 @@ export default function HomePage() {
                 {selectedApps.map(item => (
                   <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: '#fbfbfb', border: '1px solid #f2f2f2', fontSize: '13px' }}>
                     <div>
-                      <div style={{ fontWeight: 600 }}>{item.name}</div>
+                      <div style={{ fontWeight: 500 }}>{item.name}</div>
                       <div className="font-mono" style={{ fontSize: '11px', color: '#737373' }}>Prefix: {item.keyPrefix}</div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span className="font-mono" style={{ fontWeight: 600 }}>₹{item.price.toLocaleString('en-IN')}</span>
+                      <span className="font-mono" style={{ fontWeight: 500 }}>₹{item.price.toLocaleString('en-IN')}</span>
                       <button type="button" onClick={() => toggleCartItem(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#737373' }}>
                         <Trash2 size={13} />
                       </button>
@@ -848,43 +867,42 @@ export default function HomePage() {
                     <span className="font-mono">-₹{discountAmount.toLocaleString('en-IN')}</span>
                   </div>
                 )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 700, borderTop: '1px dashed #dcdcdc', paddingTop: '8px', marginTop: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 600, borderTop: '1px dashed #dcdcdc', paddingTop: '8px', marginTop: '4px' }}>
                   <span>Total:</span>
                   <span className="font-mono" style={{ color: '#0067b8' }}>₹{totalAmount.toLocaleString('en-IN')}</span>
                 </div>
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={() => handleStartPurchase()}
-              disabled={selectedApps.length === 0}
+            {/* Exactly says "Checkout" per instruction */}
+            <Link
+              href="/cart"
               className="ms-hero-btn"
-              style={{ width: '100%', height: '40px', fontSize: '14px' }}
+              style={{ width: '100%', height: '40px', fontSize: '14px', textDecoration: 'none' }}
             >
-              Checkout via UPI / QR (₹{totalAmount.toLocaleString('en-IN')})
-            </button>
+              Checkout
+            </Link>
           </div>
         </div>
       </section>
 
       {/* 5. DOWNLOADS TABLE */}
       <section id="downloads" style={{ padding: '0 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
-        <h2 style={{ fontSize: '24px', marginBottom: '16px' }}>Downloads &amp; Runtime</h2>
+        <h2 style={{ fontSize: '24px', marginBottom: '16px', fontWeight: 400 }}>Downloads &amp; Runtime</h2>
         <table style={{ width: '100%', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
           <thead>
             <tr style={{ background: '#f2f2f2' }}>
-              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Platform</th>
-              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Architecture</th>
-              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6' }}>Channel</th>
-              <th style={{ padding: '10px 14px', textAlign: 'right', borderBottom: '1px solid #e6e6e6' }}>Get it</th>
+              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Platform</th>
+              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Architecture</th>
+              <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Channel</th>
+              <th style={{ padding: '10px 14px', textAlign: 'right', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Get it</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2' }}><b>Windows</b></td>
               <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2' }}>Windows 10 / 11 (64-bit)</td>
-              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2', color: '#107c10', fontWeight: 600 }}>Available (v2.0.0-alpha.1)</td>
+              <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2', color: '#107c10', fontWeight: 500 }}>Available (v2.0.0-alpha.1)</td>
               <td style={{ padding: '12px 14px', borderBottom: '1px solid #f2f2f2', textAlign: 'right' }}>
                 <a href="/api/download" download className="ms-hero-btn" style={{ height: '30px', padding: '0 12px', fontSize: '12.5px' }}>
                   Download .exe
@@ -894,7 +912,7 @@ export default function HomePage() {
             <tr>
               <td style={{ padding: '12px 14px' }}><b>Linux</b></td>
               <td style={{ padding: '12px 14px' }}>Ubuntu, Debian, Fedora, Arch</td>
-              <td style={{ padding: '12px 14px', color: '#107c10', fontWeight: 600 }}>Available (PyPI)</td>
+              <td style={{ padding: '12px 14px', color: '#107c10', fontWeight: 500 }}>Available (PyPI)</td>
               <td style={{ padding: '12px 14px', textAlign: 'right' }}>
                 <code className="font-mono" style={{ background: '#f2f2f2', padding: '4px 8px', fontSize: '12px' }}>pip install adios-manager</code>
               </td>
@@ -903,18 +921,76 @@ export default function HomePage() {
         </table>
       </section>
 
-      {/* 6. OFFICIAL MICROSOFT FOOTER */}
-      <footer style={{ background: '#f2f2f2', borderTop: '1px solid #e6e6e6', padding: '36px 6%', fontSize: '12px', color: '#616161' }}>
-        <div style={{ maxWidth: '1440px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
-          <div>
-            <div style={{ fontWeight: 600, color: '#262626', marginBottom: '2px' }}>Microsoft-Grade Offline Management Systems</div>
-            <div>Built for speed and durability by Sayan Maity. 100% Offline-first guarantee.</div>
+      {/* 6. REDESIGNED PROFESSIONAL MICROSOFT-GRADE FOOTER */}
+      <footer style={{ background: '#f2f2f2', borderTop: '1px solid #e6e6e6', padding: '48px 6% 36px 6%', fontSize: '13px', color: '#616161' }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+          {/* Multi-column sitemap matching Microsoft footer */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '36px',
+              marginBottom: '44px'
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>Management Suites</div>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <li><Link href="/product/personal" className="ms-footer-link">Personal Manager</Link></li>
+                <li><Link href="/product/hospital" className="ms-footer-link">Hospital HMS</Link></li>
+                <li><Link href="/product/hotel" className="ms-footer-link">Hotel PMS</Link></li>
+                <li><Link href="/product/billing" className="ms-footer-link">POS &amp; GST Billing</Link></li>
+                <li><Link href="/product/academics" className="ms-footer-link">Academics Management</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>Store &amp; Licensing</div>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <li><Link href="/cart" className="ms-footer-link">Shopping Cart</Link></li>
+                <li><a href="#pricing" className="ms-footer-link">Perpetual Pricing</a></li>
+                <li><a href="#downloads" className="ms-footer-link">Windows Installer (.exe)</a></li>
+                <li><a href="#downloads" className="ms-footer-link">Linux Package (PyPI)</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>Developer &amp; Community</div>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <li><Link href="/community" className="ms-footer-link">Alpha Feedback Forum</Link></li>
+                <li><a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" className="ms-footer-link">GitHub Repository</a></li>
+                <li><Link href="/admin" className="ms-footer-link">Admin Portal</Link></li>
+                <li><Link href="/community" className="ms-footer-link">Release Notes &amp; Roadmap</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>About ADIOS</div>
+              <p style={{ fontSize: '12.5px', color: '#616161', lineHeight: 1.6, marginBottom: '12px', fontWeight: 350 }}>
+                High-performance offline desktop ecosystem engineered by Sayan Maity with compiled Qt 6 and local SQLite persistence.
+              </p>
+              <div style={{ fontSize: '12px', color: '#737373' }}>
+                Engine Architecture: <b>Qt 6.7 · Python 3.11 · SQLite 3</b>
+              </div>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: '#616161' }}>GitHub</a>
-            <Link href="/community" style={{ color: '#616161' }}>Community</Link>
-            <Link href="/privacy" style={{ color: '#616161' }}>Privacy</Link>
-            <Link href="/terms" style={{ color: '#616161' }}>Terms</Link>
+
+          {/* Bottom Bar */}
+          <div style={{ borderTop: '1px solid #e0e0e0', paddingTop: '24px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ position: 'relative', width: '20px', height: '20px' }}>
+                <Image src="/logo.png" alt="ADIOS Logo" width={20} height={20} style={{ objectFit: 'contain' }} />
+              </div>
+              <span style={{ fontSize: '12px', color: '#616161' }}>
+                © 2026 ADIOS Software Ecosystem. All rights reserved.
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', gap: '24px', fontSize: '12px' }}>
+              <Link href="/privacy" className="ms-footer-link">Privacy Statement</Link>
+              <Link href="/terms" className="ms-footer-link">Terms of Use</Link>
+              <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" className="ms-footer-link">Source Code</a>
+            </div>
           </div>
         </div>
       </footer>
@@ -971,115 +1047,59 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* CHECKOUT MODAL */}
-      {showCheckoutModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '28px', maxWidth: '420px', width: '100%', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{ fontWeight: 600, fontSize: '17px' }}>UPI Payment Checkout</div>
-              <button type="button" onClick={() => setShowCheckoutModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
-            </div>
-
-            {orderSubmitted ? (
-              <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#dff6dd', color: '#107c10', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>
-                  <Check size={20} />
-                </div>
-                <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '6px' }}>Payment Reference Submitted</div>
-                <p style={{ fontSize: '13px', color: '#505050', marginBottom: '16px' }}>
-                  Thank you, <b>{user?.name}</b>. Your UPI reference (<b>{utrNumber}</b>) has been recorded.
-                  Your license key will be issued upon bank verification.
-                </p>
-                <button type="button" onClick={() => { setShowCheckoutModal(false); setOrderSubmitted(false); }} className="ms-hero-btn" style={{ width: '100%' }}>Done</button>
-              </div>
-            ) : (
-              <div>
-                <div style={{ background: '#f7f7f7', border: '1px solid #e6e6e6', padding: '16px', textAlign: 'center', marginBottom: '16px' }}>
-                  <div style={{ display: 'inline-block', background: '#ffffff', padding: '8px', border: '1px solid #e6e6e6', marginBottom: '8px' }}>
-                    <svg width="130" height="130" viewBox="0 0 100 100" fill="#1b1b1b">
-                      <rect x="0" y="0" width="30" height="30" fill="#1b1b1b" />
-                      <rect x="5" y="5" width="20" height="20" fill="#ffffff" />
-                      <rect x="10" y="10" width="10" height="10" fill="#0067b8" />
-                      <rect x="70" y="0" width="30" height="30" fill="#1b1b1b" />
-                      <rect x="75" y="5" width="20" height="20" fill="#ffffff" />
-                      <rect x="80" y="10" width="10" height="10" fill="#0067b8" />
-                      <rect x="0" y="70" width="30" height="30" fill="#1b1b1b" />
-                      <rect x="5" y="75" width="20" height="20" fill="#ffffff" />
-                      <rect x="10" y="80" width="10" height="10" fill="#0067b8" />
-                      <rect x="40" y="10" width="10" height="20" />
-                      <rect x="55" y="15" width="8" height="8" />
-                      <rect x="40" y="40" width="20" height="20" fill="#0067b8" />
-                      <rect x="70" y="40" width="10" height="10" />
-                      <rect x="85" y="55" width="12" height="12" />
-                      <rect x="40" y="70" width="15" height="15" />
-                      <rect x="65" y="75" width="10" height="20" />
-                      <rect x="85" y="80" width="10" height="10" />
-                    </svg>
-                  </div>
-                  <div className="font-mono" style={{ fontSize: '13px', fontWeight: 600 }}>sayanjc3639q@oksbi</div>
-                  <div style={{ fontSize: '16px', fontWeight: 700, color: '#0067b8', marginTop: '4px' }}>Total: ₹{totalAmount.toLocaleString('en-IN')}</div>
-                </div>
-
-                <form onSubmit={handleOrderSubmit}>
-                  <div style={{ marginBottom: '14px' }}>
-                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>UPI Reference / UTR Number (12 digits)*</label>
-                    <input type="text" placeholder="e.g. 432190821941" value={utrNumber} onChange={e => setUtrNumber(e.target.value)} required className="font-mono" style={{ width: '100%', height: '36px', border: '1px solid #8a8886', padding: '0 8px', fontSize: '13px' }} />
-                  </div>
-                  <button type="submit" disabled={submittingOrder} className="ms-hero-btn" style={{ width: '100%', height: '38px', fontSize: '13.5px' }}>
-                    {submittingOrder ? 'Submitting...' : 'Submit Payment Reference'}
-                  </button>
-                </form>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* PROFILE MODAL */}
+      {/* USER PROFILE MODAL */}
       {showProfileModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '28px', maxWidth: '480px', width: '100%', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{ fontWeight: 600, fontSize: '17px' }}>Account &amp; License Keys</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <div style={{ fontWeight: 600, fontSize: '18px' }}>User Account Profile</div>
               <button type="button" onClick={() => setShowProfileModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
             </div>
 
-            <div style={{ background: '#f7f7f7', padding: '12px', marginBottom: '16px', fontSize: '13px' }}>
-              <div><b>Name:</b> {user?.name}</div>
-              <div><b>Email:</b> {user?.email}</div>
-              {user?.phone && <div><b>Phone:</b> {user?.phone}</div>}
+            <div style={{ marginBottom: '20px', padding: '16px', background: '#f7f7f7', border: '1px solid #e6e6e6' }}>
+              <div style={{ fontSize: '15px', fontWeight: 600, color: '#262626' }}>{user?.name}</div>
+              <div style={{ fontSize: '13px', color: '#505050', marginTop: '2px' }}>{user?.email}</div>
+              {user?.phone && <div style={{ fontSize: '12px', color: '#737373', marginTop: '2px' }}>{user.phone}</div>}
             </div>
 
-            <div style={{ fontWeight: 600, fontSize: '14px', marginBottom: '8px' }}>Your License Keys</div>
-            {loadingProfile ? (
-              <div style={{ textAlign: 'center', padding: '16px 0', fontSize: '13px', color: '#737373' }}>Loading keys...</div>
-            ) : profileData?.productKeys && profileData.productKeys.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {profileData.productKeys.map((pk, idx) => {
-                  const isRevealed = revealedKeys[pk.key] || false;
-                  const maskedKey = pk.key.slice(0, 10) + '••••-••••';
-                  const isCopied = copiedKey === pk.key;
-                  return (
-                    <div key={idx} style={{ background: '#fbfbfb', border: '1px solid #e6e6e6', padding: '10px 12px' }}>
-                      <div style={{ fontSize: '12px', color: '#0067b8', fontWeight: 600, marginBottom: '4px' }}>{pk.plan}</div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span className="font-mono" style={{ fontSize: '13px', fontWeight: 600 }}>{isRevealed ? pk.key : maskedKey}</span>
+            <div style={{ marginBottom: '20px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '8px' }}>Issued Product Keys</h4>
+              {loadingProfile ? (
+                <div style={{ fontSize: '13px', color: '#737373' }}>Loading license keys...</div>
+              ) : profileData?.productKeys && profileData.productKeys.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {profileData.productKeys.map((k, i) => (
+                    <div key={i} style={{ padding: '10px', border: '1px solid #e6e6e6', background: '#ffffff' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#737373', marginBottom: '4px' }}>
+                        <span>{k.plan}</span>
+                        <span>{new Date(k.issuedAt).toLocaleDateString()}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                        <code className="font-mono" style={{ fontSize: '13px', fontWeight: 600 }}>
+                          {revealedKeys[k.key] ? k.key : '••••••••••••••••••••'}
+                        </code>
                         <div style={{ display: 'flex', gap: '6px' }}>
-                          <button type="button" onClick={() => toggleRevealKey(pk.key)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#737373' }}>
-                            {isRevealed ? <EyeOff size={14} /> : <Eye size={14} />}
+                          <button type="button" onClick={() => toggleRevealKey(k.key)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0067b8' }}>
+                            {revealedKeys[k.key] ? <EyeOff size={15} /> : <Eye size={15} />}
                           </button>
-                          <button type="button" onClick={() => handleCopyKey(pk.key)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: isCopied ? '#107c10' : '#737373' }}>
-                            {isCopied ? <Check size={14} /> : <Copy size={14} />}
+                          <button type="button" onClick={() => handleCopyKey(k.key)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0067b8' }}>
+                            {copiedKey === k.key ? <Check size={15} /> : <Copy size={15} />}
                           </button>
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '16px 0', fontSize: '13px', color: '#737373' }}>No active keys found.</div>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <div style={{ fontSize: '13px', color: '#737373', fontStyle: 'italic' }}>
+                  No perpetual license keys registered yet.
+                </div>
+              )}
+            </div>
+
+            <button type="button" onClick={() => { setUser(null); setShowProfileModal(false); }} className="ms-secondary-btn" style={{ width: '100%', color: '#d83b01' }}>
+              Sign out
+            </button>
           </div>
         </div>
       )}
