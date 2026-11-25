@@ -9,13 +9,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ valid: false, message: 'Email required' }, { status: 400 });
     }
 
-    // Product Key check
+    // Product Key check across ADIOS software suite
     if (product_key) {
       const trimmedKey = product_key.trim().toUpperCase();
-      if (trimmedKey.startsWith('ADIOS-PRO') || trimmedKey.startsWith('ADIOS-LIFETIME')) {
+      
+      const productPrefixes: { [prefix: string]: string } = {
+        'ADIOS-PRO': 'pro_lifetime',
+        'ADIOS-LIFETIME': 'pro_lifetime',
+        'ADIOS-PERS': 'personal_pro',
+        'ADIOS-HOSP': 'hospital_enterprise',
+        'ADIOS-HOTL': 'hotel_enterprise',
+        'ADIOS-BILL': 'billing_pos',
+        'ADIOS-ACAD': 'academics_enterprise'
+      };
+
+      const matchedPrefix = Object.keys(productPrefixes).find(prefix => trimmedKey.startsWith(prefix));
+
+      if (matchedPrefix) {
         return NextResponse.json({
           valid: true,
-          plan: 'pro_lifetime',
+          plan: productPrefixes[matchedPrefix],
+          product: matchedPrefix.replace('ADIOS-', ''),
           message: 'Product key verified successfully. Cloud sync enabled.'
         });
       }
