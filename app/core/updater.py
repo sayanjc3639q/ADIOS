@@ -61,13 +61,25 @@ class CheckUpdateThread(QThread):
             self.check_failed.emit(str(e))
 
     def _is_newer(self, latest_ver: str, current_ver: str) -> bool:
-        """Compares version tuples e.g. 2.1.0 vs 2.0.0."""
+        """Compares version tags e.g. v2.0.0-alpha.2 vs 2.0.0-alpha.1."""
         try:
-            latest_parts = [int(p) for p in latest_ver.split(".") if p.isdigit()]
-            current_parts = [int(p) for p in current_ver.split(".") if p.isdigit()]
-            return latest_parts > current_parts
+            import re
+            def parse_ver(v: str):
+                v_clean = v.lstrip("vV")
+                parts = re.split(r'[-.]', v_clean)
+                numeric_parts = []
+                stage_order = {"alpha": 1, "beta": 2, "rc": 3, "stable": 4}
+                stage_val = 4
+                for p in parts:
+                    if p.isdigit():
+                        numeric_parts.append(int(p))
+                    elif p.lower() in stage_order:
+                        stage_val = stage_order[p.lower()]
+                return (numeric_parts[:3], stage_val, numeric_parts[3:] if len(numeric_parts) > 3 else [0])
+
+            return parse_ver(latest_ver) > parse_ver(current_ver)
         except Exception:
-            return latest_ver != current_ver and bool(latest_ver)
+            return latest_ver.strip().lstrip("vV") != current_ver.strip().lstrip("vV") and bool(latest_ver)
 
 
 class DownloadUpdateThread(QThread):

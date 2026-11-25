@@ -287,7 +287,7 @@ export default function HomePage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff' }}>
-      {/* 1. OFFICIAL MICROSOFT.COM HEADER */}
+      {/* 1. ADIOS MANAGEMENT SUITES HEADER (Surface-style layout) */}
       <header
         style={{
           height: '54px',
@@ -302,51 +302,92 @@ export default function HomePage() {
         }}
       >
         <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/* Left: 4-Square Microsoft Emblem + Brand + Navigation */}
+          {/* Left: ADIOS Logo Mark & Brand + Navigation */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-              {/* Microsoft 4-color grid emblem */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 10px)', gap: '2px' }}>
-                <div style={{ width: '10px', height: '10px', background: '#f25022' }}></div>
-                <div style={{ width: '10px', height: '10px', background: '#7fba00' }}></div>
-                <div style={{ width: '10px', height: '10px', background: '#00a4ef' }}></div>
-                <div style={{ width: '10px', height: '10px', background: '#ffb900' }}></div>
+              <div style={{ position: 'relative', width: '28px', height: '28px' }}>
+                <Image
+                  src="/logo.png"
+                  alt="ADIOS Logo"
+                  width={28}
+                  height={28}
+                  style={{ objectFit: 'contain' }}
+                  priority
+                />
               </div>
-              <span style={{ fontSize: '18px', fontWeight: 600, color: '#262626', letterSpacing: '-0.02em' }}>
-                Microsoft
+              <span style={{ fontSize: '18px', fontWeight: 700, color: '#1a1429', letterSpacing: '-0.02em' }}>
+                ADIOS
               </span>
             </Link>
 
-            {/* Microsoft Top Nav Menu matching screenshot */}
+            {/* Version & Testing Status Badge in Nav */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span
+                style={{
+                  background: '#0067b8',
+                  color: '#ffffff',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '3px 8px',
+                  borderRadius: '4px',
+                  fontFamily: 'monospace',
+                  letterSpacing: '0.02em'
+                }}
+              >
+                v2.0.0-alpha.1
+              </span>
+              <span
+                style={{
+                  border: '1px solid rgba(16, 124, 16, 0.4)',
+                  background: '#dff6dd',
+                  color: '#107c10',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px'
+                }}
+              >
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#107c10' }}></span>
+                Open for Testing
+              </span>
+            </div>
+
+            {/* Top Nav Menu matching Surface showcase styling */}
             <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }} className="desktop-nav">
-              <a href="#personal" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
-                Personal 365
+              <a href="#personal" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+                Personal
               </a>
-              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
-                Enterprise Suites
+              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+                Hospital HMS
               </a>
-              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
-                Hospital &amp; Hotel
+              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+                Hotel PMS
               </a>
-              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
+              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
                 GST POS Billing
               </a>
-              <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
-                Surface &amp; Pricing
+              <a href="#suites" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+                Academics
               </a>
-              <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
-                Windows Desktop
+              <a href="#pricing" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+                Pricing &amp; Cart
               </a>
-              <Link href="/community" style={{ color: '#262626', fontSize: '13px', fontWeight: 400 }}>
-                Support
+              <a href="#downloads" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+                Downloads
+              </a>
+              <Link href="/community" style={{ color: '#262626', fontSize: '13px', fontWeight: 500 }}>
+                Community
               </Link>
             </nav>
           </div>
 
-          {/* Right: All Microsoft dropdown, Search, Cart & User Circle (exact match to screenshot) */}
+          {/* Right: All Suites dropdown, Search, Cart & User Circle */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '13px', color: '#262626' }}>
-              <span>All Microsoft</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '13px', color: '#262626', fontWeight: 500 }}>
+              <span>All Suites</span>
               <ChevronDown size={14} />
             </div>
 
@@ -429,10 +470,24 @@ export default function HomePage() {
         >
           {/* Left Column: Product Statement */}
           <div style={{ maxWidth: '540px', zIndex: 2 }}>
-            {/* "Coming soon" pill in exact purple styling */}
-            <div style={{ marginBottom: '18px' }}>
+            {/* "Open for Testing" pill in purple styling */}
+            <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span className="ms-pill">
-                Coming soon
+                Open Alpha Testing
+              </span>
+              <span
+                style={{
+                  background: 'rgba(255, 255, 255, 0.75)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#2c2242',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '4px 10px',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(255, 255, 255, 0.9)'
+                }}
+              >
+                v2.0.0-alpha.1
               </span>
             </div>
 
@@ -460,14 +515,14 @@ export default function HomePage() {
                 fontWeight: 400
               }}
             >
-              Big ideas, busy days, operational moments. ADIOS Personal, Hospital, Hotel, POS and Academics
-              are engineered offline-first to keep pace.
+              Big ideas, busy operations, zero latency. ADIOS Personal, Hospital, Hotel, POS and Academics
+              are engineered offline-first with compiled C++/Qt performance and SQLite persistence.
             </p>
 
             {/* "Learn more" Primary Button */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <a href="#suites" className="ms-hero-btn">
-                Learn more
+                Explore Suites
               </a>
 
               <a
