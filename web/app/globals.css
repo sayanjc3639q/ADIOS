@@ -1,30 +1,27 @@
 :root {
-  /* ADIOS Original Dark / Blue Native Aesthetic */
-  --bg: #1e1e1e;            /* deep dark canvas as seen in screenshot */
-  --surface: #252526;       /* card & panel containers */
-  --surface-alt: #2d2d2d;   /* alternating rows, code snippets */
-  --surface-hover: #333333; /* card hover state */
-  --border: #3c3c3c;        /* 1px dark subtle borders */
-  --border-strong: #6c6c6c; /* focused borders, highlights */
-  --text: #e0e0e0;          /* high contrast crisp primary text */
-  --text-secondary: #aaaaaa;/* secondary descriptive text */
-  --text-muted: #808080;    /* muted labels and dates */
+  /* Microsoft.com Official Theme Palette */
+  --ms-nav-bg: #ffffff;
+  --ms-page-bg: #ffffff;
+  --ms-hero-gradient: linear-gradient(135deg, #e8e3f2 0%, #d8d0ea 40%, #c4b9e2 100%);
+  --ms-hero-dark-gradient: linear-gradient(135deg, #1b1928 0%, #252037 40%, #151320 100%);
 
-  /* The signature ADIOS Titlebar Accent Blue */
-  --accent: #0078d4;
-  --accent-hover: #106ebe;
-  --accent-pressed: #005a9e;
-  --accent-text-on: #ffffff;
+  --ms-text: #262626;
+  --ms-text-secondary: #505050;
+  --ms-text-muted: #737373;
 
-  --ok: #4ec9b0;            /* "available" green */
-  --ok-bg: rgba(78, 201, 176, 0.15);
-  --warn: #ce9178;          /* "coming soon" orange */
-  --warn-bg: rgba(206, 145, 120, 0.15);
-  --purple: #c586c0;
-  --purple-bg: rgba(197, 134, 192, 0.15);
+  --ms-blue: #0067b8;
+  --ms-blue-hover: #005da6;
+  --ms-blue-pressed: #005293;
+  --ms-purple-pill: #78248c;
 
-  --font-ui: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-  --font-mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --ms-border: #e6e6e6;
+  --ms-border-subtle: #f2f2f2;
+
+  /* Thin, elegant, highly professional typography stack */
+  --font-segoe: "Segoe UI", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: "Cascadia Code", "Consolas", monospace;
+
+  --container-max: 1600px;
 }
 
 * {
@@ -34,11 +31,11 @@
 }
 
 html {
-  font-family: var(--font-ui);
-  background: var(--bg);
-  color: var(--text);
+  font-family: var(--font-segoe);
+  background: var(--ms-page-bg);
+  color: var(--ms-text);
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.5;
   font-weight: 350;
   letter-spacing: -0.01em;
   scroll-behavior: smooth;
@@ -48,53 +45,58 @@ html {
 
 body {
   min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--ms-page-bg);
+  color: var(--ms-text);
   font-weight: 350;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Headings */
-h1, h2, h3, h4 {
-  font-family: var(--font-ui);
-  color: #ffffff;
-  font-weight: 450;
+/* Headings with thin, modern, premium weights */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-segoe);
+  color: var(--ms-text);
+  font-weight: 400;
   letter-spacing: -0.02em;
 }
 
 h1 {
   font-size: clamp(34px, 4.2vw, 52px);
-  font-weight: 450;
+  font-weight: 400;
   letter-spacing: -0.025em;
   line-height: 1.15;
 }
 
 h2 {
   font-size: clamp(24px, 2.4vw, 32px);
-  font-weight: 450;
+  font-weight: 400;
   letter-spacing: -0.018em;
 }
 
 h3 {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 450;
   letter-spacing: -0.01em;
 }
 
 p {
-  color: var(--text-secondary);
+  color: var(--ms-text-secondary);
   font-size: 15px;
   line-height: 1.6;
   font-weight: 350;
 }
 
-code, pre, .font-mono {
+code,
+pre,
+.font-mono {
   font-family: var(--font-mono);
   font-weight: 400;
 }
 
 a {
-  color: #4da6ff;
+  color: var(--ms-blue);
   text-decoration: none;
 }
 
@@ -103,18 +105,18 @@ a:hover {
   text-underline-offset: 3px;
 }
 
-/* Buttons */
+/* Official Microsoft Button Style */
 .ms-hero-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--accent);
+  background: #0067b8;
   color: #ffffff !important;
   font-weight: 500;
   font-size: 14px;
   padding: 10px 22px;
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
@@ -122,12 +124,12 @@ a:hover {
 }
 
 .ms-hero-btn:hover {
-  background: var(--accent-hover);
+  background: #005da6;
   text-decoration: none;
 }
 
 .ms-hero-btn:active {
-  background: var(--accent-pressed);
+  background: #005293;
 }
 
 .ms-secondary-btn {
@@ -136,27 +138,39 @@ a:hover {
   justify-content: center;
   gap: 8px;
   background: transparent;
-  color: #4da6ff;
+  color: #0067b8;
   font-weight: 500;
   font-size: 14px;
   padding: 9px 18px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
+  border-radius: 2px;
+  border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.15s ease;
 }
 
 .ms-secondary-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--border-strong);
-  text-decoration: none;
+  background: rgba(0, 103, 184, 0.05);
+  text-decoration: underline;
+}
+
+/* Purple Pill Tag */
+.ms-pill {
+  display: inline-block;
+  background: #78248c;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 2px;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
 }
 
 /* Product Cards */
 .ms-product-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -167,8 +181,8 @@ a:hover {
 
 .ms-product-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-  border-color: var(--border-strong);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  border-color: #d1d1d1;
 }
 
 /* Quick Links Nav Icons */
@@ -177,45 +191,39 @@ a:hover {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: #e0e0e0;
+  color: #0067b8;
   text-decoration: none;
   font-size: 13.5px;
   font-weight: 450;
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  transition: all 0.15s ease;
+  padding: 8px 12px;
+  transition: opacity 0.15s ease;
 }
 
 .ms-quick-link:hover {
-  background: var(--surface-alt);
-  border-color: var(--border);
-  color: #4da6ff;
-  text-decoration: none;
+  text-decoration: underline;
+  opacity: 0.85;
 }
 
-/* Search bar */
+/* Search bar popover */
 .ms-search-input {
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  color: #ffffff;
+  border: 1px solid #c7c7c7;
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 350;
-  border-radius: 4px;
+  border-radius: 2px;
   outline: none;
   width: 240px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .ms-search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent);
+  border-color: #0067b8;
+  box-shadow: 0 0 0 1px #0067b8;
 }
 
 /* Footer Links */
 .ms-footer-link {
-  color: #999999;
+  color: #616161;
   font-size: 12.5px;
   font-weight: 350;
   text-decoration: none;
@@ -223,7 +231,7 @@ a:hover {
 }
 
 .ms-footer-link:hover {
-  color: #ffffff;
+  color: #262626;
   text-decoration: underline;
 }
 
