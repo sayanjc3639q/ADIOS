@@ -108,7 +108,7 @@ export default function PricingPage() {
                 transition: 'all 0.15s ease'
               }}
             >
-              Special Cases (Students &amp; Developers)
+              Student or Developer
             </button>
           </div>
         </div>
@@ -432,7 +432,7 @@ export default function PricingPage() {
           </div>
         )}
 
-        {/* 2. SPECIAL CASES (Students and Developers) */}
+        {/* 2. STUDENT OR DEVELOPER */}
         {selectedCategory === 'special' && (
           <div
             style={{
