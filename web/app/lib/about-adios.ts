@@ -57,7 +57,7 @@ export const UNIQUENESS_STORIES: UniquenessStory[] = [
       'Never blocked by external server downtime, ISP outages, or cloud maintenance',
       'All business data stays physically on your machine—no remote surveillance'
     ],
-    image: '/app-screenshot.png',
+    image: '/about-speed.jpg',
     badge: 'Hardware Performance',
     metrics: [
       { label: 'Query Latency', value: '< 2ms' },
@@ -74,7 +74,7 @@ export const UNIQUENESS_STORIES: UniquenessStory[] = [
       'Continuous uninterrupted software execution even if you never update again',
       'Full exportability of all tables to standard open formats (CSV, JSON, SQL)'
     ],
-    image: '/app-screenshot.png',
+    image: '/about-ownership.jpg',
     badge: 'Economic Freedom',
     metrics: [
       { label: 'Recurring Fees', value: '₹0 / mo' },
@@ -91,7 +91,7 @@ export const UNIQUENESS_STORIES: UniquenessStory[] = [
       'Modular architecture ready for Hospital, Hotel, POS Billing, and Education',
       'Built with Qt 6 native controls for smooth 60fps rendering without Chromium bloat'
     ],
-    image: '/app-screenshot.png',
+    image: '/about-ecosystem.jpg',
     badge: 'Modular Framework',
     metrics: [
       { label: 'RAM Footprint', value: '~45 MB' },

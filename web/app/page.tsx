@@ -718,80 +718,62 @@ export default function HomePage() {
                 key={app.id}
                 className="ms-product-card"
               >
-                {/* Product Card Top Image Banner with App Logo */}
-                <div style={{ position: 'relative', width: '100%', height: '170px', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <Image
-                    src={app.logo || app.image}
-                    alt={app.name}
-                    width={96}
-                    height={96}
-                    style={{ objectFit: 'contain', filter: 'drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12))' }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '12px',
-                      left: '12px',
-                      background: app.status === 'available' ? '#107c10' : '#78248c',
-                      color: '#ffffff',
-                      fontSize: '11px',
-                      fontWeight: 500,
-                      padding: '3px 8px',
-                      borderRadius: '2px',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.04em'
-                    }}
-                  >
-                    {app.statusLabel}
+                <div>
+                  {/* Top Suite Category Label */}
+                  <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500, marginBottom: '8px' }}>
+                    {app.name}
                   </div>
+
+                  {/* Clean Headline */}
+                  <h3 style={{ fontSize: '20px', color: '#0f172a', fontWeight: 600, lineHeight: 1.3, marginBottom: '16px' }}>
+                    {app.shortDescription}
+                  </h3>
+
+                  {/* Brief Descriptive Copy */}
+                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, fontWeight: 350, marginBottom: '24px' }}>
+                    {app.description}
+                  </p>
                 </div>
 
-                {/* Product Card Content */}
-                <div style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
-                  <div>
-                    <h3 style={{ fontSize: '18px', color: '#262626', fontWeight: 450, marginBottom: '8px' }}>
-                      {app.name}
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#505050', lineHeight: 1.5, marginBottom: '16px', fontWeight: 350 }}>
-                      {app.shortDescription}
-                    </p>
-
-                    <div style={{ fontSize: '12.5px', color: '#737373', marginBottom: '18px' }}>
-                      Perpetual license: <b style={{ color: '#262626', fontWeight: 600 }}>₹{app.price.toLocaleString('en-IN')}</b>
-                    </div>
-                  </div>
-
-                  {/* Button Action Row */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '12px', borderTop: '1px solid #f2f2f2' }}>
-                    <Link
-                      href={`/product/${app.id}`}
-                      className="ms-hero-btn"
-                      style={{
-                        flex: 1,
-                        height: '36px',
-                        fontSize: '13px',
-                        padding: '0 12px'
-                      }}
-                    >
-                      Learn more
-                    </Link>
-
+                {/* Bottom Action Area */}
+                <div style={{ marginTop: 'auto', paddingTop: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                    <span style={{ fontSize: '13px', color: '#64748b' }}>
+                      Perpetual: <strong style={{ color: '#0f172a', fontWeight: 600 }}>₹{app.price.toLocaleString('en-IN')}</strong>
+                    </span>
                     <button
                       type="button"
                       onClick={() => toggleCartItem(app.id)}
-                      className={inCart ? 'ms-secondary-btn' : 'ms-secondary-btn'}
                       style={{
-                        height: '36px',
-                        padding: '0 12px',
-                        fontSize: '12.5px',
-                        border: '1px solid #e6e6e6',
+                        background: 'transparent',
+                        border: 'none',
                         color: inCart ? '#107c10' : '#0067b8',
-                        fontWeight: 500
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        padding: '4px 8px'
                       }}
                     >
-                      {inCart ? '✓ Added' : '+ Cart'}
+                      {inCart ? '✓ Added' : '+ Add to cart'}
                     </button>
                   </div>
+
+                  <Link
+                    href={`/product/${app.id}`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      color: '#0067b8',
+                      fontSize: '14.5px',
+                      fontWeight: 600,
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+                    onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+                  >
+                    Learn more
+                  </Link>
                 </div>
               </div>
             );
@@ -833,26 +815,29 @@ export default function HomePage() {
                 <div style={{ order: isReversed ? 2 : 1, position: 'relative' }}>
                   <div
                     style={{
-                      background: '#f8f8fa',
-                      border: '1px solid #e6e6e6',
-                      borderRadius: '8px',
-                      padding: '24px',
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '16px',
+                      padding: '16px',
                       boxShadow: '0 20px 40px rgba(0,0,0,0.06)',
-                      position: 'relative'
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}
                   >
-                    <Image
-                      src={story.image}
-                      alt={story.title}
-                      width={1280}
-                      height={720}
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        borderRadius: '4px',
-                        border: '1px solid rgba(0,0,0,0.08)'
-                      }}
-                    />
+                    <div style={{ position: 'relative', width: '100%', height: 'auto', borderRadius: '12px', overflow: 'hidden' }}>
+                      <Image
+                        src={story.image}
+                        alt={story.title}
+                        width={1280}
+                        height={960}
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          borderRadius: '12px',
+                          display: 'block'
+                        }}
+                      />
+                    </div>
 
                     {/* Floating Badge Tag */}
                     <div
