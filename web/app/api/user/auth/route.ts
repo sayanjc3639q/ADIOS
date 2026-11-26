@@ -24,8 +24,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, message: 'User not found.' }, { status: 404 });
       }
 
-      if (user.password && user.password !== currentPassword) {
-        return NextResponse.json({ success: false, message: 'Current password does not match.' }, { status: 400 });
+      if (user.password) {
+        if (!currentPassword) {
+          return NextResponse.json({ success: false, message: 'Current password is required to change password.' }, { status: 400 });
+        }
+        if (user.password !== currentPassword) {
+          return NextResponse.json({ success: false, message: 'Current password does not match.' }, { status: 401 });
+        }
       }
 
       if (!newPassword || newPassword.length < 6) {
@@ -197,6 +202,10 @@ export async function POST(req: NextRequest) {
     let user = data.users.find(u => u.email.toLowerCase() === cleanEmail);
     if (!user) {
       return NextResponse.json({ success: false, message: 'Account not found. Please sign up to create your ADIOS account.' }, { status: 404 });
+    }
+
+    if (!cleanPass) {
+      return NextResponse.json({ success: false, message: 'Password is required to sign in.' }, { status: 400 });
     }
 
     if (user.password && user.password !== cleanPass) {

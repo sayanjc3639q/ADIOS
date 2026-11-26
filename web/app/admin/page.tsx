@@ -59,8 +59,14 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  // Check lockout status on initial mount
+  // Check lockout status and load session on initial mount
   useEffect(() => {
+    try {
+      if (sessionStorage.getItem('adios_admin_auth') === 'true') {
+        setAuthorized(true);
+      }
+    } catch {}
+
     const checkLockout = async () => {
       try {
         const res = await fetch('/api/admin/login');
@@ -114,6 +120,9 @@ export default function AdminPage() {
 
       if (res.ok && data.success) {
         setAuthorized(true);
+        try {
+          sessionStorage.setItem('adios_admin_auth', 'true');
+        } catch {}
         setErrorMsg('');
         setIsLocked(false);
       } else {
@@ -252,7 +261,12 @@ export default function AdminPage() {
           <span style={{ color: '#64748b' }}>Admin: <b>jcsayan7@gmail.com</b></span>
           <button
             type="button"
-            onClick={() => setAuthorized(false)}
+            onClick={() => {
+              setAuthorized(false);
+              try {
+                sessionStorage.removeItem('adios_admin_auth');
+              } catch {}
+            }}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'transparent', border: '1px solid #e2e8f0', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', color: '#dc2626' }}
           >
             <LogOut size={13} />

@@ -34,6 +34,11 @@ function CartContent() {
     if (addId && SUITE_APPS.some(app => app.id === addId)) {
       setCart(prev => (prev.includes(addId) ? prev : [...prev, addId]));
     }
+    // Load persisted user
+    try {
+      const saved = localStorage.getItem('adios_user');
+      if (saved) setUser(JSON.parse(saved));
+    } catch {}
   }, [searchParams]);
 
   const toggleCartItem = (appId: string) => {
@@ -70,6 +75,9 @@ function CartContent() {
       const data = await res.json();
       if (res.ok && data.success) {
         setUser(data.user);
+        try {
+          localStorage.setItem('adios_user', JSON.stringify(data.user));
+        } catch {}
         setShowAuthModal(false);
         setAuthPassword('');
         setShowCheckoutModal(true);

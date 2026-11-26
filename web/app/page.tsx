@@ -75,6 +75,18 @@ export default function HomePage() {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
 
+  // Load saved user session on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('adios_user');
+      if (saved) {
+        setUser(JSON.parse(saved));
+      }
+    } catch {
+      // Ignore parsing errors
+    }
+  }, []);
+
   // Auto slide interval for Hero
   useEffect(() => {
     const timer = setInterval(() => {
@@ -153,6 +165,11 @@ export default function HomePage() {
       const data = await res.json();
       if (res.ok && data.success) {
         setUser(data.user);
+        try {
+          localStorage.setItem('adios_user', JSON.stringify(data.user));
+        } catch {
+          // localStorage failure fallback
+        }
         setShowAuthModal(false);
         setAuthPassword('');
       } else {
@@ -1925,7 +1942,18 @@ export default function HomePage() {
               )}
             </div>
 
-            <button type="button" onClick={() => { setUser(null); setShowProfileModal(false); }} className="ms-secondary-btn" style={{ width: '100%', color: '#d83b01' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setUser(null);
+                try {
+                  localStorage.removeItem('adios_user');
+                } catch {}
+                setShowProfileModal(false);
+              }}
+              className="ms-secondary-btn"
+              style={{ width: '100%', color: '#d83b01' }}
+            >
               Sign out
             </button>
           </div>
