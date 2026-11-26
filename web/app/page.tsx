@@ -531,23 +531,23 @@ export default function HomePage() {
             maxWidth: '1440px',
             margin: '0 auto',
             display: 'grid',
-            gridTemplateColumns: 'minmax(320px, 1.15fr) minmax(340px, 1.1fr)',
+            gridTemplateColumns: 'minmax(320px, 620px) 1fr',
             gap: '40px',
             alignItems: 'center'
           }}
         >
-          {/* Left Column: Product Statement */}
+          {/* Left Column: Product Statement with refined subtle transparency */}
           <div
             style={{
-              maxWidth: '560px',
+              maxWidth: '580px',
               zIndex: 2,
-              background: 'rgba(255, 255, 255, 0.45)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
+              background: 'rgba(255, 255, 255, 0.18)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
               padding: '36px 38px',
-              borderRadius: '20px',
-              border: '1px solid rgba(255, 255, 255, 0.7)',
-              boxShadow: '0 12px 36px rgba(107, 70, 193, 0.12)'
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.4)',
+              boxShadow: '0 8px 32px rgba(107, 70, 193, 0.08)'
             }}
           >
             <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -556,14 +556,14 @@ export default function HomePage() {
               </span>
               <span
                 style={{
-                  background: 'rgba(255, 255, 255, 0.85)',
+                  background: 'rgba(255, 255, 255, 0.65)',
                   backdropFilter: 'blur(8px)',
                   color: '#2c2242',
                   fontSize: '11px',
                   fontWeight: 600,
                   padding: '4px 10px',
                   borderRadius: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.9)'
+                  border: '1px solid rgba(255, 255, 255, 0.8)'
                 }}
               >
                 v2.0.0-alpha.1
@@ -615,58 +615,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Column: High-Resolution Product Showcase matching Laptop & Tablet visual inside the canvas frame */}
-          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                maxWidth: '640px',
-                filter: 'drop-shadow(0 20px 36px rgba(45, 25, 90, 0.3))'
-              }}
-            >
-              <Image
-                src="/app-screenshot.png"
-                alt="ADIOS Surface Management Lineup"
-                width={1280}
-                height={720}
-                priority
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  borderRadius: '10px',
-                  border: '1.5px solid rgba(255, 255, 255, 0.85)',
-                  boxShadow: '0 16px 40px rgba(0, 0, 0, 0.25)'
-                }}
-              />
-
-              {/* Floating Architecture Badge */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '-14px',
-                  right: '12px',
-                  background: '#0f0c18',
-                  color: '#ffffff',
-                  padding: '8px 14px',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 18px rgba(0,0,0,0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-              >
-                <div style={{ width: '18px', height: '18px', borderRadius: '3px', background: '#0067b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700 }}>
-                  A
-                </div>
-                <div>
-                  <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#9d91b8' }}>ENGINE ARCHITECTURE</div>
-                  <div style={{ fontSize: '11px', fontWeight: 600 }}>Qt 6 · Offline SQLite</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Right Column: Intentionally left unobstructed to let the artwork shine */}
+          <div style={{ minHeight: '440px' }} />
         </div>
       </section>
 
