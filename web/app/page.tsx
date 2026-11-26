@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -73,6 +73,15 @@ export default function HomePage() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [revealedKeys, setRevealedKeys] = useState<{ [key: string]: boolean }>({});
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+
+  // Auto slide interval for Hero
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveHeroSlide(prev => (prev === 0 ? 1 : 0));
+    }, 7000);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleCartItem = (appId: string) => {
     setCart(prev =>
@@ -554,114 +563,337 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 2. FULL-BLEED HERO: SURFACE SHOWCASE WITH ARTISTIC HERO BACKGROUND */}
+      {/* 2. FULL-BLEED HERO SLIDER: PREVIOUS HERO + ALL-IN-ONE PACK SHOWCASE */}
       <section
         style={{
           width: '100%',
-          minHeight: '620px',
-          backgroundImage: 'url("/hero-bg.jpg")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center right',
-          backgroundRepeat: 'no-repeat',
-          display: 'flex',
-          alignItems: 'center',
           position: 'relative',
-          padding: '56px 6% 72px 6%',
           overflow: 'hidden'
         }}
       >
+        {/* Slider Track */}
         <div
           style={{
-            width: '100%',
-            maxWidth: '1440px',
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(320px, 620px) 1fr',
-            gap: '40px',
-            alignItems: 'center'
+            display: 'flex',
+            width: '200%',
+            transform: `translateX(${activeHeroSlide === 0 ? '0%' : '-50%'})`,
+            transition: 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          {/* Left Column: Product Statement with refined subtle transparency */}
+          {/* SLIDE 1: Original Artistic Showcase */}
           <div
             style={{
-              maxWidth: '580px',
-              zIndex: 2,
-              background: 'rgba(255, 255, 255, 0.18)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              padding: '36px 38px',
-              borderRadius: '24px',
-              border: '1px solid rgba(255, 255, 255, 0.4)',
-              boxShadow: '0 8px 32px rgba(107, 70, 193, 0.08)'
+              width: '50%',
+              minHeight: '620px',
+              backgroundImage: 'url("/hero-bg.jpg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center right',
+              backgroundRepeat: 'no-repeat',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              padding: '56px 6% 72px 6%',
+              boxSizing: 'border-box'
             }}
           >
-            <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="ms-pill">
-                Open Alpha Testing
-              </span>
-              <span
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '1440px',
+                margin: '0 auto',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(320px, 620px) 1fr',
+                gap: '40px',
+                alignItems: 'center'
+              }}
+            >
+              <div
                 style={{
-                  background: 'rgba(255, 255, 255, 0.65)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#2c2242',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  padding: '4px 10px',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.8)'
+                  maxWidth: '580px',
+                  zIndex: 2,
+                  background: 'rgba(255, 255, 255, 0.18)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  padding: '36px 38px',
+                  borderRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  boxShadow: '0 8px 32px rgba(107, 70, 193, 0.08)'
                 }}
               >
-                v2.0.0-alpha.1
-              </span>
-            </div>
+                <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span className="ms-pill">
+                    Open Alpha Testing
+                  </span>
+                  <span
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.65)',
+                      backdropFilter: 'blur(8px)',
+                      color: '#2c2242',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      border: '1px solid rgba(255, 255, 255, 0.8)'
+                    }}
+                  >
+                    v2.0.0-alpha.1
+                  </span>
+                </div>
 
-            {/* Product Headline */}
-            <h1
-              style={{
-                color: '#1a1429',
-                fontSize: 'clamp(34px, 4.2vw, 50px)',
-                fontWeight: 500,
-                lineHeight: 1.18,
-                letterSpacing: '-0.025em',
-                marginBottom: '16px'
-              }}
-            >
-              Our most optimised management lineup
-            </h1>
+                <h1
+                  style={{
+                    color: '#1a1429',
+                    fontSize: 'clamp(34px, 4.2vw, 50px)',
+                    fontWeight: 500,
+                    lineHeight: 1.18,
+                    letterSpacing: '-0.025em',
+                    marginBottom: '16px'
+                  }}
+                >
+                  Our most optimised management lineup
+                </h1>
 
-            {/* Subtext description */}
-            <p
-              style={{
-                color: '#2c2242',
-                fontSize: '16.5px',
-                lineHeight: 1.6,
-                marginBottom: '28px',
-                fontWeight: 350
-              }}
-            >
-              Big ideas, busy operations, zero latency. ADIOS Personal, Hospital, Hotel, POS and Academics
-              are engineered offline-first with compiled C++/Qt performance and SQLite persistence.
-            </p>
+                <p
+                  style={{
+                    color: '#2c2242',
+                    fontSize: '16.5px',
+                    lineHeight: 1.6,
+                    marginBottom: '28px',
+                    fontWeight: 350
+                  }}
+                >
+                  Big ideas, busy operations, zero latency. ADIOS Personal, Hospital, Hotel, POS and Academics
+                  are engineered offline-first with compiled C++/Qt performance and SQLite persistence.
+                </p>
 
-            {/* "Explore Suites" Primary Button */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-              <a href="#suites" className="ms-hero-btn">
-                Explore Suites
-              </a>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                  <a href="#suites" className="ms-hero-btn">
+                    Explore Suites
+                  </a>
 
-              <a
-                href="/api/download"
-                download
-                className="ms-secondary-btn"
-                style={{ color: '#1a1429', fontWeight: 500, textDecoration: 'underline' }}
-              >
-                Download Desktop .exe
-              </a>
+                  <a
+                    href="/api/download"
+                    download
+                    className="ms-secondary-btn"
+                    style={{ color: '#1a1429', fontWeight: 500, textDecoration: 'underline' }}
+                  >
+                    Download Desktop .exe
+                  </a>
+                </div>
+              </div>
+
+              <div style={{ minHeight: '440px' }} />
             </div>
           </div>
 
-          {/* Right Column: Intentionally left unobstructed to let the artwork shine */}
-          <div style={{ minHeight: '440px' }} />
+          {/* SLIDE 2: All-in-One Suite Pack Showcase */}
+          <div
+            style={{
+              width: '50%',
+              minHeight: '620px',
+              background: 'linear-gradient(135deg, #f8f9fc 0%, #edf2f9 50%, #e2e8f0 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              padding: '56px 6% 72px 6%',
+              boxSizing: 'border-box'
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '1440px',
+                margin: '0 auto',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(320px, 600px) minmax(320px, 1fr)',
+                gap: '50px',
+                alignItems: 'center'
+              }}
+            >
+              {/* Left Column: Get The Pack Now */}
+              <div
+                style={{
+                  zIndex: 2,
+                  background: 'rgba(255, 255, 255, 0.85)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  padding: '40px 42px',
+                  borderRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.9)',
+                  boxShadow: '0 20px 40px rgba(0, 103, 184, 0.08)'
+                }}
+              >
+                <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span
+                    style={{
+                      background: 'linear-gradient(135deg, #0067b8 0%, #78248c 100%)',
+                      color: '#ffffff',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      padding: '4px 12px',
+                      borderRadius: '12px',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    All-in-One Ecosystem
+                  </span>
+                  <span
+                    style={{
+                      background: '#ecfdf5',
+                      color: '#059669',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      border: '1px solid #a7f3d0'
+                    }}
+                  >
+                    Special Bundle Offer
+                  </span>
+                </div>
+
+                <h1
+                  style={{
+                    color: '#0f172a',
+                    fontSize: 'clamp(34px, 4.2vw, 48px)',
+                    fontWeight: 600,
+                    lineHeight: 1.15,
+                    letterSpacing: '-0.025em',
+                    marginBottom: '16px'
+                  }}
+                >
+                  Get the complete <span style={{ fontFamily: 'var(--font-display)', color: '#0067b8' }}>ADIOS</span> pack now
+                </h1>
+
+                <p
+                  style={{
+                    color: '#475569',
+                    fontSize: '16.5px',
+                    lineHeight: 1.6,
+                    marginBottom: '28px',
+                    fontWeight: 350
+                  }}
+                >
+                  Empower your entire venture with all 5 flagship management suites: Personal, Hospital, Hotel, POS Billing, and Academics. Unified lifetime perpetual license with zero subscriptions.
+                </p>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                  <a
+                    href="#suites"
+                    className="ms-hero-btn"
+                    style={{
+                      padding: '12px 28px',
+                      fontSize: '15px',
+                      fontWeight: 600,
+                      borderRadius: '8px',
+                      boxShadow: '0 8px 20px rgba(0, 103, 184, 0.25)'
+                    }}
+                  >
+                    Get the Pack Now
+                  </a>
+
+                  <Link
+                    href="/cart"
+                    className="ms-secondary-btn"
+                    style={{
+                      color: '#0067b8',
+                      fontWeight: 600,
+                      fontSize: '14.5px',
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+                    onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+                  >
+                    View Bundle Pricing &rarr;
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column: High Quality Suite Pack Artwork Showcase */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative'
+                }}
+              >
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    maxWidth: '560px',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
+                    boxShadow: '0 24px 50px rgba(15, 23, 42, 0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.8)'
+                  }}
+                >
+                  <Image
+                    src="/hero-suite-pack.jpg"
+                    alt="ADIOS Complete Management Suite Pack"
+                    width={1024}
+                    height={576}
+                    priority
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Slide Navigation Dots & Arrows */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '22px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            zIndex: 10,
+            background: 'rgba(255, 255, 255, 0.65)',
+            backdropFilter: 'blur(8px)',
+            padding: '6px 14px',
+            borderRadius: '20px',
+            border: '1px solid rgba(255, 255, 255, 0.8)'
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setActiveHeroSlide(0)}
+            style={{
+              width: activeHeroSlide === 0 ? '28px' : '10px',
+              height: '10px',
+              borderRadius: '5px',
+              border: 'none',
+              background: activeHeroSlide === 0 ? '#0067b8' : '#cbd5e1',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            aria-label="Go to slide 1"
+          />
+          <button
+            type="button"
+            onClick={() => setActiveHeroSlide(1)}
+            style={{
+              width: activeHeroSlide === 1 ? '28px' : '10px',
+              height: '10px',
+              borderRadius: '5px',
+              border: 'none',
+              background: activeHeroSlide === 1 ? '#0067b8' : '#cbd5e1',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            aria-label="Go to slide 2"
+          />
         </div>
       </section>
 
