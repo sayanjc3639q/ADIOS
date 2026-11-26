@@ -509,16 +509,19 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 2. FULL-BLEED HERO: SURFACE SHOWCASE WITH THIN ELEGANT FONTS */}
+      {/* 2. FULL-BLEED HERO: SURFACE SHOWCASE WITH ARTISTIC HERO BACKGROUND */}
       <section
         style={{
           width: '100%',
-          minHeight: '540px',
-          background: 'linear-gradient(135deg, #d3c7e8 0%, #b8a8dc 50%, #a291cf 100%)',
+          minHeight: '620px',
+          backgroundImage: 'url("/hero-bg.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center right',
+          backgroundRepeat: 'no-repeat',
           display: 'flex',
           alignItems: 'center',
           position: 'relative',
-          padding: '48px 6% 64px 6%',
+          padding: '56px 6% 72px 6%',
           overflow: 'hidden'
         }}
       >
@@ -528,24 +531,36 @@ export default function HomePage() {
             maxWidth: '1440px',
             margin: '0 auto',
             display: 'grid',
-            gridTemplateColumns: 'minmax(320px, 1fr) minmax(360px, 1.25fr)',
+            gridTemplateColumns: 'minmax(320px, 1.15fr) minmax(340px, 1.1fr)',
             gap: '40px',
             alignItems: 'center'
           }}
         >
           {/* Left Column: Product Statement */}
-          <div style={{ maxWidth: '540px', zIndex: 2 }}>
+          <div
+            style={{
+              maxWidth: '560px',
+              zIndex: 2,
+              background: 'rgba(255, 255, 255, 0.45)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              padding: '36px 38px',
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.7)',
+              boxShadow: '0 12px 36px rgba(107, 70, 193, 0.12)'
+            }}
+          >
             <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span className="ms-pill">
                 Open Alpha Testing
               </span>
               <span
                 style={{
-                  background: 'rgba(255, 255, 255, 0.75)',
+                  background: 'rgba(255, 255, 255, 0.85)',
                   backdropFilter: 'blur(8px)',
                   color: '#2c2242',
                   fontSize: '11px',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   padding: '4px 10px',
                   borderRadius: '12px',
                   border: '1px solid rgba(255, 255, 255, 0.9)'
@@ -559,9 +574,9 @@ export default function HomePage() {
             <h1
               style={{
                 color: '#1a1429',
-                fontSize: 'clamp(36px, 4.4vw, 54px)',
-                fontWeight: 400,
-                lineHeight: 1.15,
+                fontSize: 'clamp(34px, 4.2vw, 50px)',
+                fontWeight: 500,
+                lineHeight: 1.18,
                 letterSpacing: '-0.025em',
                 marginBottom: '16px'
               }}
@@ -573,8 +588,8 @@ export default function HomePage() {
             <p
               style={{
                 color: '#2c2242',
-                fontSize: '17px',
-                lineHeight: 1.55,
+                fontSize: '16.5px',
+                lineHeight: 1.6,
                 marginBottom: '28px',
                 fontWeight: 350
               }}
@@ -584,7 +599,7 @@ export default function HomePage() {
             </p>
 
             {/* "Explore Suites" Primary Button */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
               <a href="#suites" className="ms-hero-btn">
                 Explore Suites
               </a>
@@ -593,21 +608,21 @@ export default function HomePage() {
                 href="/api/download"
                 download
                 className="ms-secondary-btn"
-                style={{ color: '#1a1429', textDecoration: 'underline' }}
+                style={{ color: '#1a1429', fontWeight: 500, textDecoration: 'underline' }}
               >
                 Download Desktop .exe
               </a>
             </div>
           </div>
 
-          {/* Right Column: High-Resolution Product Showcase matching Laptop & Tablet visual */}
+          {/* Right Column: High-Resolution Product Showcase matching Laptop & Tablet visual inside the canvas frame */}
           <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div
               style={{
                 position: 'relative',
                 width: '100%',
-                maxWidth: '680px',
-                filter: 'drop-shadow(0 24px 40px rgba(24, 14, 46, 0.35))'
+                maxWidth: '640px',
+                filter: 'drop-shadow(0 20px 36px rgba(45, 25, 90, 0.3))'
               }}
             >
               <Image
@@ -619,9 +634,9 @@ export default function HomePage() {
                 style={{
                   width: '100%',
                   height: 'auto',
-                  borderRadius: '4px',
-                  border: '1px solid rgba(255, 255, 255, 0.4)',
-                  boxShadow: '0 20px 45px rgba(0, 0, 0, 0.3)'
+                  borderRadius: '10px',
+                  border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                  boxShadow: '0 16px 40px rgba(0, 0, 0, 0.25)'
                 }}
               />
 
@@ -629,11 +644,11 @@ export default function HomePage() {
               <div
                 style={{
                   position: 'absolute',
-                  bottom: '-16px',
-                  right: '10px',
+                  bottom: '-14px',
+                  right: '12px',
                   background: '#0f0c18',
                   color: '#ffffff',
-                  padding: '8px 12px',
+                  padding: '8px 14px',
                   borderRadius: '6px',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   boxShadow: '0 8px 18px rgba(0,0,0,0.4)',
