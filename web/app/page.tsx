@@ -818,26 +818,23 @@ export default function HomePage() {
                       background: '#ffffff',
                       border: '1px solid #e2e8f0',
                       borderRadius: '16px',
-                      padding: '16px',
-                      boxShadow: '0 20px 40px rgba(0,0,0,0.06)',
+                      boxShadow: '0 12px 32px rgba(0,0,0,0.06)',
                       position: 'relative',
                       overflow: 'hidden'
                     }}
                   >
-                    <div style={{ position: 'relative', width: '100%', height: 'auto', borderRadius: '12px', overflow: 'hidden' }}>
-                      <Image
-                        src={story.image}
-                        alt={story.title}
-                        width={1280}
-                        height={960}
-                        style={{
-                          width: '100%',
-                          height: 'auto',
-                          borderRadius: '12px',
-                          display: 'block'
-                        }}
-                      />
-                    </div>
+                    {/* Main Image */}
+                    <Image
+                      src={story.image}
+                      alt={story.title}
+                      width={1280}
+                      height={960}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block'
+                      }}
+                    />
 
                     {/* Floating Badge Tag */}
                     <div
@@ -845,12 +842,12 @@ export default function HomePage() {
                         position: 'absolute',
                         top: '16px',
                         left: '16px',
-                        background: '#1a1429',
+                        background: '#0f172a',
                         color: '#ffffff',
                         fontSize: '11px',
                         fontWeight: 600,
                         padding: '4px 10px',
-                        borderRadius: '2px',
+                        borderRadius: '4px',
                         letterSpacing: '0.04em'
                       }}
                     >
@@ -860,18 +857,18 @@ export default function HomePage() {
                     {/* Quick Metric Bar */}
                     <div
                       style={{
-                        marginTop: '18px',
-                        paddingTop: '16px',
-                        borderTop: '1px solid #ebebeb',
+                        padding: '16px 20px',
                         display: 'grid',
                         gridTemplateColumns: 'repeat(3, 1fr)',
                         gap: '12px',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        background: '#ffffff',
+                        borderTop: '1px solid #f1f5f9'
                       }}
                     >
                       {story.metrics.map((m, mIdx) => (
                         <div key={mIdx}>
-                          <div style={{ fontSize: '11px', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{m.label}</div>
+                          <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{m.label}</div>
                           <div className="font-mono" style={{ fontSize: '16px', fontWeight: 600, color: '#0067b8', marginTop: '2px' }}>{m.value}</div>
                         </div>
                       ))}
