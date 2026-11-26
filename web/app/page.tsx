@@ -351,10 +351,10 @@ export default function HomePage() {
                 POS
               </Link>
 
-              {/* Clean Pricing link pointing to pricing section */}
-              <a href="#pricing" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
+              {/* Clean Pricing link pointing to dedicated /pricing page */}
+              <Link href="/pricing" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 Pricing
-              </a>
+              </Link>
 
               {/* Direct Link to About ADIOS Uniqueness Section */}
               <a href="#about" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
@@ -492,19 +492,20 @@ export default function HomePage() {
               )}
             </Link>
 
-            {/* Profile Section: Profile Icon or First + Last Name */}
+            {/* Profile Section: Link to dedicated /profile */}
             {user ? (
-              <div
-                onClick={handleOpenProfile}
+              <Link
+                href="/profile"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                   cursor: 'pointer',
-                  padding: '4px 8px',
+                  padding: '4px 10px',
                   borderRadius: '4px',
                   border: '1px solid #e6e6e6',
-                  background: '#f9f9f9'
+                  background: '#f9f9f9',
+                  textDecoration: 'none'
                 }}
                 title={`Signed in as ${user.name}`}
               >
@@ -525,7 +526,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '13px', fontWeight: 500, color: '#262626' }}>
                   {user.name}
                 </span>
-              </div>
+              </Link>
             ) : (
               <div
                 onClick={() => { setAuthMode('signin'); setShowAuthModal(true); }}
@@ -1160,120 +1161,83 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. PERPETUAL LICENSING & CART PREVIEW */}
+      {/* 6. PERPETUAL LICENSING PHILOSOPHY */}
       <section id="pricing" style={{ padding: '20px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <div
           style={{
-            background: '#f7f7f7',
-            border: '1px solid #e6e6e6',
-            padding: '36px',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(320px, 1.2fr) minmax(300px, 1fr)',
-            gap: '36px',
-            alignItems: 'start'
+            background: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: '16px',
+            padding: '40px',
+            maxWidth: '1080px',
+            margin: '0 auto'
           }}
         >
-          {/* Left: Licensing matrix */}
-          <div>
-            <h2 style={{ fontSize: '24px', marginBottom: '8px', fontWeight: 400 }}>
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 36px auto' }}>
+            <h2 style={{ fontSize: '32px', marginBottom: '12px', fontWeight: 500, color: '#0f172a' }}>
               Perpetual Licensing Philosophy
             </h2>
-            <p style={{ fontSize: '14.5px', color: '#505050', marginBottom: '20px', fontWeight: 350 }}>
+            <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.6, fontWeight: 350 }}>
               Unlike recurring SaaS subscription models, ADIOS is built on genuine perpetual software ownership.
               Your software runs offline on your own hardware forever.
             </p>
-
-            <table style={{ width: '100%', background: '#ffffff', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
-              <thead>
-                <tr style={{ background: '#f2f2f2' }}>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Capability</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Community Free</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Lifetime License</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>All core modules &amp; features</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Local SQLite database storage</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Custom directory backups</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '10px 14px' }}>Multi-device encrypted cloud sync</td>
-                  <td style={{ textAlign: 'center', color: '#a19f9d' }}>—</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
 
-          {/* Right: Cart Summary Box with link to dedicated /cart */}
-          <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{ fontSize: '17px', fontWeight: 500, color: '#262626' }}>Selected Suite Cart</div>
-              <span style={{ fontSize: '12px', background: '#eff6fc', color: '#0067b8', padding: '2px 8px', fontWeight: 500 }}>
-                {cart.length} {cart.length === 1 ? 'Suite' : 'Suites'}
-              </span>
-            </div>
+          <table style={{ width: '100%', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden', borderCollapse: 'collapse', fontSize: '14px', marginBottom: '28px' }}>
+            <thead>
+              <tr style={{ background: '#f1f5f9' }}>
+                <th style={{ padding: '14px 18px', textAlign: 'left', borderBottom: '1px solid #e2e8f0', fontWeight: 600, color: '#334155' }}>Capability</th>
+                <th style={{ padding: '14px 18px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: 600, color: '#334155' }}>Community Free</th>
+                <th style={{ padding: '14px 18px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: 600, color: '#0067b8' }}>Lifetime License</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>All core modules &amp; features</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Local SQLite database storage</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Custom directory backups</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Commercial &amp; enterprise business use</td>
+                <td style={{ textAlign: 'center', color: '#94a3b8' }}>—</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Multi-counter local LAN networking</td>
+                <td style={{ textAlign: 'center', color: '#94a3b8' }}>—</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', color: '#1e293b' }}>Multi-device encrypted cloud sync</td>
+                <td style={{ textAlign: 'center', color: '#94a3b8' }}>—</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+            </tbody>
+          </table>
 
-            {selectedApps.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '24px 0', color: '#737373', fontSize: '13.5px' }}>
-                Your cart is empty. Choose suites above to bundle your software.
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-                {selectedApps.map(item => (
-                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: '#fbfbfb', border: '1px solid #f2f2f2', fontSize: '13px' }}>
-                    <div>
-                      <div style={{ fontWeight: 500 }}>{item.name}</div>
-                      <div className="font-mono" style={{ fontSize: '11px', color: '#737373' }}>Prefix: {item.keyPrefix}</div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span className="font-mono" style={{ fontWeight: 500 }}>₹{item.price.toLocaleString('en-IN')}</span>
-                      <button type="button" onClick={() => toggleCartItem(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#737373' }}>
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {selectedApps.length > 0 && (
-              <div style={{ background: '#f7f7f7', padding: '12px', marginBottom: '16px', fontSize: '13px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span style={{ color: '#737373' }}>Subtotal:</span>
-                  <span className="font-mono">₹{subtotal.toLocaleString('en-IN')}</span>
-                </div>
-                {discountRate > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#107c10', marginBottom: '4px' }}>
-                    <span>Bundle Savings ({Math.round(discountRate * 100)}%):</span>
-                    <span className="font-mono">-₹{discountAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 600, borderTop: '1px dashed #dcdcdc', paddingTop: '8px', marginTop: '4px' }}>
-                  <span>Total:</span>
-                  <span className="font-mono" style={{ color: '#0067b8' }}>₹{totalAmount.toLocaleString('en-IN')}</span>
-                </div>
-              </div>
-            )}
-
-            {/* Exactly says "Checkout" per instruction */}
+          <div style={{ textAlign: 'center' }}>
             <Link
-              href="/cart"
+              href="/pricing"
               className="ms-hero-btn"
-              style={{ width: '100%', height: '40px', fontSize: '14px', textDecoration: 'none' }}
+              style={{
+                padding: '12px 32px',
+                fontSize: '15px',
+                borderRadius: '8px',
+                display: 'inline-flex',
+                boxShadow: '0 4px 16px rgba(0, 103, 184, 0.2)'
+              }}
             >
-              Checkout
+              View Detailed Plans &amp; Pricing &rarr;
             </Link>
           </div>
         </div>
