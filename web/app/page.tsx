@@ -806,7 +806,7 @@ export default function HomePage() {
             ENGINEERING PHILOSOPHY
           </div>
           <h2 style={{ fontSize: '32px', color: '#1a1429', fontWeight: 400, marginBottom: '16px', lineHeight: 1.2 }}>
-            About ADIOS: What Makes It Different
+            About <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>ADIOS</span>: What Makes It Different
           </h2>
           <p style={{ fontSize: '16px', color: '#505050', lineHeight: 1.6, fontWeight: 350 }}>
             In an industry obsessed with forced cloud subscriptions, recurring micro-transactions, and latency-ridden web apps,
@@ -1146,8 +1146,9 @@ export default function HomePage() {
             </div>
             <h2
               style={{
+                fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(36px, 4.5vw, 54px)',
-                fontWeight: 500,
+                fontWeight: 400,
                 color: '#0f172a',
                 lineHeight: 1.15,
                 letterSpacing: '-0.025em',
@@ -1279,8 +1280,8 @@ export default function HomePage() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <h3 style={{ fontSize: '30px', fontWeight: 500, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                  ADIOS App
+                <h3 style={{ fontSize: '30px', fontWeight: 400, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                  <span style={{ fontFamily: 'var(--font-display)' }}>ADIOS</span> App
                 </h3>
                 <span
                   style={{
@@ -1495,8 +1496,8 @@ export default function HomePage() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <h3 style={{ fontSize: '30px', fontWeight: 500, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                  ADIOS CLI
+                <h3 style={{ fontSize: '30px', fontWeight: 400, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                  <span style={{ fontFamily: 'var(--font-display)' }}>ADIOS</span> CLI
                 </h3>
                 <span
                   style={{
@@ -1682,7 +1683,9 @@ export default function HomePage() {
             </div>
 
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>About ADIOS</div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>
+                About <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>ADIOS</span>
+              </div>
               <p style={{ fontSize: '12.5px', color: '#616161', lineHeight: 1.6, marginBottom: '12px', fontWeight: 350 }}>
                 High-performance offline desktop ecosystem engineered by Sayan Maity with compiled Qt 6 and local SQLite persistence.
               </p>
