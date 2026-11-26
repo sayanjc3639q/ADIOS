@@ -765,27 +765,6 @@ export default function HomePage() {
 
                 {/* Bottom Action Area */}
                 <div style={{ marginTop: 'auto', paddingTop: '16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                    <span style={{ fontSize: '13px', color: '#64748b' }}>
-                      Perpetual: <strong style={{ color: '#0f172a', fontWeight: 600 }}>₹{app.price.toLocaleString('en-IN')}</strong>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => toggleCartItem(app.id)}
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: inCart ? '#107c10' : '#0067b8',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        padding: '4px 8px'
-                      }}
-                    >
-                      {inCart ? '✓ Added' : '+ Add to cart'}
-                    </button>
-                  </div>
-
                   <Link
                     href={`/product/${app.id}`}
                     style={{
