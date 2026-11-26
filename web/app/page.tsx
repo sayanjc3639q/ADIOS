@@ -1033,26 +1033,6 @@ export default function HomePage() {
                         display: 'block'
                       }}
                     />
-
-                    {/* Quick Metric Bar */}
-                    <div
-                      style={{
-                        padding: '16px 20px',
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        gap: '12px',
-                        textAlign: 'center',
-                        background: '#ffffff',
-                        borderTop: '1px solid #f1f5f9'
-                      }}
-                    >
-                      {story.metrics.map((m, mIdx) => (
-                        <div key={mIdx}>
-                          <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{m.label}</div>
-                          <div className="font-mono" style={{ fontSize: '16px', fontWeight: 600, color: '#0067b8', marginTop: '2px' }}>{m.value}</div>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 </div>
 
@@ -1091,94 +1071,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. FREQUENTLY ASKED QUESTIONS (FAQS) ACCORDION */}
-      <section id="faqs" style={{ padding: '60px 6% 60px 6%', maxWidth: '1000px', margin: '0 auto', width: '100%', borderTop: '1px solid #e6e6e6' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#0067b8', fontWeight: 600, marginBottom: '8px' }}>
-            TRANSPARENT ANSWERS
-          </div>
-          <h2 style={{ fontSize: '30px', color: '#262626', fontWeight: 400, marginBottom: '12px' }}>
-            Frequently Asked Questions
-          </h2>
-          <p style={{ fontSize: '15px', color: '#505050', fontWeight: 350 }}>
-            Everything you need to know about ADIOS architecture, offline SQLite data storage, and perpetual software licenses.
-          </p>
-        </div>
-
-        {/* FAQ Accordion List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {FAQS.map((faq, index) => {
-            const isOpen = openFaqIndex === index;
-
-            return (
-              <div
-                key={index}
-                style={{
-                  border: '1px solid #e6e6e6',
-                  borderRadius: '6px',
-                  background: isOpen ? '#fafafa' : '#ffffff',
-                  transition: 'background 0.2s ease, border-color 0.2s ease',
-                  overflow: 'hidden'
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                  style={{
-                    width: '100%',
-                    padding: '20px 24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '16px',
-                    background: 'transparent',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <div>
-                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#737373', letterSpacing: '0.04em', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
-                      {faq.category}
-                    </span>
-                    <span style={{ fontSize: '16px', color: '#262626', fontWeight: 450 }}>
-                      {faq.question}
-                    </span>
-                  </div>
-                  <ChevronDown
-                    size={18}
-                    style={{
-                      color: isOpen ? '#0067b8' : '#737373',
-                      transform: isOpen ? 'rotate(180deg)' : 'none',
-                      transition: 'transform 0.2s ease',
-                      flexShrink: 0
-                    }}
-                  />
-                </button>
-
-                {isOpen && (
-                  <div style={{ padding: '0 24px 22px 24px', color: '#505050', fontSize: '14.5px', lineHeight: 1.6, fontWeight: 350, borderTop: '1px solid #f2f2f2', paddingTop: '16px' }}>
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        <div style={{ marginTop: '36px', textAlign: 'center', fontSize: '13.5px', color: '#737373' }}>
-          Have more questions? Join the discussion on our{' '}
-          <Link href="/community" style={{ color: '#0067b8', fontWeight: 500 }}>
-            Community Forum
-          </Link>{' '}
-          or inspect the open architecture on{' '}
-          <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: '#0067b8', fontWeight: 500 }}>
-            GitHub
-          </a>.
-        </div>
-      </section>
-
-      {/* 6. PERPETUAL LICENSING PHILOSOPHY */}
+      {/* 5. PERPETUAL LICENSING PHILOSOPHY */}
       <section id="pricing" style={{ padding: '20px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <div
           style={{
@@ -1654,20 +1547,41 @@ export default function HomePage() {
               style={{
                 background: '#0f172a',
                 borderRadius: '10px',
-                padding: '18px 24px',
+                padding: '16px 20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: '16px',
                 maxWidth: '780px',
+                width: '100%',
                 marginBottom: '26px',
                 border: '1px solid #1e293b',
-                boxShadow: '0 6px 20px rgba(15, 23, 42, 0.25)'
+                boxShadow: '0 6px 20px rgba(15, 23, 42, 0.25)',
+                overflow: 'hidden'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', overflowX: 'auto' }}>
-                <span style={{ color: '#38bdf8', fontSize: '15px', userSelect: 'none' }}>$</span>
-                <code className="font-mono" style={{ color: '#f8fafc', fontSize: '15px', fontWeight: 500 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  minWidth: 0,
+                  flex: 1,
+                  overflowX: 'auto',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}
+              >
+                <span style={{ color: '#38bdf8', fontSize: '14px', fontWeight: 600, userSelect: 'none', flexShrink: 0 }}>$</span>
+                <code
+                  className="font-mono"
+                  style={{
+                    color: '#f8fafc',
+                    fontSize: '13.5px',
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
                   curl -fsSL https://get.adios.dev/cli.sh | sh
                 </code>
               </div>
@@ -1684,8 +1598,8 @@ export default function HomePage() {
                   border: '1px solid rgba(56, 189, 248, 0.35)',
                   color: '#38bdf8',
                   borderRadius: '6px',
-                  padding: '8px 16px',
-                  fontSize: '13px',
+                  padding: '7px 14px',
+                  fontSize: '12.5px',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
@@ -1761,6 +1675,94 @@ export default function HomePage() {
               </code>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 7. FREQUENTLY ASKED QUESTIONS (FAQS) ACCORDION */}
+      <section id="faqs" style={{ padding: '72px 6% 72px 6%', maxWidth: '1000px', margin: '0 auto', width: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#0067b8', fontWeight: 600, marginBottom: '8px' }}>
+            TRANSPARENT ANSWERS
+          </div>
+          <h2 style={{ fontSize: '32px', color: '#0f172a', fontWeight: 500, marginBottom: '12px' }}>
+            Frequently Asked Questions
+          </h2>
+          <p style={{ fontSize: '15px', color: '#475569', fontWeight: 350 }}>
+            Everything you need to know about ADIOS architecture, offline SQLite data storage, and perpetual software licenses.
+          </p>
+        </div>
+
+        {/* FAQ Accordion List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {FAQS.map((faq, index) => {
+            const isOpen = openFaqIndex === index;
+
+            return (
+              <div
+                key={index}
+                style={{
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '10px',
+                  background: isOpen ? '#f8fafc' : '#ffffff',
+                  boxShadow: isOpen ? '0 4px 12px rgba(0,0,0,0.03)' : 'none',
+                  transition: 'background 0.2s ease, border-color 0.2s ease',
+                  overflow: 'hidden'
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                  style={{
+                    width: '100%',
+                    padding: '20px 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    background: 'transparent',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.04em', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+                      {faq.category}
+                    </span>
+                    <span style={{ fontSize: '16px', color: '#0f172a', fontWeight: 500 }}>
+                      {faq.question}
+                    </span>
+                  </div>
+                  <ChevronDown
+                    size={18}
+                    style={{
+                      color: isOpen ? '#0067b8' : '#64748b',
+                      transform: isOpen ? 'rotate(180deg)' : 'none',
+                      transition: 'transform 0.2s ease',
+                      flexShrink: 0
+                    }}
+                  />
+                </button>
+
+                {isOpen && (
+                  <div style={{ padding: '0 24px 22px 24px', color: '#475569', fontSize: '14.5px', lineHeight: 1.6, fontWeight: 350, borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ marginTop: '36px', textAlign: 'center', fontSize: '13.5px', color: '#64748b' }}>
+          Have more questions? Join the discussion on our{' '}
+          <Link href="/community" style={{ color: '#0067b8', fontWeight: 500 }}>
+            Community Forum
+          </Link>{' '}
+          or inspect the open architecture on{' '}
+          <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: '#0067b8', fontWeight: 500 }}>
+            GitHub
+          </a>.
         </div>
       </section>
 
