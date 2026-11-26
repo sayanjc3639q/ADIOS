@@ -193,18 +193,8 @@ export default function HomePage() {
         <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Left: ADIOS Logo Mark & Brand + Navigation */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-              <div style={{ position: 'relative', width: '32px', height: '32px' }}>
-                <Image
-                  src="/gemini-svg.svg"
-                  alt="ADIOS Logo"
-                  width={32}
-                  height={32}
-                  style={{ objectFit: 'contain' }}
-                  priority
-                />
-              </div>
-              <span style={{ fontSize: '22px', fontWeight: 400, color: '#1a1429', fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+              <span style={{ fontSize: '26px', fontWeight: 400, color: '#1a1429', fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
                 ADIOS
               </span>
             </Link>
