@@ -1016,24 +1016,6 @@ export default function HomePage() {
                       }}
                     />
 
-                    {/* Floating Badge Tag */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '16px',
-                        left: '16px',
-                        background: '#0f172a',
-                        color: '#ffffff',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        padding: '4px 10px',
-                        borderRadius: '4px',
-                        letterSpacing: '0.04em'
-                      }}
-                    >
-                      {story.badge}
-                    </div>
-
                     {/* Quick Metric Bar */}
                     <div
                       style={{
