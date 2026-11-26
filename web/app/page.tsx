@@ -719,13 +719,41 @@ export default function HomePage() {
                 className="ms-product-card"
               >
                 <div>
-                  {/* Top Suite Category Label */}
-                  <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500, marginBottom: '8px' }}>
-                    {app.name}
+                  {/* Top Suite App Logo & App Name Header */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+                    {app.logo && (
+                      <div
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '10px',
+                          background: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '6px',
+                          flexShrink: 0
+                        }}
+                      >
+                        <Image
+                          src={app.logo}
+                          alt={app.name}
+                          width={32}
+                          height={32}
+                          style={{ objectFit: 'contain' }}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
+                        {app.name}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Clean Headline */}
-                  <h3 style={{ fontSize: '20px', color: '#0f172a', fontWeight: 600, lineHeight: 1.3, marginBottom: '16px' }}>
+                  <h3 style={{ fontSize: '20px', color: '#0f172a', fontWeight: 600, lineHeight: 1.3, marginBottom: '14px' }}>
                     {app.shortDescription}
                   </h3>
 
