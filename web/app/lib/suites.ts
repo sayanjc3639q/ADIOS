@@ -11,6 +11,7 @@ export interface SuiteApp {
   features: string[];
   ctaLabel: string;
   image: string;
+  logo: string;
   badge?: string;
   specifications: { label: string; value: string }[];
   overview: string[];
@@ -29,6 +30,7 @@ export const SUITE_APPS: SuiteApp[] = [
     keyPrefix: 'ADIOS-PERS',
     ctaLabel: 'Download for Windows',
     image: '/app-screenshot.png',
+    logo: '/suite-personal.png',
     badge: 'Flagship Edition',
     specifications: [
       { label: 'Operating System', value: 'Windows 10 / 11 (64-bit), Linux (AppImage/PyPI)' },
@@ -61,6 +63,7 @@ export const SUITE_APPS: SuiteApp[] = [
     keyPrefix: 'ADIOS-HOSP',
     ctaLabel: 'Explore Details',
     image: '/app-screenshot.png',
+    logo: '/suite-hospital.png',
     specifications: [
       { label: 'Target Facilities', value: 'Daycare Clinics, Nursing Homes, Specialty Hospitals' },
       { label: 'Local LAN Mode', value: 'Multi-Workstation LAN Synchronization over SQLite/Postgres' },
@@ -91,6 +94,7 @@ export const SUITE_APPS: SuiteApp[] = [
     keyPrefix: 'ADIOS-HOTL',
     ctaLabel: 'Explore Details',
     image: '/app-screenshot.png',
+    logo: '/suite-hotel.png',
     specifications: [
       { label: 'Property Types', value: 'Hotels, Motels, Homestays, Guest Houses, Resorts' },
       { label: 'Device Integration', value: 'Passport/ID Flatbed Scanners, Keycard Encoders, Thermal Printers' },
@@ -120,6 +124,7 @@ export const SUITE_APPS: SuiteApp[] = [
     keyPrefix: 'ADIOS-BILL',
     ctaLabel: 'Explore Details',
     image: '/app-screenshot.png',
+    logo: '/suite-billing.png',
     specifications: [
       { label: 'Supported Scanners', value: 'USB & Bluetooth 1D/2D Barcode & QR Scanners' },
       { label: 'Print Outputs', value: '80mm / 58mm Thermal Receipts, Standard A4 / A5 Tax Invoices' },
@@ -149,6 +154,7 @@ export const SUITE_APPS: SuiteApp[] = [
     keyPrefix: 'ADIOS-ACAD',
     ctaLabel: 'Explore Details',
     image: '/app-screenshot.png',
+    logo: '/suite-academics.png',
     specifications: [
       { label: 'Institutions', value: 'Schools (CBSE/ICSE/State), Coaching Centers, Colleges' },
       { label: 'Report Formats', value: 'CBSE Grading Cards, Term Marksheets, Fee Payment Receipts' },

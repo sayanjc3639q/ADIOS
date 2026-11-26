@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    
+    <linearGradient id="bg-vibrant" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D8CFF" />
+      <stop offset="55%" stop-color="#1E6FFF" />
+      <stop offset="100%" stop-color="#134EEB" />
+    </linearGradient>
+
+    
+    <linearGradient id="a-white" x1="50%" y1="10%" x2="50%" y2="95%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="80%" stop-color="#F7FAFF" />
+      <stop offset="100%" stop-color="#EBF3FF" />
+    </linearGradient>
+
+    
+    <linearGradient id="line-vibrant" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5CE645" />
+      <stop offset="50%" stop-color="#7AF54C" />
+      <stop offset="100%" stop-color="#96FF52" />
+    </linearGradient>
+
+    
+    <linearGradient id="line-depth" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1D9E38" />
+      <stop offset="100%" stop-color="#2BC247" />
+    </linearGradient>
+
+    
+    <filter id="a-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="6" dy="10" stdDeviation="10" flood-color="#092B8A" flood-opacity="0.28" />
+    </filter>
+
+    
+    <filter id="line-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="3" dy="8" stdDeviation="6" flood-color="#082475" flood-opacity="0.30" />
+    </filter>
+  </defs>
+
+  
+  <rect width="512" height="512" fill="url(#bg-vibrant)" />
+
+  
+  <path d="M 94 422 L 256 86 L 418 422" fill="none" stroke="url(#a-white)" stroke-width="86" stroke-linecap="round" stroke-linejoin="round" filter="url(#a-shadow)" />
+
+  
+  <g filter="url(#line-shadow)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    
+    <path d="M 174 352 L 250 276 L 300 326 L 452 174" transform="translate(0, 7)" stroke="url(#line-depth)" stroke-width="34" />
+
+    
+    <path d="M 174 352 L 250 276 L 300 326 L 452 174" stroke="url(#line-vibrant)" stroke-width="34" />
+  </g>
+</svg>

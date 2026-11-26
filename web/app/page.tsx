@@ -187,7 +187,7 @@ export default function HomePage() {
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
               <div style={{ position: 'relative', width: '32px', height: '32px' }}>
                 <Image
-                  src="/logo.png"
+                  src="/gemini-svg.svg"
                   alt="ADIOS Logo"
                   width={32}
                   height={32}
@@ -195,7 +195,7 @@ export default function HomePage() {
                   priority
                 />
               </div>
-              <span style={{ fontSize: '20px', fontWeight: 600, color: '#1a1429', letterSpacing: '-0.02em' }}>
+              <span style={{ fontSize: '22px', fontWeight: 400, color: '#1a1429', fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
                 ADIOS
               </span>
             </Link>
@@ -253,49 +253,94 @@ export default function HomePage() {
                       }}
                     >
                       <Link
-                        href="/product/hospital"
+                        href="/product/personal"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
-                          display: 'block',
-                          padding: '10px 18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
                           color: '#262626',
-                          fontSize: '13.5px',
+                          fontSize: '13px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        Hospital HMS
+                        <Image src="/suite-personal.png" alt="Personal" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Personal Manager</span>
+                      </Link>
+                      <Link
+                        href="/product/hospital"
+                        onClick={() => setSuitesMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
+                          color: '#262626',
+                          fontSize: '13px',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <Image src="/suite-hospital.png" alt="Hospital" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Hospital HMS</span>
                       </Link>
                       <Link
                         href="/product/hotel"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
-                          display: 'block',
-                          padding: '10px 18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
                           color: '#262626',
-                          fontSize: '13.5px',
+                          fontSize: '13px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        Hotel PMS
+                        <Image src="/suite-hotel.png" alt="Hotel" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Hotel PMS</span>
+                      </Link>
+                      <Link
+                        href="/product/billing"
+                        onClick={() => setSuitesMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
+                          color: '#262626',
+                          fontSize: '13px',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <Image src="/suite-billing.png" alt="POS & Billing" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>POS &amp; GST Billing</span>
                       </Link>
                       <Link
                         href="/product/academics"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
-                          display: 'block',
-                          padding: '10px 18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
                           color: '#262626',
-                          fontSize: '13.5px',
+                          fontSize: '13px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        Academics
+                        <Image src="/suite-academics.png" alt="Academics" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Academics</span>
                       </Link>
                     </div>
                   </div>
@@ -620,27 +665,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* QUICK NAV CATEGORY ICONS (Microsoft.com Surface row) */}
+      {/* QUICK NAV CATEGORY ICONS (Microsoft.com Surface row with modern 3D Suite App Logos) */}
       <section style={{ padding: '36px 6% 20px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: '32px' }}>
-          <Link href="/product/personal" className="ms-quick-link">
-            <Cpu size={22} />
+          <Link href="/product/personal" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-personal.png" alt="Personal Manager" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Personal Manager</span>
           </Link>
-          <Link href="/product/hospital" className="ms-quick-link">
-            <Building2 size={22} />
+          <Link href="/product/hospital" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-hospital.png" alt="Hospital HMS" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Hospital HMS</span>
           </Link>
-          <Link href="/product/hotel" className="ms-quick-link">
-            <Hotel size={22} />
+          <Link href="/product/hotel" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-hotel.png" alt="Hotel PMS" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Hotel PMS</span>
           </Link>
-          <Link href="/product/billing" className="ms-quick-link">
-            <Receipt size={22} />
+          <Link href="/product/billing" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-billing.png" alt="POS & GST Billing" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>POS &amp; GST Billing</span>
           </Link>
-          <Link href="/product/academics" className="ms-quick-link">
-            <GraduationCap size={22} />
+          <Link href="/product/academics" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-academics.png" alt="Academics Suite" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Academics Suite</span>
           </Link>
         </div>
@@ -673,14 +718,14 @@ export default function HomePage() {
                 key={app.id}
                 className="ms-product-card"
               >
-                {/* Product Card Top Image Banner */}
-                <div style={{ position: 'relative', width: '100%', height: '170px', background: '#f5f5f5', overflow: 'hidden' }}>
+                {/* Product Card Top Image Banner with App Logo */}
+                <div style={{ position: 'relative', width: '100%', height: '170px', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                   <Image
-                    src={app.image}
+                    src={app.logo || app.image}
                     alt={app.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 320px"
-                    style={{ objectFit: 'cover' }}
+                    width={96}
+                    height={96}
+                    style={{ objectFit: 'contain', filter: 'drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12))' }}
                   />
                   <div
                     style={{
