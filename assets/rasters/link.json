@@ -1,0 +1,9 @@
+[
+    {   
+        "img_id":"unique raster image id (template)",
+        "img_name": "name of the image (not to be displayed)",
+        "img_link": "link of images from Digital Assets Management Provider",
+        "img_alt" : "text when image takes time to load",
+        "img_desc": "in which purpuse the image will be used with name"
+    }
+]

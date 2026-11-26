@@ -6,71 +6,54 @@
       "email": "jcsayan7@gmail.com",
       "phone": "+91 9876543210",
       "role": "admin",
-      "createdAt": "2026-11-20"
+      "createdAt": "2026-11-21",
+      "password": "adios@Admin2026!"
+    }
+  ],
+  "orders": [],
+  "productKeys": [
+    {
+      "id": 1,
+      "key": "ADIOS-PRO-7788-9900",
+      "plan": "Personal Pro Lifetime",
+      "isUsed": false,
+      "assignedToEmail": null,
+      "createdAt": "2026-11-21 18:16:34"
     },
     {
       "id": 2,
-      "name": "Rahul Sharma",
-      "email": "rahul.s@example.com",
-      "phone": "+91 9811122233",
-      "role": "user",
-      "createdAt": "2026-11-21"
+      "key": "ADIOS-LIFETIME-2026-X1",
+      "plan": "Pro Lifetime License",
+      "isUsed": false,
+      "assignedToEmail": null,
+      "createdAt": "2026-11-21 18:16:34"
     },
     {
       "id": 3,
-      "name": "SAYAN MAITY",
-      "email": "me@sayanmaity.com",
-      "phone": "03224452169",
-      "password": "123456",
-      "role": "user",
-      "createdAt": "2026-11-23"
-    }
-  ],
-  "orders": [
-    {
-      "id": "ORD-1087",
-      "userName": "SAYAN MAITY",
-      "userEmail": "me@sayanmaity.com",
-      "userPhone": "03224452169",
-      "amount": 999,
-      "utrNumber": "123456789123",
-      "plan": "Pro Lifetime Key",
-      "status": "Approved & Key Issued",
-      "createdAt": "11/23/2026, 10:04:28 PM",
-      "issuedKey": "ADIOS-PRO-X0DL-A32T"
+      "key": "ADIOS-DEV-KEY-3639",
+      "plan": "Developer Suite Key",
+      "isUsed": false,
+      "assignedToEmail": null,
+      "createdAt": "2026-11-21 18:16:34"
     },
     {
-      "id": "ORD-9021",
-      "userName": "Rahul Sharma",
-      "userEmail": "rahul.s@example.com",
-      "userPhone": "+91 9811122233",
-      "amount": 999,
-      "utrNumber": "UPI442981029481",
-      "plan": "Pro Lifetime",
-      "status": "Pending Verification",
-      "createdAt": "2026-11-22 09:30"
-    }
-  ],
-  "discussions": [
-    {
-      "id": 1,
-      "author": "Rahul Sharma",
-      "authorEmail": "rahul.s@example.com",
-      "topic": "How does rolling local backup work?",
-      "message": "Loving the speed of ADIOS! Does the backup snapshot retain SQLite attachments as well?",
-      "likes": 4,
-      "createdAt": "2026-11-22 10:15"
+      "id": 25,
+      "key": "ADIOS-PRO-264D69DB-F01D1FDE",
+      "plan": "Personal Pro Lifetime",
+      "isUsed": false,
+      "assignedToEmail": null,
+      "createdAt": "2026-11-21 18:42:04"
     },
     {
-      "id": 2,
-      "author": "Sayan Maity",
-      "authorEmail": "jcsayan7@gmail.com",
-      "topic": "Linux & Windows Cross Compatibility",
-      "message": "Both Windows setup and Linux packages use the identical SQLite schema so you can copy your db across machines effortlessly.",
-      "likes": 9,
-      "createdAt": "2026-11-22 11:00"
+      "id": 26,
+      "key": "ADIOS-PRO-0AB7C79E-5E7F92B4",
+      "plan": "Personal Pro Lifetime",
+      "isUsed": false,
+      "assignedToEmail": null,
+      "createdAt": "2026-11-21 18:42:07"
     }
   ],
+  "discussions": [],
   "adminLockout": {
     "failedAttempts": 0,
     "lockedUntil": null

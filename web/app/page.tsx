@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -73,6 +73,27 @@ export default function HomePage() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [revealedKeys, setRevealedKeys] = useState<{ [key: string]: boolean }>({});
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+
+  // Load saved user session on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('adios_user');
+      if (saved) {
+        setUser(JSON.parse(saved));
+      }
+    } catch {
+      // Ignore parsing errors
+    }
+  }, []);
+
+  // Auto slide interval for Hero
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveHeroSlide(prev => (prev === 0 ? 1 : 0));
+    }, 7000);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleCartItem = (appId: string) => {
     setCart(prev =>
@@ -144,6 +165,11 @@ export default function HomePage() {
       const data = await res.json();
       if (res.ok && data.success) {
         setUser(data.user);
+        try {
+          localStorage.setItem('adios_user', JSON.stringify(data.user));
+        } catch {
+          // localStorage failure fallback
+        }
         setShowAuthModal(false);
         setAuthPassword('');
       } else {
@@ -184,18 +210,8 @@ export default function HomePage() {
         <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Left: ADIOS Logo Mark & Brand + Navigation */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-              <div style={{ position: 'relative', width: '32px', height: '32px' }}>
-                <Image
-                  src="/logo.png"
-                  alt="ADIOS Logo"
-                  width={32}
-                  height={32}
-                  style={{ objectFit: 'contain' }}
-                  priority
-                />
-              </div>
-              <span style={{ fontSize: '20px', fontWeight: 600, color: '#1a1429', letterSpacing: '-0.02em' }}>
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+              <span style={{ fontSize: '26px', fontWeight: 400, color: '#1a1429', fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
                 ADIOS
               </span>
             </Link>
@@ -253,49 +269,94 @@ export default function HomePage() {
                       }}
                     >
                       <Link
-                        href="/product/hospital"
+                        href="/product/personal"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
-                          display: 'block',
-                          padding: '10px 18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
                           color: '#262626',
-                          fontSize: '13.5px',
+                          fontSize: '13px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        Hospital HMS
+                        <Image src="/suite-personal.png" alt="Personal" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Personal Manager</span>
+                      </Link>
+                      <Link
+                        href="/product/hospital"
+                        onClick={() => setSuitesMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
+                          color: '#262626',
+                          fontSize: '13px',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <Image src="/suite-hospital.png" alt="Hospital" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Hospital HMS</span>
                       </Link>
                       <Link
                         href="/product/hotel"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
-                          display: 'block',
-                          padding: '10px 18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
                           color: '#262626',
-                          fontSize: '13.5px',
+                          fontSize: '13px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        Hotel PMS
+                        <Image src="/suite-hotel.png" alt="Hotel" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Hotel PMS</span>
+                      </Link>
+                      <Link
+                        href="/product/billing"
+                        onClick={() => setSuitesMenuOpen(false)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
+                          color: '#262626',
+                          fontSize: '13px',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        <Image src="/suite-billing.png" alt="POS & Billing" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>POS &amp; GST Billing</span>
                       </Link>
                       <Link
                         href="/product/academics"
                         onClick={() => setSuitesMenuOpen(false)}
                         style={{
-                          display: 'block',
-                          padding: '10px 18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '8px 16px',
                           color: '#262626',
-                          fontSize: '13.5px',
+                          fontSize: '13px',
                           textDecoration: 'none'
                         }}
                         onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        Academics
+                        <Image src="/suite-academics.png" alt="Academics" width={20} height={20} style={{ borderRadius: '4px' }} />
+                        <span>Academics</span>
                       </Link>
                     </div>
                   </div>
@@ -307,10 +368,10 @@ export default function HomePage() {
                 POS
               </Link>
 
-              {/* Clean Pricing link pointing to pricing section */}
-              <a href="#pricing" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
+              {/* Clean Pricing link pointing to dedicated /pricing page */}
+              <Link href="/pricing" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
                 Pricing
-              </a>
+              </Link>
 
               {/* Direct Link to About ADIOS Uniqueness Section */}
               <a href="#about" style={{ color: '#262626', fontSize: '14px', fontWeight: 450 }}>
@@ -448,19 +509,20 @@ export default function HomePage() {
               )}
             </Link>
 
-            {/* Profile Section: Profile Icon or First + Last Name */}
+            {/* Profile Section: Link to dedicated /profile */}
             {user ? (
-              <div
-                onClick={handleOpenProfile}
+              <Link
+                href="/profile"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                   cursor: 'pointer',
-                  padding: '4px 8px',
+                  padding: '4px 10px',
                   borderRadius: '4px',
                   border: '1px solid #e6e6e6',
-                  background: '#f9f9f9'
+                  background: '#f9f9f9',
+                  textDecoration: 'none'
                 }}
                 title={`Signed in as ${user.name}`}
               >
@@ -481,7 +543,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '13px', fontWeight: 500, color: '#262626' }}>
                   {user.name}
                 </span>
-              </div>
+              </Link>
             ) : (
               <div
                 onClick={() => { setAuthMode('signin'); setShowAuthModal(true); }}
@@ -509,173 +571,312 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 2. FULL-BLEED HERO: SURFACE SHOWCASE WITH THIN ELEGANT FONTS */}
+      {/* 2. FULL-BLEED HERO SLIDER: PREVIOUS HERO + ALL-IN-ONE PACK SHOWCASE */}
       <section
         style={{
           width: '100%',
-          minHeight: '540px',
-          background: 'linear-gradient(135deg, #d3c7e8 0%, #b8a8dc 50%, #a291cf 100%)',
-          display: 'flex',
-          alignItems: 'center',
           position: 'relative',
-          padding: '48px 6% 64px 6%',
           overflow: 'hidden'
         }}
       >
+        {/* Slider Track */}
         <div
           style={{
-            width: '100%',
-            maxWidth: '1440px',
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(320px, 1fr) minmax(360px, 1.25fr)',
-            gap: '40px',
-            alignItems: 'center'
+            display: 'flex',
+            width: '200%',
+            transform: `translateX(${activeHeroSlide === 0 ? '0%' : '-50%'})`,
+            transition: 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          {/* Left Column: Product Statement */}
-          <div style={{ maxWidth: '540px', zIndex: 2 }}>
-            <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="ms-pill">
-                Open Alpha Testing
-              </span>
-              <span
+          {/* SLIDE 1: Original Artistic Showcase */}
+          <div
+            style={{
+              width: '50%',
+              minHeight: '620px',
+              backgroundImage: 'url("/hero-bg.jpg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center right',
+              backgroundRepeat: 'no-repeat',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              padding: '56px 4% 72px 4%',
+              boxSizing: 'border-box'
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '1440px',
+                margin: '0 auto',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(320px, 600px) 1fr',
+                gap: '24px',
+                alignItems: 'center'
+              }}
+            >
+              <div
                 style={{
-                  background: 'rgba(255, 255, 255, 0.75)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#2c2242',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  padding: '4px 10px',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.9)'
+                  maxWidth: '560px',
+                  zIndex: 2,
+                  background: 'rgba(255, 255, 255, 0.18)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  padding: '38px 40px',
+                  borderRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  boxShadow: '0 8px 32px rgba(107, 70, 193, 0.08)',
+                  marginLeft: '0'
                 }}
               >
-                v2.0.0-alpha.1
-              </span>
-            </div>
+                <h1
+                  style={{
+                    color: '#1a1429',
+                    fontSize: 'clamp(34px, 4.2vw, 50px)',
+                    fontWeight: 500,
+                    lineHeight: 1.18,
+                    letterSpacing: '-0.025em',
+                    marginBottom: '16px'
+                  }}
+                >
+                  Our most optimised management lineup
+                </h1>
 
-            {/* Product Headline */}
-            <h1
-              style={{
-                color: '#1a1429',
-                fontSize: 'clamp(36px, 4.4vw, 54px)',
-                fontWeight: 400,
-                lineHeight: 1.15,
-                letterSpacing: '-0.025em',
-                marginBottom: '16px'
-              }}
-            >
-              Our most optimised management lineup
-            </h1>
+                <p
+                  style={{
+                    color: '#2c2242',
+                    fontSize: '16.5px',
+                    lineHeight: 1.6,
+                    marginBottom: '28px',
+                    fontWeight: 350
+                  }}
+                >
+                  Big ideas, busy operations, zero latency. ADIOS Personal, Hospital, Hotel, POS and Academics
+                  are engineered offline-first with compiled C++/Qt performance and SQLite persistence.
+                </p>
 
-            {/* Subtext description */}
-            <p
-              style={{
-                color: '#2c2242',
-                fontSize: '17px',
-                lineHeight: 1.55,
-                marginBottom: '28px',
-                fontWeight: 350
-              }}
-            >
-              Big ideas, busy operations, zero latency. ADIOS Personal, Hospital, Hotel, POS and Academics
-              are engineered offline-first with compiled C++/Qt performance and SQLite persistence.
-            </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                  <a href="#suites" className="ms-hero-btn">
+                    Explore Suites
+                  </a>
 
-            {/* "Explore Suites" Primary Button */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <a href="#suites" className="ms-hero-btn">
-                Explore Suites
-              </a>
+                  <a
+                    href="/api/download"
+                    download
+                    className="ms-secondary-btn"
+                    style={{ color: '#1a1429', fontWeight: 500, textDecoration: 'underline' }}
+                  >
+                    Download Desktop .exe
+                  </a>
+                </div>
+              </div>
 
-              <a
-                href="/api/download"
-                download
-                className="ms-secondary-btn"
-                style={{ color: '#1a1429', textDecoration: 'underline' }}
-              >
-                Download Desktop .exe
-              </a>
+              <div style={{ minHeight: '440px' }} />
             </div>
           </div>
 
-          {/* Right Column: High-Resolution Product Showcase matching Laptop & Tablet visual */}
-          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {/* SLIDE 2: All-in-One Suite Pack Showcase */}
+          <div
+            style={{
+              width: '50%',
+              minHeight: '620px',
+              background: 'linear-gradient(135deg, #f8f9fc 0%, #edf2f9 50%, #e2e8f0 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              padding: '56px 4% 72px 4%',
+              boxSizing: 'border-box'
+            }}
+          >
             <div
               style={{
-                position: 'relative',
                 width: '100%',
-                maxWidth: '680px',
-                filter: 'drop-shadow(0 24px 40px rgba(24, 14, 46, 0.35))'
+                maxWidth: '1440px',
+                margin: '0 auto',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(320px, 600px) minmax(320px, 1fr)',
+                gap: '40px',
+                alignItems: 'center'
               }}
             >
-              <Image
-                src="/app-screenshot.png"
-                alt="ADIOS Surface Management Lineup"
-                width={1280}
-                height={720}
-                priority
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  borderRadius: '4px',
-                  border: '1px solid rgba(255, 255, 255, 0.4)',
-                  boxShadow: '0 20px 45px rgba(0, 0, 0, 0.3)'
-                }}
-              />
-
-              {/* Floating Architecture Badge */}
+              {/* Left Column: Get The Pack Now */}
               <div
                 style={{
-                  position: 'absolute',
-                  bottom: '-16px',
-                  right: '10px',
-                  background: '#0f0c18',
-                  color: '#ffffff',
-                  padding: '8px 12px',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 18px rgba(0,0,0,0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
+                  zIndex: 2,
+                  background: 'rgba(255, 255, 255, 0.85)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  padding: '40px 42px',
+                  borderRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.9)',
+                  boxShadow: '0 20px 40px rgba(0, 103, 184, 0.08)'
                 }}
               >
-                <div style={{ width: '18px', height: '18px', borderRadius: '3px', background: '#0067b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700 }}>
-                  A
+                <h1
+                  style={{
+                    color: '#0f172a',
+                    fontSize: 'clamp(34px, 4.2vw, 48px)',
+                    fontWeight: 600,
+                    lineHeight: 1.15,
+                    letterSpacing: '-0.025em',
+                    marginBottom: '16px'
+                  }}
+                >
+                  Get the complete <span style={{ fontFamily: 'var(--font-display)', color: '#0067b8' }}>ADIOS</span> pack now
+                </h1>
+
+                <p
+                  style={{
+                    color: '#475569',
+                    fontSize: '16.5px',
+                    lineHeight: 1.6,
+                    marginBottom: '28px',
+                    fontWeight: 350
+                  }}
+                >
+                  Empower your entire venture with all 5 flagship management suites: Personal, Hospital, Hotel, POS Billing, and Academics. Unified lifetime perpetual license with zero subscriptions.
+                </p>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                  <a
+                    href="#suites"
+                    className="ms-hero-btn"
+                    style={{
+                      padding: '12px 28px',
+                      fontSize: '15px',
+                      fontWeight: 600,
+                      borderRadius: '8px',
+                      boxShadow: '0 8px 20px rgba(0, 103, 184, 0.25)'
+                    }}
+                  >
+                    Get the Pack Now
+                  </a>
+
+                  <Link
+                    href="/cart"
+                    className="ms-secondary-btn"
+                    style={{
+                      color: '#0067b8',
+                      fontWeight: 600,
+                      fontSize: '14.5px',
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+                    onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+                  >
+                    View Bundle Pricing &rarr;
+                  </Link>
                 </div>
-                <div>
-                  <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#9d91b8' }}>ENGINE ARCHITECTURE</div>
-                  <div style={{ fontSize: '11px', fontWeight: 600 }}>Qt 6 · Offline SQLite</div>
+              </div>
+
+              {/* Right Column: High Quality Suite Pack Artwork Showcase */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative'
+                }}
+              >
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    maxWidth: '560px',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
+                    boxShadow: '0 24px 50px rgba(15, 23, 42, 0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.8)'
+                  }}
+                >
+                  <Image
+                    src="/hero-suite-pack.jpg"
+                    alt="ADIOS Complete Management Suite Pack"
+                    width={1024}
+                    height={576}
+                    priority
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Slide Navigation Dots & Arrows */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '22px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            zIndex: 10,
+            background: 'rgba(255, 255, 255, 0.65)',
+            backdropFilter: 'blur(8px)',
+            padding: '6px 14px',
+            borderRadius: '20px',
+            border: '1px solid rgba(255, 255, 255, 0.8)'
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setActiveHeroSlide(0)}
+            style={{
+              width: activeHeroSlide === 0 ? '28px' : '10px',
+              height: '10px',
+              borderRadius: '5px',
+              border: 'none',
+              background: activeHeroSlide === 0 ? '#0067b8' : '#cbd5e1',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            aria-label="Go to slide 1"
+          />
+          <button
+            type="button"
+            onClick={() => setActiveHeroSlide(1)}
+            style={{
+              width: activeHeroSlide === 1 ? '28px' : '10px',
+              height: '10px',
+              borderRadius: '5px',
+              border: 'none',
+              background: activeHeroSlide === 1 ? '#0067b8' : '#cbd5e1',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            aria-label="Go to slide 2"
+          />
+        </div>
       </section>
 
-      {/* QUICK NAV CATEGORY ICONS (Microsoft.com Surface row) */}
+      {/* QUICK NAV CATEGORY ICONS (Microsoft.com Surface row with modern 3D Suite App Logos) */}
       <section style={{ padding: '36px 6% 20px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: '32px' }}>
-          <Link href="/product/personal" className="ms-quick-link">
-            <Cpu size={22} />
+          <Link href="/product/personal" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-personal.png" alt="Personal Manager" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Personal Manager</span>
           </Link>
-          <Link href="/product/hospital" className="ms-quick-link">
-            <Building2 size={22} />
+          <Link href="/product/hospital" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-hospital.png" alt="Hospital HMS" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Hospital HMS</span>
           </Link>
-          <Link href="/product/hotel" className="ms-quick-link">
-            <Hotel size={22} />
+          <Link href="/product/hotel" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-hotel.png" alt="Hotel PMS" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Hotel PMS</span>
           </Link>
-          <Link href="/product/billing" className="ms-quick-link">
-            <Receipt size={22} />
+          <Link href="/product/billing" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-billing.png" alt="POS & GST Billing" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>POS &amp; GST Billing</span>
           </Link>
-          <Link href="/product/academics" className="ms-quick-link">
-            <GraduationCap size={22} />
+          <Link href="/product/academics" className="ms-quick-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/suite-academics.png" alt="Academics Suite" width={28} height={28} style={{ borderRadius: '6px' }} />
             <span>Academics Suite</span>
           </Link>
         </div>
@@ -708,80 +909,69 @@ export default function HomePage() {
                 key={app.id}
                 className="ms-product-card"
               >
-                {/* Product Card Top Image Banner */}
-                <div style={{ position: 'relative', width: '100%', height: '170px', background: '#f5f5f5', overflow: 'hidden' }}>
-                  <Image
-                    src={app.image}
-                    alt={app.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 320px"
-                    style={{ objectFit: 'cover' }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '12px',
-                      left: '12px',
-                      background: app.status === 'available' ? '#107c10' : '#78248c',
-                      color: '#ffffff',
-                      fontSize: '11px',
-                      fontWeight: 500,
-                      padding: '3px 8px',
-                      borderRadius: '2px',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.04em'
-                    }}
-                  >
-                    {app.statusLabel}
-                  </div>
-                </div>
-
-                {/* Product Card Content */}
-                <div style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
-                  <div>
-                    <h3 style={{ fontSize: '18px', color: '#262626', fontWeight: 450, marginBottom: '8px' }}>
-                      {app.name}
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#505050', lineHeight: 1.5, marginBottom: '16px', fontWeight: 350 }}>
-                      {app.shortDescription}
-                    </p>
-
-                    <div style={{ fontSize: '12.5px', color: '#737373', marginBottom: '18px' }}>
-                      Perpetual license: <b style={{ color: '#262626', fontWeight: 600 }}>₹{app.price.toLocaleString('en-IN')}</b>
+                <div>
+                  {/* Top Suite App Logo & App Name Header */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+                    {app.logo && (
+                      <div
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '10px',
+                          background: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '6px',
+                          flexShrink: 0
+                        }}
+                      >
+                        <Image
+                          src={app.logo}
+                          alt={app.name}
+                          width={32}
+                          height={32}
+                          style={{ objectFit: 'contain' }}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
+                        {app.name}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Button Action Row */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '12px', borderTop: '1px solid #f2f2f2' }}>
-                    <Link
-                      href={`/product/${app.id}`}
-                      className="ms-hero-btn"
-                      style={{
-                        flex: 1,
-                        height: '36px',
-                        fontSize: '13px',
-                        padding: '0 12px'
-                      }}
-                    >
-                      Learn more
-                    </Link>
+                  {/* Clean Headline */}
+                  <h3 style={{ fontSize: '20px', color: '#0f172a', fontWeight: 600, lineHeight: 1.3, marginBottom: '14px' }}>
+                    {app.shortDescription}
+                  </h3>
 
-                    <button
-                      type="button"
-                      onClick={() => toggleCartItem(app.id)}
-                      className={inCart ? 'ms-secondary-btn' : 'ms-secondary-btn'}
-                      style={{
-                        height: '36px',
-                        padding: '0 12px',
-                        fontSize: '12.5px',
-                        border: '1px solid #e6e6e6',
-                        color: inCart ? '#107c10' : '#0067b8',
-                        fontWeight: 500
-                      }}
-                    >
-                      {inCart ? '✓ Added' : '+ Cart'}
-                    </button>
-                  </div>
+                  {/* Brief Descriptive Copy */}
+                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, fontWeight: 350, marginBottom: '24px' }}>
+                    {app.description}
+                  </p>
+                </div>
+
+                {/* Bottom Action Area */}
+                <div style={{ marginTop: 'auto', paddingTop: '16px' }}>
+                  <Link
+                    href={`/product/${app.id}`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      color: '#0067b8',
+                      fontSize: '14.5px',
+                      fontWeight: 600,
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+                    onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+                  >
+                    Learn more
+                  </Link>
                 </div>
               </div>
             );
@@ -796,7 +986,7 @@ export default function HomePage() {
             ENGINEERING PHILOSOPHY
           </div>
           <h2 style={{ fontSize: '32px', color: '#1a1429', fontWeight: 400, marginBottom: '16px', lineHeight: 1.2 }}>
-            About ADIOS: What Makes It Different
+            About <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>ADIOS</span>: What Makes It Different
           </h2>
           <p style={{ fontSize: '16px', color: '#505050', lineHeight: 1.6, fontWeight: 350 }}>
             In an industry obsessed with forced cloud subscriptions, recurring micro-transactions, and latency-ridden web apps,
@@ -823,64 +1013,26 @@ export default function HomePage() {
                 <div style={{ order: isReversed ? 2 : 1, position: 'relative' }}>
                   <div
                     style={{
-                      background: '#f8f8fa',
-                      border: '1px solid #e6e6e6',
-                      borderRadius: '8px',
-                      padding: '24px',
-                      boxShadow: '0 20px 40px rgba(0,0,0,0.06)',
-                      position: 'relative'
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '16px',
+                      boxShadow: '0 12px 32px rgba(0,0,0,0.06)',
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}
                   >
+                    {/* Main Image */}
                     <Image
                       src={story.image}
                       alt={story.title}
                       width={1280}
-                      height={720}
+                      height={960}
                       style={{
                         width: '100%',
                         height: 'auto',
-                        borderRadius: '4px',
-                        border: '1px solid rgba(0,0,0,0.08)'
+                        display: 'block'
                       }}
                     />
-
-                    {/* Floating Badge Tag */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '16px',
-                        left: '16px',
-                        background: '#1a1429',
-                        color: '#ffffff',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        padding: '4px 10px',
-                        borderRadius: '2px',
-                        letterSpacing: '0.04em'
-                      }}
-                    >
-                      {story.badge}
-                    </div>
-
-                    {/* Quick Metric Bar */}
-                    <div
-                      style={{
-                        marginTop: '18px',
-                        paddingTop: '16px',
-                        borderTop: '1px solid #ebebeb',
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        gap: '12px',
-                        textAlign: 'center'
-                      }}
-                    >
-                      {story.metrics.map((m, mIdx) => (
-                        <div key={mIdx}>
-                          <div style={{ fontSize: '11px', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{m.label}</div>
-                          <div className="font-mono" style={{ fontSize: '16px', fontWeight: 600, color: '#0067b8', marginTop: '2px' }}>{m.value}</div>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 </div>
 
@@ -919,207 +1071,83 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. FREQUENTLY ASKED QUESTIONS (FAQS) ACCORDION */}
-      <section id="faqs" style={{ padding: '60px 6% 60px 6%', maxWidth: '1000px', margin: '0 auto', width: '100%', borderTop: '1px solid #e6e6e6' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#0067b8', fontWeight: 600, marginBottom: '8px' }}>
-            TRANSPARENT ANSWERS
-          </div>
-          <h2 style={{ fontSize: '30px', color: '#262626', fontWeight: 400, marginBottom: '12px' }}>
-            Frequently Asked Questions
-          </h2>
-          <p style={{ fontSize: '15px', color: '#505050', fontWeight: 350 }}>
-            Everything you need to know about ADIOS architecture, offline SQLite data storage, and perpetual software licenses.
-          </p>
-        </div>
-
-        {/* FAQ Accordion List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {FAQS.map((faq, index) => {
-            const isOpen = openFaqIndex === index;
-
-            return (
-              <div
-                key={index}
-                style={{
-                  border: '1px solid #e6e6e6',
-                  borderRadius: '6px',
-                  background: isOpen ? '#fafafa' : '#ffffff',
-                  transition: 'background 0.2s ease, border-color 0.2s ease',
-                  overflow: 'hidden'
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                  style={{
-                    width: '100%',
-                    padding: '20px 24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '16px',
-                    background: 'transparent',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <div>
-                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#737373', letterSpacing: '0.04em', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
-                      {faq.category}
-                    </span>
-                    <span style={{ fontSize: '16px', color: '#262626', fontWeight: 450 }}>
-                      {faq.question}
-                    </span>
-                  </div>
-                  <ChevronDown
-                    size={18}
-                    style={{
-                      color: isOpen ? '#0067b8' : '#737373',
-                      transform: isOpen ? 'rotate(180deg)' : 'none',
-                      transition: 'transform 0.2s ease',
-                      flexShrink: 0
-                    }}
-                  />
-                </button>
-
-                {isOpen && (
-                  <div style={{ padding: '0 24px 22px 24px', color: '#505050', fontSize: '14.5px', lineHeight: 1.6, fontWeight: 350, borderTop: '1px solid #f2f2f2', paddingTop: '16px' }}>
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        <div style={{ marginTop: '36px', textAlign: 'center', fontSize: '13.5px', color: '#737373' }}>
-          Have more questions? Join the discussion on our{' '}
-          <Link href="/community" style={{ color: '#0067b8', fontWeight: 500 }}>
-            Community Forum
-          </Link>{' '}
-          or inspect the open architecture on{' '}
-          <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: '#0067b8', fontWeight: 500 }}>
-            GitHub
-          </a>.
-        </div>
-      </section>
-
-      {/* 6. PERPETUAL LICENSING & CART PREVIEW */}
+      {/* 5. PERPETUAL LICENSING PHILOSOPHY */}
       <section id="pricing" style={{ padding: '20px 6% 60px 6%', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <div
           style={{
-            background: '#f7f7f7',
-            border: '1px solid #e6e6e6',
-            padding: '36px',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(320px, 1.2fr) minmax(300px, 1fr)',
-            gap: '36px',
-            alignItems: 'start'
+            background: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: '16px',
+            padding: '40px',
+            maxWidth: '1080px',
+            margin: '0 auto'
           }}
         >
-          {/* Left: Licensing matrix */}
-          <div>
-            <h2 style={{ fontSize: '24px', marginBottom: '8px', fontWeight: 400 }}>
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 36px auto' }}>
+            <h2 style={{ fontSize: '32px', marginBottom: '12px', fontWeight: 500, color: '#0f172a' }}>
               Perpetual Licensing Philosophy
             </h2>
-            <p style={{ fontSize: '14.5px', color: '#505050', marginBottom: '20px', fontWeight: 350 }}>
+            <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.6, fontWeight: 350 }}>
               Unlike recurring SaaS subscription models, ADIOS is built on genuine perpetual software ownership.
               Your software runs offline on your own hardware forever.
             </p>
-
-            <table style={{ width: '100%', background: '#ffffff', border: '1px solid #e6e6e6', borderCollapse: 'collapse', fontSize: '13.5px' }}>
-              <thead>
-                <tr style={{ background: '#f2f2f2' }}>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Capability</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Community Free</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'center', borderBottom: '1px solid #e6e6e6', fontWeight: 500 }}>Lifetime License</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>All core modules &amp; features</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Local SQLite database storage</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '10px 14px', borderBottom: '1px solid #f2f2f2' }}>Custom directory backups</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '10px 14px' }}>Multi-device encrypted cloud sync</td>
-                  <td style={{ textAlign: 'center', color: '#a19f9d' }}>—</td>
-                  <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 500 }}>✓</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
 
-          {/* Right: Cart Summary Box with link to dedicated /cart */}
-          <div style={{ background: '#ffffff', border: '1px solid #e6e6e6', padding: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{ fontSize: '17px', fontWeight: 500, color: '#262626' }}>Selected Suite Cart</div>
-              <span style={{ fontSize: '12px', background: '#eff6fc', color: '#0067b8', padding: '2px 8px', fontWeight: 500 }}>
-                {cart.length} {cart.length === 1 ? 'Suite' : 'Suites'}
-              </span>
-            </div>
+          <table style={{ width: '100%', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden', borderCollapse: 'collapse', fontSize: '14px', marginBottom: '28px' }}>
+            <thead>
+              <tr style={{ background: '#f1f5f9' }}>
+                <th style={{ padding: '14px 18px', textAlign: 'left', borderBottom: '1px solid #e2e8f0', fontWeight: 600, color: '#334155' }}>Capability</th>
+                <th style={{ padding: '14px 18px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: 600, color: '#334155' }}>Community Free</th>
+                <th style={{ padding: '14px 18px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: 600, color: '#0067b8' }}>Lifetime License</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>All core modules &amp; features</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Local SQLite database storage</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Custom directory backups</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Commercial &amp; enterprise business use</td>
+                <td style={{ textAlign: 'center', color: '#94a3b8' }}>—</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', color: '#1e293b' }}>Multi-counter local LAN networking</td>
+                <td style={{ textAlign: 'center', color: '#94a3b8' }}>—</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '12px 18px', color: '#1e293b' }}>Multi-device encrypted cloud sync</td>
+                <td style={{ textAlign: 'center', color: '#94a3b8' }}>—</td>
+                <td style={{ textAlign: 'center', color: '#107c10', fontWeight: 600 }}>✓</td>
+              </tr>
+            </tbody>
+          </table>
 
-            {selectedApps.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '24px 0', color: '#737373', fontSize: '13.5px' }}>
-                Your cart is empty. Choose suites above to bundle your software.
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-                {selectedApps.map(item => (
-                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: '#fbfbfb', border: '1px solid #f2f2f2', fontSize: '13px' }}>
-                    <div>
-                      <div style={{ fontWeight: 500 }}>{item.name}</div>
-                      <div className="font-mono" style={{ fontSize: '11px', color: '#737373' }}>Prefix: {item.keyPrefix}</div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span className="font-mono" style={{ fontWeight: 500 }}>₹{item.price.toLocaleString('en-IN')}</span>
-                      <button type="button" onClick={() => toggleCartItem(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#737373' }}>
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {selectedApps.length > 0 && (
-              <div style={{ background: '#f7f7f7', padding: '12px', marginBottom: '16px', fontSize: '13px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span style={{ color: '#737373' }}>Subtotal:</span>
-                  <span className="font-mono">₹{subtotal.toLocaleString('en-IN')}</span>
-                </div>
-                {discountRate > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#107c10', marginBottom: '4px' }}>
-                    <span>Bundle Savings ({Math.round(discountRate * 100)}%):</span>
-                    <span className="font-mono">-₹{discountAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 600, borderTop: '1px dashed #dcdcdc', paddingTop: '8px', marginTop: '4px' }}>
-                  <span>Total:</span>
-                  <span className="font-mono" style={{ color: '#0067b8' }}>₹{totalAmount.toLocaleString('en-IN')}</span>
-                </div>
-              </div>
-            )}
-
-            {/* Exactly says "Checkout" per instruction */}
+          <div style={{ textAlign: 'center' }}>
             <Link
-              href="/cart"
+              href="/pricing"
               className="ms-hero-btn"
-              style={{ width: '100%', height: '40px', fontSize: '14px', textDecoration: 'none' }}
+              style={{
+                padding: '12px 32px',
+                fontSize: '15px',
+                borderRadius: '8px',
+                display: 'inline-flex',
+                boxShadow: '0 4px 16px rgba(0, 103, 184, 0.2)'
+              }}
             >
-              Checkout
+              View Detailed Plans &amp; Pricing &rarr;
             </Link>
           </div>
         </div>
@@ -1136,8 +1164,9 @@ export default function HomePage() {
             </div>
             <h2
               style={{
+                fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(36px, 4.5vw, 54px)',
-                fontWeight: 500,
+                fontWeight: 400,
                 color: '#0f172a',
                 lineHeight: 1.15,
                 letterSpacing: '-0.025em',
@@ -1269,8 +1298,8 @@ export default function HomePage() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <h3 style={{ fontSize: '30px', fontWeight: 500, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                  ADIOS App
+                <h3 style={{ fontSize: '30px', fontWeight: 400, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                  <span style={{ fontFamily: 'var(--font-display)' }}>ADIOS</span> App
                 </h3>
                 <span
                   style={{
@@ -1485,8 +1514,8 @@ export default function HomePage() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <h3 style={{ fontSize: '30px', fontWeight: 500, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                  ADIOS CLI
+                <h3 style={{ fontSize: '30px', fontWeight: 400, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                  <span style={{ fontFamily: 'var(--font-display)' }}>ADIOS</span> CLI
                 </h3>
                 <span
                   style={{
@@ -1518,20 +1547,41 @@ export default function HomePage() {
               style={{
                 background: '#0f172a',
                 borderRadius: '10px',
-                padding: '18px 24px',
+                padding: '16px 20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: '16px',
                 maxWidth: '780px',
+                width: '100%',
                 marginBottom: '26px',
                 border: '1px solid #1e293b',
-                boxShadow: '0 6px 20px rgba(15, 23, 42, 0.25)'
+                boxShadow: '0 6px 20px rgba(15, 23, 42, 0.25)',
+                overflow: 'hidden'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', overflowX: 'auto' }}>
-                <span style={{ color: '#38bdf8', fontSize: '15px', userSelect: 'none' }}>$</span>
-                <code className="font-mono" style={{ color: '#f8fafc', fontSize: '15px', fontWeight: 500 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  minWidth: 0,
+                  flex: 1,
+                  overflowX: 'auto',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}
+              >
+                <span style={{ color: '#38bdf8', fontSize: '14px', fontWeight: 600, userSelect: 'none', flexShrink: 0 }}>$</span>
+                <code
+                  className="font-mono"
+                  style={{
+                    color: '#f8fafc',
+                    fontSize: '13.5px',
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
                   curl -fsSL https://get.adios.dev/cli.sh | sh
                 </code>
               </div>
@@ -1548,8 +1598,8 @@ export default function HomePage() {
                   border: '1px solid rgba(56, 189, 248, 0.35)',
                   color: '#38bdf8',
                   borderRadius: '6px',
-                  padding: '8px 16px',
-                  fontSize: '13px',
+                  padding: '7px 14px',
+                  fontSize: '12.5px',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
@@ -1628,6 +1678,94 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 7. FREQUENTLY ASKED QUESTIONS (FAQS) ACCORDION */}
+      <section id="faqs" style={{ padding: '72px 6% 72px 6%', maxWidth: '1000px', margin: '0 auto', width: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#0067b8', fontWeight: 600, marginBottom: '8px' }}>
+            TRANSPARENT ANSWERS
+          </div>
+          <h2 style={{ fontSize: '32px', color: '#0f172a', fontWeight: 500, marginBottom: '12px' }}>
+            Frequently Asked Questions
+          </h2>
+          <p style={{ fontSize: '15px', color: '#475569', fontWeight: 350 }}>
+            Everything you need to know about ADIOS architecture, offline SQLite data storage, and perpetual software licenses.
+          </p>
+        </div>
+
+        {/* FAQ Accordion List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {FAQS.map((faq, index) => {
+            const isOpen = openFaqIndex === index;
+
+            return (
+              <div
+                key={index}
+                style={{
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '10px',
+                  background: isOpen ? '#f8fafc' : '#ffffff',
+                  boxShadow: isOpen ? '0 4px 12px rgba(0,0,0,0.03)' : 'none',
+                  transition: 'background 0.2s ease, border-color 0.2s ease',
+                  overflow: 'hidden'
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                  style={{
+                    width: '100%',
+                    padding: '20px 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    background: 'transparent',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.04em', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+                      {faq.category}
+                    </span>
+                    <span style={{ fontSize: '16px', color: '#0f172a', fontWeight: 500 }}>
+                      {faq.question}
+                    </span>
+                  </div>
+                  <ChevronDown
+                    size={18}
+                    style={{
+                      color: isOpen ? '#0067b8' : '#64748b',
+                      transform: isOpen ? 'rotate(180deg)' : 'none',
+                      transition: 'transform 0.2s ease',
+                      flexShrink: 0
+                    }}
+                  />
+                </button>
+
+                {isOpen && (
+                  <div style={{ padding: '0 24px 22px 24px', color: '#475569', fontSize: '14.5px', lineHeight: 1.6, fontWeight: 350, borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ marginTop: '36px', textAlign: 'center', fontSize: '13.5px', color: '#64748b' }}>
+          Have more questions? Join the discussion on our{' '}
+          <Link href="/community" style={{ color: '#0067b8', fontWeight: 500 }}>
+            Community Forum
+          </Link>{' '}
+          or inspect the open architecture on{' '}
+          <a href="https://github.com/sayanjc3639q/ADIOS" target="_blank" rel="noopener noreferrer" style={{ color: '#0067b8', fontWeight: 500 }}>
+            GitHub
+          </a>.
+        </div>
+      </section>
+
       {/* 8. REDESIGNED PROFESSIONAL MICROSOFT-GRADE FOOTER */}
       <footer style={{ background: '#f2f2f2', borderTop: '1px solid #e6e6e6', padding: '48px 6% 36px 6%', fontSize: '13px', color: '#616161' }}>
         <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
@@ -1672,7 +1810,9 @@ export default function HomePage() {
             </div>
 
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>About ADIOS</div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#262626', marginBottom: '14px' }}>
+                About <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>ADIOS</span>
+              </div>
               <p style={{ fontSize: '12.5px', color: '#616161', lineHeight: 1.6, marginBottom: '12px', fontWeight: 350 }}>
                 High-performance offline desktop ecosystem engineered by Sayan Maity with compiled Qt 6 and local SQLite persistence.
               </p>
@@ -1804,7 +1944,18 @@ export default function HomePage() {
               )}
             </div>
 
-            <button type="button" onClick={() => { setUser(null); setShowProfileModal(false); }} className="ms-secondary-btn" style={{ width: '100%', color: '#d83b01' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setUser(null);
+                try {
+                  localStorage.removeItem('adios_user');
+                } catch {}
+                setShowProfileModal(false);
+              }}
+              className="ms-secondary-btn"
+              style={{ width: '100%', color: '#d83b01' }}
+            >
               Sign out
             </button>
           </div>
