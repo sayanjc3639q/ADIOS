@@ -592,7 +592,7 @@ export default function HomePage() {
               display: 'flex',
               alignItems: 'center',
               position: 'relative',
-              padding: '56px 6% 72px 6%',
+              padding: '56px 4% 72px 4%',
               boxSizing: 'border-box'
             }}
           >
@@ -602,44 +602,25 @@ export default function HomePage() {
                 maxWidth: '1440px',
                 margin: '0 auto',
                 display: 'grid',
-                gridTemplateColumns: 'minmax(320px, 620px) 1fr',
-                gap: '40px',
+                gridTemplateColumns: 'minmax(320px, 600px) 1fr',
+                gap: '24px',
                 alignItems: 'center'
               }}
             >
               <div
                 style={{
-                  maxWidth: '580px',
+                  maxWidth: '560px',
                   zIndex: 2,
                   background: 'rgba(255, 255, 255, 0.18)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
-                  padding: '36px 38px',
+                  padding: '38px 40px',
                   borderRadius: '24px',
                   border: '1px solid rgba(255, 255, 255, 0.4)',
-                  boxShadow: '0 8px 32px rgba(107, 70, 193, 0.08)'
+                  boxShadow: '0 8px 32px rgba(107, 70, 193, 0.08)',
+                  marginLeft: '0'
                 }}
               >
-                <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span className="ms-pill">
-                    Open Alpha Testing
-                  </span>
-                  <span
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.65)',
-                      backdropFilter: 'blur(8px)',
-                      color: '#2c2242',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      padding: '4px 10px',
-                      borderRadius: '12px',
-                      border: '1px solid rgba(255, 255, 255, 0.8)'
-                    }}
-                  >
-                    v2.0.0-alpha.1
-                  </span>
-                </div>
-
                 <h1
                   style={{
                     color: '#1a1429',
@@ -695,7 +676,7 @@ export default function HomePage() {
               display: 'flex',
               alignItems: 'center',
               position: 'relative',
-              padding: '56px 6% 72px 6%',
+              padding: '56px 4% 72px 4%',
               boxSizing: 'border-box'
             }}
           >
@@ -706,7 +687,7 @@ export default function HomePage() {
                 margin: '0 auto',
                 display: 'grid',
                 gridTemplateColumns: 'minmax(320px, 600px) minmax(320px, 1fr)',
-                gap: '50px',
+                gap: '40px',
                 alignItems: 'center'
               }}
             >
@@ -723,36 +704,6 @@ export default function HomePage() {
                   boxShadow: '0 20px 40px rgba(0, 103, 184, 0.08)'
                 }}
               >
-                <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span
-                    style={{
-                      background: 'linear-gradient(135deg, #0067b8 0%, #78248c 100%)',
-                      color: '#ffffff',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      padding: '4px 12px',
-                      borderRadius: '12px',
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase'
-                    }}
-                  >
-                    All-in-One Ecosystem
-                  </span>
-                  <span
-                    style={{
-                      background: '#ecfdf5',
-                      color: '#059669',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      padding: '4px 10px',
-                      borderRadius: '12px',
-                      border: '1px solid #a7f3d0'
-                    }}
-                  >
-                    Special Bundle Offer
-                  </span>
-                </div>
-
                 <h1
                   style={{
                     color: '#0f172a',
