@@ -126,7 +126,30 @@ class MainWindow(QMainWindow):
         self.left_toolbar.addAction(act_home)
         self.left_toolbar.addSeparator()
 
+        # Load customizable toolbar items from DB setting if present
+        saved_order = self.db.get_setting("toolbar_sections_order", "")
+        saved_hidden = set(self.db.get_setting("toolbar_sections_hidden", "").split(","))
+
+        sections_map = {sec.id: sec for sec in self.registry.all_sections()}
+        ordered_sec_ids = []
+
+        if saved_order:
+            for sid in saved_order.split(","):
+                sid = sid.strip()
+                if sid in sections_map:
+                    ordered_sec_ids.append(sid)
+
+        # Append any newly added sections not yet in saved order
         for sec in self.registry.all_sections():
+            if sec.id not in ordered_sec_ids:
+                ordered_sec_ids.append(sec.id)
+
+        for sec_id in ordered_sec_ids:
+            if sec_id in saved_hidden:
+                continue
+            sec = sections_map.get(sec_id)
+            if not sec:
+                continue
             act = QAction(WinIcons.get(sec.id), sec.name, self)
             act.setToolTip(f"Open {sec.name} ({sec.shortcut})")
             act.triggered.connect(lambda checked=False, s=sec: self.tab_manager.open_tab(s.id, TabKind.LIST))

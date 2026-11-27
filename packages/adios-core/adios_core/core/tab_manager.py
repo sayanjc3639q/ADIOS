@@ -111,7 +111,7 @@ class TabManager(QObject):
 
         if kind == TabKind.SETTINGS:
             from app.ui.widgets.settings_view import SettingsView
-            return SettingsView(self.registry.db, self)
+            return SettingsView(self.registry.db, self, registry=self.registry)
 
         if kind == TabKind.RELEASE_NOTES:
             from app.ui.widgets.release_notes_view import ReleaseNotesView

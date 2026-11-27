@@ -7,11 +7,13 @@ Settings:
 - Custom Vector Icons & Themes (Upload custom SVGs/images for sections, subscription providers, clubs, tools)
 """
 from __future__ import annotations
-from typing import Any
+from typing import Any, List
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QFormLayout, QLineEdit, QSpinBox, QComboBox, 
-    QCheckBox, QPushButton, QMessageBox, QHBoxLayout, QGroupBox, QTabWidget
+    QCheckBox, QPushButton, QMessageBox, QHBoxLayout, QGroupBox, QTabWidget,
+    QListWidget, QListWidgetItem, QLabel
 )
+from PySide6.QtCore import Qt
 from app.ui.widgets.icon_customizer import IconCustomizerWidget
 from app.core.icons import WinIcons
 from app.core.theme_manager import THEME_NAMES, ThemeManager
@@ -19,9 +21,10 @@ from app.core.theme_manager import THEME_NAMES, ThemeManager
 
 class GeneralSettingsWidget(QWidget):
     """General preferences sub-view."""
-    def __init__(self, db: Any, parent=None):
+    def __init__(self, db: Any, registry: Any = None, parent=None):
         super().__init__(parent)
         self.db = db
+        self.registry = registry
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(15, 15, 15, 15)
@@ -85,6 +88,42 @@ class GeneralSettingsWidget(QWidget):
         f_rem.addRow("Max Backups Retained:", self.spin_backup_count)
         layout.addWidget(grp_rem)
 
+        # 4. Left Toolbar Customization Group
+        grp_toolbar = QGroupBox("Left Toolbar Customization")
+        v_toolbar = QVBoxLayout(grp_toolbar)
+        
+        lbl_toolbar_hint = QLabel("Select which sections appear in the left toolbar and configure their display order:")
+        lbl_toolbar_hint.setStyleSheet("color: #64748b; font-size: 12px; margin-bottom: 4px;")
+        v_toolbar.addWidget(lbl_toolbar_hint)
+
+        toolbar_content_layout = QHBoxLayout()
+        self.toolbar_list = QListWidget()
+        self.toolbar_list.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
+        self.toolbar_list.setDragDropMode(QListWidget.DragDropMode.InternalMove)
+        toolbar_content_layout.addWidget(self.toolbar_list)
+
+        tb_btn_col = QVBoxLayout()
+        self.btn_move_up = QPushButton("▲ Move Up")
+        self.btn_move_down = QPushButton("▼ Move Down")
+        self.btn_select_all_tb = QPushButton("Check All")
+        self.btn_unselect_all_tb = QPushButton("Uncheck All")
+
+        self.btn_move_up.clicked.connect(self._move_toolbar_item_up)
+        self.btn_move_down.clicked.connect(self._move_toolbar_item_down)
+        self.btn_select_all_tb.clicked.connect(lambda: self._set_all_toolbar_checked(True))
+        self.btn_unselect_all_tb.clicked.connect(lambda: self._set_all_toolbar_checked(False))
+
+        tb_btn_col.addWidget(self.btn_move_up)
+        tb_btn_col.addWidget(self.btn_move_down)
+        tb_btn_col.addSpacing(10)
+        tb_btn_col.addWidget(self.btn_select_all_tb)
+        tb_btn_col.addWidget(self.btn_unselect_all_tb)
+        tb_btn_col.addStretch()
+
+        toolbar_content_layout.addLayout(tb_btn_col)
+        v_toolbar.addLayout(toolbar_content_layout)
+        layout.addWidget(grp_toolbar)
+
         # Save Button
         btn_box = QHBoxLayout()
         self.btn_save = QPushButton("Save Preferences")
@@ -99,10 +138,79 @@ class GeneralSettingsWidget(QWidget):
         self.btn_save.clicked.connect(self.save_settings)
         self.load_settings()
 
+    def _move_toolbar_item_up(self):
+        curr_row = self.toolbar_list.currentRow()
+        if curr_row > 0:
+            item = self.toolbar_list.takeItem(curr_row)
+            self.toolbar_list.insertItem(curr_row - 1, item)
+            self.toolbar_list.setCurrentRow(curr_row - 1)
+
+    def _move_toolbar_item_down(self):
+        curr_row = self.toolbar_list.currentRow()
+        if curr_row >= 0 and curr_row < self.toolbar_list.count() - 1:
+            item = self.toolbar_list.takeItem(curr_row)
+            self.toolbar_list.insertItem(curr_row + 1, item)
+            self.toolbar_list.setCurrentRow(curr_row + 1)
+
+    def _set_all_toolbar_checked(self, checked: bool):
+        for i in range(self.toolbar_list.count()):
+            item = self.toolbar_list.item(i)
+            item.setCheckState(Qt.CheckState.Checked if checked else Qt.CheckState.Unchecked)
+
+    def _populate_toolbar_list(self):
+        self.toolbar_list.clear()
+        
+        # Retrieve registered sections via provided registry or window
+        registry = self.registry
+        if not registry:
+            win = self.window()
+            registry = getattr(win, "registry", None)
+            
+        if not registry:
+            # Fallback search parent hierarchy
+            p = self.parent()
+            while p:
+                if hasattr(p, "registry"):
+                    registry = p.registry
+                    break
+                p = p.parent() if hasattr(p, "parent") else None
+
+        all_sections = registry.all_sections() if registry else []
+        sec_map = {sec.id: sec for sec in all_sections}
+
+        order_str = self.db.get_setting("toolbar_sections_order", "")
+        hidden_str = self.db.get_setting("toolbar_sections_hidden", "")
+        hidden_ids = set([x.strip() for x in hidden_str.split(",") if x.strip()])
+
+        ordered_ids: List[str] = []
+        if order_str:
+            for s_id in order_str.split(","):
+                s_id = s_id.strip()
+                if s_id and s_id in sec_map and s_id not in ordered_ids:
+                    ordered_ids.append(s_id)
+
+        for sec in all_sections:
+            if sec.id not in ordered_ids:
+                ordered_ids.append(sec.id)
+
+        for s_id in ordered_ids:
+            sec = sec_map.get(s_id)
+            if not sec:
+                continue
+            title = getattr(sec, "name", None) or getattr(sec, "title", s_id)
+            item = QListWidgetItem(f"{title}  ({s_id})")
+            icon = getattr(sec, "icon", None) or WinIcons.get(s_id)
+            item.setIcon(icon)
+            item.setData(Qt.ItemDataRole.UserRole, s_id)
+            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+            item.setCheckState(Qt.CheckState.Unchecked if s_id in hidden_ids else Qt.CheckState.Checked)
+            self.toolbar_list.addItem(item)
+
     def _on_theme_changed(self, theme_text: str):
         ThemeManager.apply_theme(theme_text)
 
     def load_settings(self):
+        self._populate_toolbar_list()
         # Theme
         theme = self.db.get_setting("theme_mode", "Light Mode")
         idx_t = self.combo_theme.findText(theme)
@@ -158,23 +266,43 @@ class GeneralSettingsWidget(QWidget):
         self.db.set_setting("default_reminder_lead", self.combo_default_reminder.currentText())
         self.db.set_setting("backup_count", str(self.spin_backup_count.value()))
 
+        # Save toolbar order and visibility
+        order_ids = []
+        hidden_ids = []
+        for i in range(self.toolbar_list.count()):
+            item = self.toolbar_list.item(i)
+            s_id = item.data(Qt.ItemDataRole.UserRole)
+            if s_id:
+                order_ids.append(s_id)
+                if item.checkState() == Qt.CheckState.Unchecked:
+                    hidden_ids.append(s_id)
+
+        self.db.set_setting("toolbar_sections_order", ",".join(order_ids))
+        self.db.set_setting("toolbar_sections_hidden", ",".join(hidden_ids))
+
+        # Rebuild toolbar immediately on the main window if possible
+        win = self.window()
+        if hasattr(win, "rebuild_left_toolbar"):
+            win.rebuild_left_toolbar()
+
         QMessageBox.information(self, "Settings Saved", "Preferences have been successfully saved.")
 
 
 class SettingsView(QWidget):
     """Main Settings workspace tab containing Preferences and Custom Icon Customizer."""
 
-    def __init__(self, db: Any, tab_manager: Any, parent=None):
+    def __init__(self, db: Any, tab_manager: Any, registry: Any = None, parent=None):
         super().__init__(parent)
         self.db = db
         self.tab_manager = tab_manager
+        self.registry = registry or getattr(tab_manager, "registry", None)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
 
         # Tab widget separating Preferences from Icon Customization
         self.tabs = QTabWidget(self)
-        self.general_widget = GeneralSettingsWidget(db, self)
+        self.general_widget = GeneralSettingsWidget(db, self.registry, self)
         self.icon_widget = IconCustomizerWidget(db, tab_manager, self)
 
         self.tabs.addTab(self.general_widget, WinIcons.get("settings"), "General Preferences")

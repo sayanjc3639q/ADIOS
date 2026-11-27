@@ -1,5 +1,5 @@
 """Version definition and Release Notes for ADIOS."""
-APP_VERSION = "2.0.0"
+APP_VERSION = "2.1.0"
 GITHUB_REPO = "sayanjc3639q/ADIOS"
 
 RELEASE_NOTES = """

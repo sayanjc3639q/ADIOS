@@ -19,9 +19,9 @@ from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox,
     QDateEdit, QCheckBox, QTableWidget, QTableWidgetItem, QHeaderView,
     QGroupBox, QFormLayout, QLineEdit, QTextBrowser, QMessageBox, QSplitter,
-    QWidget, QFileDialog
+    QWidget, QFileDialog, QSpinBox, QRadioButton, QButtonGroup
 )
-from PySide6.QtGui import QTextDocument, QFont, QColor
+from PySide6.QtGui import QTextDocument, QFont, QColor, QPageSize
 from PySide6.QtCore import Qt, QDate, QSizeF
 from PySide6.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
 from app.core.icons import WinIcons
@@ -100,6 +100,31 @@ class PrintReportDialog(QDialog):
         h_dates.addWidget(self.btn_preset_all)
         form_opt.addRow("Date Window:", h_dates)
 
+        # Page Setup & Formatting Options (A4 default, Color/Black & White, Scale)
+        h_format = QHBoxLayout()
+        self.cmb_pagesize = QComboBox()
+        self.cmb_pagesize.addItems(["A4 (210 × 297 mm)", "Letter (8.5 × 11 in)", "Legal (8.5 × 14 in)"])
+        self.cmb_pagesize.currentIndexChanged.connect(self._update_preview)
+        h_format.addWidget(QLabel("Size:"))
+        h_format.addWidget(self.cmb_pagesize)
+
+        self.cmb_colormode = QComboBox()
+        self.cmb_colormode.addItems(["Full Color", "Black & White (Grayscale)"])
+        self.cmb_colormode.currentIndexChanged.connect(self._update_preview)
+        h_format.addWidget(QLabel("Color:"))
+        h_format.addWidget(self.cmb_colormode)
+
+        self.spin_scale = QSpinBox()
+        self.spin_scale.setRange(50, 150)
+        self.spin_scale.setValue(100)
+        self.spin_scale.setSuffix("%")
+        self.spin_scale.setSingleStep(5)
+        self.spin_scale.valueChanged.connect(self._update_preview)
+        h_format.addWidget(QLabel("Scale:"))
+        h_format.addWidget(self.spin_scale)
+
+        form_opt.addRow("Page & Format:", h_format)
+
         left_layout.addWidget(grp_options)
 
         # 2. Items Selection Table
@@ -157,13 +182,14 @@ class PrintReportDialog(QDialog):
         preview_header.addWidget(btn_refresh_preview)
         right_layout.addLayout(preview_header)
 
-        # Using QTextBrowser with clean white background and realistic document box shadow
+        # Using QTextBrowser with clean preview background and realistic document box shadow
         self.preview_browser = QTextBrowser()
         self.preview_browser.setStyleSheet("""
             QTextBrowser {
-                background-color: #525659;
-                padding: 15px;
-                border: 1px solid #3c3f41;
+                background-color: #cbd5e1;
+                padding: 20px;
+                border: 1px solid #94a3b8;
+                border-radius: 4px;
             }
         """)
         right_layout.addWidget(self.preview_browser)
@@ -424,27 +450,66 @@ class PrintReportDialog(QDialog):
         selected = self._get_selected_items()
         summary_text = self.lbl_summary.text()
 
+        is_bw = "Black & White" in self.cmb_colormode.currentText()
+        scale_pct = self.spin_scale.value()
+        page_size_str = self.cmb_pagesize.currentText()
+        
+        # Color palette depending on color vs black & white
+        if is_bw:
+            c_brand = "#111827"
+            c_header_border = "#111827"
+            c_th_bg = "#f3f4f6"
+            c_th_border = "#111827"
+            c_summary_bg = "#f9fafb"
+            c_summary_border = "#374151"
+            c_summary_title = "#111827"
+            c_summary_text = "#1f2937"
+            c_badge_bg = "#e5e7eb"
+            c_badge_text = "#111827"
+        else:
+            c_brand = "#0284c7"
+            c_header_border = "#0284c7"
+            c_th_bg = "#f0f9ff"
+            c_th_border = "#0284c7"
+            c_summary_bg = "#f0fdf4"
+            c_summary_border = "#86efac"
+            c_summary_title = "#15803d"
+            c_summary_text = "#166534"
+            c_badge_bg = "#e0f2fe"
+            c_badge_text = "#0284c7"
+
         rows_html = ""
         for idx, item in enumerate(selected, start=1):
-            bg = "#f8fafc" if idx % 2 == 0 else "#ffffff"
+            bg = "#f8fafc" if (idx % 2 == 0 and not is_bw) else ("#f9fafb" if idx % 2 == 0 else "#ffffff")
+            val_col = "#111827" if is_bw else ("#16a34a" if item.get("is_income") else "#0f172a")
             rows_html += f"""
             <tr style="background-color: {bg};">
-                <td style="padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 13px; color: #475569;">{idx}</td>
-                <td style="padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 13px; color: #334155;">{item.get('date', '-')}</td>
-                <td style="padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a;">{item.get('title', '')}</td>
-                <td style="padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 13px; color: #475569;">{item.get('category', '')}</td>
-                <td style="padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 13px; text-align: right; font-weight: bold; color: #0f172a;">{item.get('value_display', '')}</td>
+                <td style="padding: 9px 12px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">{idx}</td>
+                <td style="padding: 9px 12px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #334155; white-space: nowrap;">{item.get('date', '-')}</td>
+                <td style="padding: 9px 12px; border-bottom: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600; color: #0f172a;">{item.get('title', '')}</td>
+                <td style="padding: 9px 12px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #475569;">{item.get('category', '')}</td>
+                <td style="padding: 9px 12px; border-bottom: 1px solid #e2e8f0; font-size: 12.5px; text-align: right; font-weight: bold; color: {val_col};">{item.get('value_display', '')}</td>
             </tr>
             """
 
-        container_style = """
-            max-width: 800px;
-            margin: 15px auto;
+        # Realistic A4 sheet dimensions (approx 794px width in 96 DPI points)
+        container_style = f"""
+            width: 760px;
+            min-height: 1040px;
+            margin: 20px auto;
             background: #ffffff;
-            padding: 35px 40px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 44px 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+            border: 1px solid #cbd5e1;
             border-radius: 4px;
-        """ if for_preview else "margin: 0; padding: 25px;"
+            box-sizing: border-box;
+            transform-origin: top center;
+            zoom: {scale_pct}%;
+        """ if for_preview else f"""
+            margin: 0;
+            padding: 30px;
+            zoom: {scale_pct}%;
+        """
 
         html = f"""
         <!DOCTYPE html>
@@ -455,7 +520,7 @@ class PrintReportDialog(QDialog):
                 body {{
                     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
                     color: #0f172a;
-                    background-color: {"#525659" if for_preview else "#ffffff"};
+                    background-color: {"#cbd5e1" if for_preview else "#ffffff"};
                     margin: 0;
                     padding: 0;
                 }}
@@ -464,43 +529,43 @@ class PrintReportDialog(QDialog):
                 }}
                 table.header-table {{
                     width: 100%;
-                    border-bottom: 3px solid #2563eb;
-                    padding-bottom: 14px;
-                    margin-bottom: 22px;
+                    border-bottom: 3px solid {c_header_border};
+                    padding-bottom: 12px;
+                    margin-bottom: 20px;
                 }}
                 .brand-title {{
-                    font-size: 24px;
-                    font-weight: 900;
-                    color: #1e3a8a;
+                    font-size: 26px;
+                    font-weight: 800;
+                    color: {c_brand};
                     margin: 0 0 4px 0;
                     letter-spacing: -0.5px;
                 }}
                 .report-title {{
-                    font-size: 17px;
+                    font-size: 16px;
                     font-weight: 700;
                     color: #1e293b;
                     margin: 2px 0 0 0;
                 }}
                 .meta-info {{
-                    font-size: 12px;
-                    color: #475569;
+                    font-size: 11.5px;
+                    color: #64748b;
                     text-align: right;
                     line-height: 1.5;
                 }}
                 table.data-table {{
                     width: 100%;
                     border-collapse: collapse;
-                    margin-bottom: 25px;
+                    margin-bottom: 20px;
                 }}
                 th {{
-                    background-color: #f1f5f9;
+                    background-color: {c_th_bg};
                     color: #1e293b;
-                    font-size: 12px;
-                    font-weight: 800;
+                    font-size: 11.5px;
+                    font-weight: 700;
                     text-transform: uppercase;
-                    padding: 10px 12px;
+                    padding: 9px 12px;
                     border-top: 1px solid #cbd5e1;
-                    border-bottom: 2px solid #64748b;
+                    border-bottom: 2px solid {c_th_border};
                     text-align: left;
                     letter-spacing: 0.5px;
                 }}
@@ -508,33 +573,43 @@ class PrintReportDialog(QDialog):
                     text-align: right;
                 }}
                 .summary-box {{
-                    background-color: #eff6ff;
-                    border: 2px solid #93c5fd;
+                    background-color: {c_summary_bg};
+                    border: 1.5px solid {c_summary_border};
                     border-radius: 6px;
-                    padding: 16px 20px;
-                    margin-top: 25px;
+                    padding: 14px 18px;
+                    margin-top: 20px;
                 }}
                 .summary-title {{
-                    font-size: 14px;
+                    font-size: 13px;
                     font-weight: 800;
-                    color: #1d4ed8;
-                    margin-bottom: 6px;
+                    color: {c_summary_title};
+                    margin-bottom: 5px;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
                 }}
                 .summary-content {{
-                    font-size: 13px;
-                    color: #1e3a8a;
-                    font-weight: 700;
+                    font-size: 12.5px;
+                    color: {c_summary_text};
+                    font-weight: 600;
                     line-height: 1.5;
                 }}
                 .footer {{
-                    margin-top: 35px;
-                    font-size: 11px;
-                    color: #64748b;
+                    margin-top: 30px;
+                    font-size: 10.5px;
+                    color: #94a3b8;
                     text-align: center;
-                    border-top: 1px solid #cbd5e1;
-                    padding-top: 12px;
+                    border-top: 1px solid #e2e8f0;
+                    padding-top: 10px;
+                }}
+                .format-badge {{
+                    display: inline-block;
+                    background: {c_badge_bg};
+                    color: {c_badge_text};
+                    font-size: 10.5px;
+                    font-weight: 600;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    margin-top: 4px;
                 }}
             </style>
         </head>
@@ -545,12 +620,15 @@ class PrintReportDialog(QDialog):
                         <td style="vertical-align: top;">
                             <div class="brand-title">ADIOS Personal Desktop</div>
                             <div class="report-title">{title}</div>
-                            <div style="font-size: 13px; color: #475569; margin-top: 4px;"><b>Section:</b> {sec_name}</div>
+                            <div style="font-size: 12.5px; color: #475569; margin-top: 4px;">
+                                <b>Section:</b> {sec_name} · <span class="format-badge">{page_size_str.split(' ')[0]}</span> · <span class="format-badge">Scale {scale_pct}%</span>
+                            </div>
                         </td>
                         <td class="meta-info" style="vertical-align: top;">
                             <div><b>Generated:</b> {date_str}</div>
-                            <div><b>System:</b> Local Database (Verified)</div>
+                            <div><b>System:</b> Local SQLite (Offline Verified)</div>
                             <div><b>Items Included:</b> {len(selected)} entries</div>
+                            <div><b>Mode:</b> {'Grayscale (B&W)' if is_bw else 'Standard Color'}</div>
                         </td>
                     </tr>
                 </table>
@@ -559,14 +637,14 @@ class PrintReportDialog(QDialog):
                     <thead>
                         <tr>
                             <th style="width: 35px;">#</th>
-                            <th style="width: 120px;">Date / Time</th>
+                            <th style="width: 110px;">Date / Time</th>
                             <th>Title / Description</th>
-                            <th style="width: 200px;">Category / Terms</th>
-                            <th class="th-right" style="width: 140px;">Amount / Value</th>
+                            <th style="width: 170px;">Category / Terms</th>
+                            <th class="th-right" style="width: 130px;">Amount / Value</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {rows_html if rows_html else '<tr><td colspan="5" style="text-align:center; padding:20px; color:#64748b;">No items selected for printing.</td></tr>'}
+                        {rows_html if rows_html else '<tr><td colspan="5" style="text-align:center; padding:24px; color:#64748b;">No items selected for printing.</td></tr>'}
                     </tbody>
                 </table>
 
@@ -576,7 +654,7 @@ class PrintReportDialog(QDialog):
                 </div>
 
                 <div class="footer">
-                    Printed via ADIOS Desktop System • Confidential • For Personal and Official Record
+                    Printed via ADIOS Desktop System • Confidential • For Personal and Official Record • Layout: {page_size_str.split(' ')[0]}
                 </div>
             </div>
         </body>
@@ -588,19 +666,35 @@ class PrintReportDialog(QDialog):
         html = self.generate_html_document(for_preview=True)
         self.preview_browser.setHtml(html)
 
+    def _configure_printer_defaults(self, printer: QPrinter) -> None:
+        """Configures printer page size (A4 by default), color mode, and orientation."""
+        sz_text = self.cmb_pagesize.currentText()
+        if "Letter" in sz_text:
+            printer.setPageSize(QPageSize(QPageSize.PageSizeId.Letter))
+        elif "Legal" in sz_text:
+            printer.setPageSize(QPageSize(QPageSize.PageSizeId.Legal))
+        else:
+            printer.setPageSize(QPageSize(QPageSize.PageSizeId.A4))
+
+        if "Black & White" in self.cmb_colormode.currentText():
+            printer.setColorMode(QPrinter.ColorMode.GrayScale)
+        else:
+            printer.setColorMode(QPrinter.ColorMode.Color)
+
+        printer.setPageOrientation(QPrinter.Orientation.Portrait)
+
     def _prepare_print_document(self, printer: QPrinter) -> QTextDocument:
         """Constructs a QTextDocument with exact point page dimensions matching the target printer."""
+        self._configure_printer_defaults(printer)
         doc = QTextDocument()
         doc.setHtml(self.generate_html_document(for_preview=False))
-        # Critical fix: lock page dimensions to standard Points size (e.g. 612x792 for Letter / 595x842 for A4)
-        # Prevents high DPI printers from shrinking standard HTML pixels to micro-dots
         page_size = printer.pageRect(QPrinter.Unit.Point).size()
         doc.setPageSize(QSizeF(page_size.width(), page_size.height()))
         return doc
 
     def _on_print_preview(self):
         printer = QPrinter()
-        printer.setPageOrientation(QPrinter.Orientation.Portrait)
+        self._configure_printer_defaults(printer)
 
         preview = QPrintPreviewDialog(printer, self)
         preview.paintRequested.connect(lambda p: self._prepare_print_document(p).print_(p))
@@ -608,6 +702,7 @@ class PrintReportDialog(QDialog):
 
     def _on_print(self):
         printer = QPrinter()
+        self._configure_printer_defaults(printer)
         dlg = QPrintDialog(printer, self)
         if dlg.exec() == QDialog.DialogCode.Accepted:
             doc = self._prepare_print_document(printer)
@@ -620,6 +715,7 @@ class PrintReportDialog(QDialog):
             return
 
         printer = QPrinter()
+        self._configure_printer_defaults(printer)
         printer.setOutputFormat(QPrinter.OutputFormat.PdfFormat)
         printer.setOutputFileName(file_path)
         doc = self._prepare_print_document(printer)
